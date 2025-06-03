@@ -4,7 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/testWeb', function () {
-    return "test";
+    $user= Auth::user();
+    return $user;
 });
 
 Route::get('/', function () {

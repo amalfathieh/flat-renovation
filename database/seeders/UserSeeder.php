@@ -18,7 +18,6 @@ class UserSeeder extends Seeder
             'name'=>'user',
             'email' => 'user@ex.com',
             'email_verified_at'=> now(),
-            'role_name' => 'user',
             'password' => Hash::make('12345678'),
         ]);
         $user1->syncRoles($user1->role_name);
@@ -27,7 +26,6 @@ class UserSeeder extends Seeder
             'name'=>'admin',
             'email' => 'admin@ex.com',
             'email_verified_at'=> now(),
-            'role_name' => 'admin',
             'password' => Hash::make('12345678'),
         ]);
         $user2->syncRoles($user2->role_name);
@@ -46,7 +44,6 @@ class UserSeeder extends Seeder
             'name'=>'supervision',
             'email' => 'comsup@ex.com',
             'email_verified_at'=> now(),
-            'role_name' => 'company_supervision',
             'password' => Hash::make('12345678'),
         ]);
         $user4->syncRoles($user4->role_name);
@@ -55,7 +52,6 @@ class UserSeeder extends Seeder
             'name'=>'test',
             'email' => 'test@ex.com',
             'email_verified_at'=> now(),
-            'role_name' => '',
             'password' => Hash::make('12345678'),
         ]);
         $user5->syncRoles($user5->role_name);
