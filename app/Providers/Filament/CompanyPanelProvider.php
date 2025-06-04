@@ -2,10 +2,16 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Company\Resources\UserResource\Pages\Auth\Register;
+use App\Filament\Pages\Tenancy\EditCompanyProfile;
+use App\Filament\Pages\Tenancy\RegisterCompany;
+use App\Http\Middleware\Filament\ApplyFilamentTenentThemeMiddleware;
+use App\Models\Company;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -16,6 +22,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class CompanyPanelProvider extends PanelProvider
@@ -26,7 +33,7 @@ class CompanyPanelProvider extends PanelProvider
             ->id('company')
             ->path('company')
             ->login()
-            ->registration()
+            ->registration(Register::class)
             ->profile()
             ->colors([
                 'primary' => Color::Red,
@@ -52,8 +59,14 @@ class CompanyPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+//            ->tenantMiddleware([
+//                ApplyFilamentTenentThemeMiddleware::class,
+//            ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->tenant(Company::class, 'slug', 'company')
+            ->tenantRegistration(RegisterCompany::class)
+            ->tenantProfile(EditCompanyProfile::class);
     }
 }

@@ -2,14 +2,22 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Filament\Models\Contracts\FilamentUser;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Filament\Models\Contracts\HasTenants;
+use Filament\Panel;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Collection;
+
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements  HasTenants
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
@@ -24,7 +32,6 @@ class User extends Authenticatable
         'email',
         'password',
         'email_verified_at',
-        'role_name',
         'banned_at'
     ];
 
@@ -50,5 +57,30 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+
+    public function company()
+    {
+        return $this->hasOne(Company::class);
+    }
+
+    public function getTenants(Panel $panel): Collection|array
+    {
+        return $this->company ? collect([$this->company]) : collect();
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        return $this->company()->whereKey($tenant)->exists();
+    }
+
+    public function getFilamentAvatarUrl()
+    {
+        $user = auth()->user();
+        if($this->company() &&$this->company->logo){
+            return Storage::disk('public')->url($this->company->logo);
+        }
+        return asset('images/logo.jpg');
     }
 }

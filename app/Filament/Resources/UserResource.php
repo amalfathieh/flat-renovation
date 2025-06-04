@@ -32,6 +32,7 @@ class UserResource extends Resource
                 TextInput::make('name')->required()->label('الاسم'),
                 TextInput::make('email')->email()->required()->label('البريد الإلكتروني'),
                 TextInput::make('phone')->label('رقم الهاتف'),
+
                 Select::make('role_name')
                     ->relationship('roles', 'name')
                     ->preload(),
