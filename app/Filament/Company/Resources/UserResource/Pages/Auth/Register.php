@@ -4,11 +4,9 @@ namespace App\Filament\Company\Resources\UserResource\Pages\Auth;
 
 use App\Filament\Company\Resources\UserResource;
 use App\Models\User;
-use Filament\Actions;
-use Filament\Forms\Components\Select;
-use Filament\Resources\Pages\CreateRecord;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\Auth\Register as BaseRegister;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\Model;
 
 class Register extends BaseRegister
@@ -19,9 +17,10 @@ class Register extends BaseRegister
            'name'=> $data['name'],
            'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'phone_number'=> $data['phone_number']?? null,
+            'phone'=> $data['phone']?? null,
         ]);
         $user->assignRole('company');
+        event(new Registered($user));
         return $user;
     }
 
@@ -35,7 +34,7 @@ class Register extends BaseRegister
                         $this->getEmailFormComponent(),
                         $this->getPasswordFormComponent(),
                         $this->getPasswordConfirmationFormComponent(),
-                         TextInput::make('phone_number')
+                         TextInput::make('phone')
                             ->label('Mobile Number')
                             ->tel() // نوع الحقل رقم هاتف
                             ->required()

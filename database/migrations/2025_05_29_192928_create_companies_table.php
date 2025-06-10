@@ -18,8 +18,10 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->string('name');
             $table->string('slug');
+            $table->string('email')->nullable();
             $table->string('location');
-            $table->text('about');
+            $table->string('phone')->nullable();
+            $table->text('about')->nullable();
             $table->string('logo')->nullable();
             $table->timestamps();
         });

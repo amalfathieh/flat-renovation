@@ -5,13 +5,11 @@ namespace App\Providers\Filament;
 use App\Filament\Company\Resources\UserResource\Pages\Auth\Register;
 use App\Filament\Pages\Tenancy\EditCompanyProfile;
 use App\Filament\Pages\Tenancy\RegisterCompany;
-use App\Http\Middleware\Filament\ApplyFilamentTenentThemeMiddleware;
 use App\Models\Company;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -22,7 +20,6 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class CompanyPanelProvider extends PanelProvider
@@ -34,10 +31,13 @@ class CompanyPanelProvider extends PanelProvider
             ->path('company')
             ->login()
             ->registration(Register::class)
+            ->passwordReset()
+            ->emailVerification()
             ->profile()
             ->colors([
                 'primary' => Color::Red,
             ])
+            ->favicon(asset('images/favicon.jpg'))
             ->discoverResources(in: app_path('Filament/Company/Resources'), for: 'App\\Filament\\Company\\Resources')
             ->discoverPages(in: app_path('Filament/Company/Pages'), for: 'App\\Filament\\Company\\Pages')
             ->pages([
@@ -59,14 +59,23 @@ class CompanyPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-//            ->tenantMiddleware([
-//                ApplyFilamentTenentThemeMiddleware::class,
-//            ])
             ->authMiddleware([
                 Authenticate::class,
             ])
             ->tenant(Company::class, 'slug', 'company')
             ->tenantRegistration(RegisterCompany::class)
             ->tenantProfile(EditCompanyProfile::class);
+
     }
 }
+
+/*
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=amalft182@gmail.com
+MAIL_PASSWORD=bqqx mbxn fpmx yxzc
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS="amalft182@gmail.com"
+MAIL_FROM_NAME="${APP_NAME}"
+*/

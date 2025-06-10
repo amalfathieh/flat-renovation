@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             'email_verified_at'=> now(),
             'password' => Hash::make('12345678'),
         ]);
-        $user1->syncRoles($user1->role_name);
+        $user1->syncRoles('user');
 
         $user2 =User::create([
             'name'=>'admin',
@@ -28,17 +28,40 @@ class UserSeeder extends Seeder
             'email_verified_at'=> now(),
             'password' => Hash::make('12345678'),
         ]);
-        $user2->syncRoles($user2->role_name);
+        $user2->syncRoles('admin');
 
 
-//        $user3 =User::create([
-//            'name'=>'company',
-//            'email' => 'company@ex.com',
-//            'email_verified_at'=> now(),
-//            'role_name' => 'super_admin',
-//            'password' => Hash::make('12345678'),
-//        ]);
-//        $user3->syncRoles($user3->role_name);
+        $user3 =User::create([
+            'name'=>'company',
+            'email' => 'company@ex.com',
+            'email_verified_at'=> now(),
+            'password' => Hash::make('12345678'),
+        ]);
+        $user3->syncRoles('company');
+
+        $user22 =User::create([
+            'name'=>'company22',
+            'email' => 'company22@ex.com',
+            'email_verified_at'=> now(),
+            'password' => Hash::make('12345678'),
+        ]);
+        $user22->syncRoles('company');
+
+        $user33 =User::create([
+            'name'=>'company33',
+            'email' => 'company33@ex.com',
+            'email_verified_at'=> now(),
+            'password' => Hash::make('12345678'),
+        ]);
+        $user33->syncRoles('company');
+
+        $user44 =User::create([
+            'name'=>'company44',
+            'email' => 'company44@ex.com',
+            'email_verified_at'=> now(),
+            'password' => Hash::make('12345678'),
+        ]);
+        $user44->syncRoles('company');
 
         $user4 =User::create([
             'name'=>'supervision',
@@ -46,7 +69,7 @@ class UserSeeder extends Seeder
             'email_verified_at'=> now(),
             'password' => Hash::make('12345678'),
         ]);
-        $user4->syncRoles($user4->role_name);
+        $user4->syncRoles(['company_supervision', 'employee']);
 
         $user5 =User::create([
             'name'=>'test',
@@ -54,6 +77,6 @@ class UserSeeder extends Seeder
             'email_verified_at'=> now(),
             'password' => Hash::make('12345678'),
         ]);
-        $user5->syncRoles($user5->role_name);
+        $user5->syncRoles(['control_panel_employee', 'employee']);
     }
 }

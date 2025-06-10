@@ -15,7 +15,7 @@ class RegisterCompany extends RegisterTenant
 
     public static function getLabel(): string
     {
-        return 'Register company';
+        return __('strings.company.register_company');
     }
 
     public function form(Form $form): Form
@@ -23,33 +23,46 @@ class RegisterCompany extends RegisterTenant
         return $form
             ->schema([
                 TextInput::make('name')
+                    ->label(__('strings.company.name'))
                     ->required()
                     ->live(onBlur: true)
                     ->unique(Company::class, 'name', ignoreRecord:true)
 
                     ->afterStateUpdated(function (string $operation, $state, Forms\Set $set){
-                                if ($operation !== 'create'){
-                                    return ;
-                                }
+
                                 $set('slug', Str::slug($state));
                     }),
 
                 TextInput::make('slug')
-//                    ->disabled()
+                    ->label(__('strings.company.slug'))
+                    ->disabled()
                     ->dehydrated()
                     ->required()
                     ->unique(Company::class, 'slug', ignoreRecord: true),
 
-                TextInput::make('location'),
-                TextInput::make('about'),
+                TextInput::make('email')
+                    ->label('البريد الإلكتروني الخاص بالشركة')
+                    ->email()
+                    ->required()
+                    ->unique(ignoreRecord: true),
 
-                Forms\Components\FileUpload::make('logo')
-                    ->label('Logo')
-                    ->disk('public')
-                    ->directory('companies-logo')
-                    ->image()
-                    ->imageEditor()
-                    ->nullable(),
+                TextInput::make('location')
+                    ->label(__('strings.company.location')),
+
+                Forms\Components\Section::make(__('strings.more_info'))
+                    ->schema([
+                        Forms\Components\MarkdownEditor::make('about')
+                            ->label(__('strings.company.about'))
+                            ->columnSpan('full'),
+
+                        Forms\Components\FileUpload::make('logo')
+                            ->label(__('strings.company.logo'))
+                            ->preserveFilenames()
+                            ->directory('companies-logo')
+                            ->image()
+                            ->imageEditor()
+                            ->nullable(),
+                    ])->collapsible(),
             ]);
     }
     protected function handleRegistration(array $data): Company

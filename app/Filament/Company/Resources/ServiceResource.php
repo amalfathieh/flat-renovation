@@ -3,7 +3,6 @@
 namespace App\Filament\Company\Resources;
 
 use App\Filament\Company\Resources\ServiceResource\Pages;
-use App\Filament\Company\Resources\ServiceResource\RelationManagers;
 use App\Models\Service;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
@@ -12,11 +11,11 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ServiceResource extends Resource
 {
+    protected static ?string $modelLabel = 'خدمة';
+    protected static ?string $pluralModelLabel = 'الخدمات';
     protected static ?string $model = Service::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -25,32 +24,54 @@ class ServiceResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                ->minLength(3)
-                ->required(),
-                TextInput::make('description'),
-                Forms\Components\FileUpload::make('image')
-                    ->directory('service-images')
-                    ->preserveFilenames()
-                    ->image()
-                    ->multiple()
-                    ->imageEditor(),
+                Forms\Components\Section::make()
+                    ->schema([
 
+                        TextInput::make('name')
+                            ->label(__('strings.service_name'))
+                            ->minLength(3)
+                            ->required(),
+
+                        Forms\Components\Section::make()
+                            ->schema([
+                                Forms\Components\MarkdownEditor::make('description')
+                                    ->label(__('strings.description')),
+
+                                Forms\Components\FileUpload::make('image')
+                                    ->label(__('strings.image'))
+                                    ->directory('service-images')
+                                    ->preserveFilenames()
+                                    ->image()
+                                    ->imageEditor(),
+
+                            ])->columns(2),
+
+                    ]),
             ]);
+
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('description'),
+                Tables\Columns\ImageColumn::make('image'),
+                TextColumn::make('name')
+                    ->label(__('strings.service_name'))
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('description')
+                    ->label(__('strings.description')),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -74,4 +95,9 @@ class ServiceResource extends Resource
             'edit' => Pages\EditService::route('/{record}/edit'),
         ];
     }
+
+//    public static function getNavigationLabel(): string
+//    {
+//        return __('strings.navigation.services');
+//    }
 }

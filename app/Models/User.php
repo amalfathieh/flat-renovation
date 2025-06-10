@@ -7,20 +7,19 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Collection;
-
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements  HasTenants
+class User extends Authenticatable implements  HasTenants, FilamentUser, MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -59,20 +58,65 @@ class User extends Authenticatable implements  HasTenants
         ];
     }
 
+    public function employee()
+    {
+        return $this->hasOne(Employee::class);
+    }
 
     public function company()
     {
         return $this->hasOne(Company::class);
     }
 
+    public function canAccessPanel(Panel $panel): bool
+    {
+        if ($panel->getId() == 'admin') {
+            return $this->hasRole('admin');
+        }
+
+        if ($panel->getId() == 'company') {
+
+            if ($this->hasRole('employee')) {
+                return $this->employee && $this->employee->company_id !== null;
+            }
+
+            if ($this->hasRole('company')) {
+                return true;
+            }
+
+            return false;
+        }
+
+        return false;
+    }
+
     public function getTenants(Panel $panel): Collection|array
     {
-        return $this->company ? collect([$this->company]) : collect();
+        if ($this->hasRole('employee') && $this->employee) {
+
+            return collect([$this->employee->company]);
+        }
+
+        if ($this->hasRole('company') && $this->company){
+
+            return collect([$this->company]);
+        }
+        return  collect();
     }
 
     public function canAccessTenant(Model $tenant): bool
     {
-        return $this->company()->whereKey($tenant)->exists();
+        if ($this->hasRole('employee')) {
+
+            return $this->employee && $this->employee->company_id == $tenant->id;
+        }
+
+        if ($this->hasRole('company')){
+
+            return $this->company || $this->company()->whereKey($tenant)->exists();
+        }
+
+        return false;
     }
 
     public function getFilamentAvatarUrl()

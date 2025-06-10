@@ -91,5 +91,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
             'service_view',
         ]);
+
+        Role::create(['name' => 'employee']);
     }
 }
