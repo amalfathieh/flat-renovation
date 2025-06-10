@@ -34,7 +34,7 @@ class User extends Authenticatable implements  HasTenants
         'password',
         'image',
         'phone', 'age', 'gender',
-
+        'google_id',
         'email_verified_at',
         'banned_at'
     ];
@@ -87,4 +87,9 @@ class User extends Authenticatable implements  HasTenants
         }
         return asset('images/logo.jpg');
     }
+    public function customerProfile()
+    {
+        return $this->hasOne(\App\Models\Customer::class);
+    }
+
 }

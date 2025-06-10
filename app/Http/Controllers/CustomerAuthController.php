@@ -35,6 +35,6 @@ class CustomerAuthController extends Controller
     public function logout(Request $request)
     {
         $this->authService->logout($request);
-        return response()->json(['message' => 'تم تسجيل الخروج بنجاح']);
+        return response()->json(['message' => 'Sign out successful']);
     }
 }

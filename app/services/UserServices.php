@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Services;
-
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -13,84 +11,92 @@ class UserServices
 {
     public function register(array $request): array
     {
-        // إنشاء المستخدم الجديد
+// إنشاء المستخدم الجديد مع gender و age
         $user = User::create([
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'password' => Hash::make($request['password'])
+            'name'     => $request['name'],
+            'email'    => $request['email'],
+            'password' => Hash::make($request['password']),
+            'gender'   => $request['gender'] ?? null,
+            'age'      => $request['age'] ?? null,
         ]);
 
-        // تعيين دور العميل للمستخدم
-        $clientRole = Role::where('name', 'client')->first();
-        $user->assignRole($clientRole);
+// تعيين دور "customer"
+        $customerRole = Role::where('name', 'customer')->first();
+        $user->assignRole($customerRole);
 
-        // منح صلاحيات الدور للمستخدم
-        $permissions = $clientRole->permissions()->pluck('name')->toArray();
+// منح صلاحيات الدور للمستخدم
+        $permissions = $customerRole->permissions()->pluck('name')->toArray();
         $user->givePermissionTo($permissions);
 
-        // تحميل العلاقات وإعداد البيانات
+// تحميل العلاقات
         $user->load(['roles', 'permissions']);
-        $user = User::with(['roles', 'permissions'])->find($user->id);
-        $this->appendRolesAndPermissions($user);
 
-        // إنشاء توكن الوصول
+// إنشاء توكن
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return [
-            'user' => $user,
+            'user'    => $this->formatUser($user),
             'message' => 'تم إنشاء المستخدم بنجاح',
-            'token' => $token
+            'token'   => $token,
         ];
     }
+
     public function login($request): array
     {
-        $user = User::query()
-            ->where('email', $request['email'])
-            ->first();
+        $user = User::where('email', $request['email'])->first();
 
-        if (!is_null($user)) {
-            if (!Auth::attempt($request->only(['email', 'password']))) {
-                $message = 'User email & password does not match with our record.';
-                $code = 401;
-            } else {
-                $user = $this->appendRolesAndPermissions($user);
-                $user['token'] = $user->createToken("token")->plainTextToken;
-                $message = 'User logged in successfully';
-                $code = 200;
-            }
-        } else {
-            $message = 'User not found';
-            $code = 404;
+        if (!$user) {
+            return [
+                'message' => 'User not found',
+                'code'    => 404,
+            ];
         }
 
-        return ['user' => $user, 'message' => $message, 'code' => $code];
+        if (!Auth::attempt($request->only(['email', 'password']))) {
+            return [
+                'message' => 'User email & password does not match with our record.',
+                'code'    => 401,
+            ];
+        }
+
+        $user->load(['roles', 'permissions']);
+        $token = $user->createToken("auth_token")->plainTextToken;
+
+        return [
+            'user'    => $this->formatUser($user),
+            'message' => 'User logged in successfully',
+            'token'   => $token,
+            'code'    => 200,
+        ];
     }
+
     public function logout(): array
     {
-        $user = Auth::user();
-        if (!is_null(Auth::user())) {
+        if (Auth::check()) {
             Auth::user()->currentAccessToken()->delete();
-            $message = 'User logged out successfully';
-            $code = 200;
-        } else {
-            $message = 'Invalid token';
-            $code = 404;
+            return [
+                'message' => 'User logged out successfully',
+                'code'    => 200,
+            ];
         }
-        return ['message' => $message, 'code' => $code];
+
+        return [
+            'message' => 'Invalid token',
+            'code'    => 404,
+        ];
     }
-    private function appendRolesAndPermissions(User $user)
+
+    private function formatUser(User $user): array
     {
-        // معالجة الأدوار
-        $roles = $user->roles->pluck('name')->toArray();
-        unset($user['roles']);
-        $user['roles'] = $roles;
-
-        // معالجة الصلاحيات
-        $permissions = $user->permissions->pluck('name')->toArray();
-        unset($user['permissions']);
-        $user['permissions'] = $permissions;
-
-        return $user;
+        return [
+            'id'          => $user->id,
+            'name'        => $user->name,
+            'email'       => $user->email,
+            'image'       => pathinfo($user->image, PATHINFO_BASENAME), // اسم الصورة فقط
+            'age'         => $user->age,
+            'gender'      => $user->gender,
+            'roles'       => $user->roles->pluck('name')->toArray(),
+            'permissions' => $user->permissions->pluck('name')->toArray(),
+        ];
     }
-
-    }
+}
