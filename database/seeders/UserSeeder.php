@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             'email_verified_at'=> now(),
             'password' => Hash::make('12345678'),
         ]);
-        $user1->syncRoles('user');
+        $user1->syncRoles('customer');
 
         $user2 =User::create([
             'name'=>'admin',
@@ -69,7 +69,7 @@ class UserSeeder extends Seeder
             'email_verified_at'=> now(),
             'password' => Hash::make('12345678'),
         ]);
-        $user4->syncRoles(['company_supervision', 'employee']);
+        $user4->syncRoles(['supervisor', 'employee']);
 
         $user5 =User::create([
             'name'=>'test',

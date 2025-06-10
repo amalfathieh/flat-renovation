@@ -16,4 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->withBindings([
+        Illuminate\Contracts\Http\Kernel::class => App\Http\Kernel::class,
+    ])
+    ->create();

@@ -15,16 +15,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-//        $this->call([
-//            RolesAndPermissionsSeeder::class,
-//
-//            UserSeeder::class,
-//        ]);
-//
-//
-//        Company::factory(4)->create();
-        Employee::factory(20)->create();
+        $this->call([
+            RolesAndPermissionsSeeder::class,
 
+            UserSeeder::class,
+        ]);
+
+
+        Company::factory(4)->create();
+        Employee::factory(20)->create();
 
 //        User::factory(2)->withRole('employee')->create();
 

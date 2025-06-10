@@ -51,7 +51,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $owner = Role::create(['name' => 'admin'])->givePermissionTo($permissions);
 
-        $userRole = Role::create(['name' => 'user'])->givePermissionTo([
+        $userRole = Role::create(['name' => 'customer'])->givePermissionTo([
             'complaint_create', 'user_create', 'user_view','user_edit', 'user_delete', 'project_view',
             'service_view', 'objection_create', 'objection_view', 'objection_delete',
             'order_create', 'order_view', 'order_delete',
@@ -81,7 +81,7 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
 
-        Role::create(['name' => 'company_supervision'])->givePermissionTo([
+        Role::create(['name' => 'supervisor'])->givePermissionTo([
             'view_company_dashboard',
             //الشكاوي
              'complaint_view',

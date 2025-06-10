@@ -7,9 +7,13 @@
     "require": {
         "php": "^8.2",
         "bezhansalleh/filament-shield": "^3.3",
-        "filament/filament": "^3.3",
+        "blade-ui-kit/blade-heroicons": "*",
+        "blade-ui-kit/blade-icons": "*",
+        "filament/filament": "3.3",
+        "illuminate/cache": "*",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
+        "laravel/socialite": "^5.21",
         "laravel/tinker": "^2.9",
         "spatie/laravel-permission": "^6.18"
     },

@@ -18,7 +18,6 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements  HasTenants, FilamentUser, MustVerifyEmail
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles, HasApiTokens;
 
     /**
@@ -30,6 +29,7 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
         'name',
         'email',
         'password',
+        'google_id',
         'email_verified_at',
         'banned_at'
     ];
@@ -127,4 +127,9 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
         }
         return asset('images/logo.jpg');
     }
+    public function customerProfile()
+    {
+        return $this->hasOne(\App\Models\Customer::class);
+    }
+
 }

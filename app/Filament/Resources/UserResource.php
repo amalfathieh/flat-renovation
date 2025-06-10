@@ -73,10 +73,10 @@ class UserResource extends Resource
                         return match($state){
                             'admin' => 'danger',
                             'control_panel_employee' =>'info',
-                            'company_supervision' => 'primary',
+                            'supervisor' => 'primary',
                             'company' => 'info',
                             'employee' => 'gray',
-                            'user' => 'success'
+                            'customer' => 'success'
                         };
                     })
                     ->searchable(),
