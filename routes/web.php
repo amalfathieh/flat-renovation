@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Responses\Response;
+use App\Models\User;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 
@@ -8,15 +11,11 @@ Route::get('/testWeb', function () {
     $user= Auth::user();
     return $user;
 });
-
-Route::get('/email/verify', function () {
-    return view('auth.verify-email'); // صفحة تطلب منه يفحص بريده
-})->middleware('auth')->name('verification.notice');
-
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+Route::get('/verify-email/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill(); // تؤكد البريد
-    return redirect('/company'); // أو أي مكان تريده
-})->middleware(['auth', 'signed'])->name('verification.verify');
+    event(new Verified(User::query()->find($request->route('id'))));
+    return Response::Success(null, 'Email Verified Successfully');
+})->middleware(['auth:sanctum', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Illuminate\Http\Request $request) {
     $request->user()->sendEmailVerificationNotification();

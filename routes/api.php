@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\VerifiedEmail;
+use App\Http\Responses\Response;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
@@ -19,9 +21,6 @@ Route::get('tests', function (){
 //    return $user->company()->whereKey($tenant)->exists();
     return $user->company;
     return $user;
-});
-Route::get('/user', function (Request $request) {
-    return $request->user();
 })->middleware('auth:sanctum');
 
 Route::post('register' , function (Request $request){
@@ -40,18 +39,13 @@ Route::post('register' , function (Request $request){
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill(); // تؤكد البريد
     event(new Verified(User::query()->find($request->route('id'))));
-    return response()->json([
-        'data' =>true,
-        'message' => 'Email Verified Successfully',
-    ], 200);
+    return Response::Success(null, 'Email Verified Successfully');
 })->middleware(['auth:sanctum', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Illuminate\Http\Request $request) {
     $request->user()->sendEmailVerificationNotification();
-    return response()->json([
-        'data' =>true,
-        'message' => 'Verification link sent',
-    ], 200);
+    return Response::Success(null, 'Verification link sent');
+
 })->middleware(['auth:sanctum', 'throttle:6,1'])->name('verification.send');
 
 
@@ -63,7 +57,7 @@ Route::post('/auth/google/token', [SocialAuthController::class, 'handleGoogleTok
 
 
 
-Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:customer', VerifiedEmail::class])->group(function () {
     Route::post('/customer/logout', [CustomerAuthController::class,'logout']);
 
 

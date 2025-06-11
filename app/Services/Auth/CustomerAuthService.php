@@ -5,6 +5,7 @@ namespace App\Services\Auth
 
 use App\Models\User;
 use App\Models\Customer;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -31,7 +32,6 @@ class CustomerAuthService implements CustomerAuthServiceInterface
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
-            'email_verified_at' => now(),
         ]);
 
         $user->assignRole('customer');
@@ -46,6 +46,8 @@ class CustomerAuthService implements CustomerAuthServiceInterface
 
         $token = $user->createToken('mobile')->plainTextToken;
 
+
+        event(new Registered($user));
         return [
             'user' => $this->formatUser($user),
             'token' => $token,
