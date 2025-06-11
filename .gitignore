@@ -20,9 +20,10 @@ yarn-error.log
 /.idea
 /.vscode
 /.zed
-bootstrap/cache/routes.php
 bootstrap/cache/config.php
+bootstrap/cache/routes.php
 bootstrap/cache/services.php
-bootstrap/cache/*.php
-/bootstrap/cache/*.php
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
 
