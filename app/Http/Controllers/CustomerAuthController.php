@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Requests\RegisterRequest;
 use App\Http\Responses\Response;
 use App\Services\Auth\CustomerAuthServiceInterface;
 use Illuminate\Http\Request;
@@ -17,10 +18,11 @@ class CustomerAuthController extends Controller
         $this->authService = $authService;
     }
 
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
         $result = $this->authService->register($request);
-        return Response::Success($result, 'User Created Successfully');
+        return Response::Success($result, __('strings.verification_code_sent'));
+
 
     }
 
@@ -28,7 +30,7 @@ class CustomerAuthController extends Controller
     {
         try {
             $result = $this->authService->login($request);
-            return Response::Success($result, 'User Logged In Successfully');
+            return Response::Success($result,  __('strings.user_logged_in_successfully'));
         } catch (\Exception $e) {
             return Response::Error( $e->getMessage(), $e->getCode() ?: 400);
 
@@ -38,7 +40,7 @@ class CustomerAuthController extends Controller
     public function logout(Request $request)
     {
         $this->authService->logout($request);
-        return Response::Success(null, 'User Sign out successful');
+        return Response::Success(null, __('strings.user_logged_out_successfully'));
 
     }
 }

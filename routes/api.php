@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CodeController;
 use App\Http\Middleware\VerifiedEmail;
 use App\Http\Responses\Response;
 use App\Models\User;
@@ -17,11 +18,7 @@ use App\Http\Controllers\SocialAuthController;
 
 Route::get('tests', function (){
     return Auth::user();
-    $user = User::query()->findOrFail(3);
-//    return $user->company()->whereKey($tenant)->exists();
-    return $user->company;
-    return $user;
-})->middleware('auth:sanctum');
+})->middleware(['auth:sanctum', VerifiedEmail::class]);
 
 Route::post('register' , function (Request $request){
     $user = User::create([
@@ -36,26 +33,21 @@ Route::post('register' , function (Request $request){
 });
 
 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill(); // تؤكد البريد
-    event(new Verified(User::query()->find($request->route('id'))));
-    return Response::Success(null, 'Email Verified Successfully');
-})->middleware(['auth:sanctum', 'signed'])->name('verification.verify');
-
-Route::post('/email/verification-notification', function (Illuminate\Http\Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-    return Response::Success(null, 'Verification link sent');
-
-})->middleware(['auth:sanctum', 'throttle:6,1'])->name('verification.send');
-
-
-
-
 Route::post('/customer/register', [CustomerAuthController::class, 'register']);
 Route::post('/customer/login', [CustomerAuthController::class, 'login']);
 Route::post('/auth/google/token', [SocialAuthController::class, 'handleGoogleToken']);
 
 
+Route::controller(CodeController::class)->group(function (){
+
+    Route::post('verifyAccount',  'verifyAccount');
+    Route::post('resendCode', 'sendCodeVerification')->middleware('throttle:6,1');
+
+    // Send Code For Reset Password Or Resend Code
+    Route::post('forgetPassword', 'sendCodeVerification');
+    Route::post('checkCode', 'checkCode');
+    Route::post('resetPassword', 'resetPassword');
+});
 
 Route::middleware(['auth:sanctum', 'role:customer', VerifiedEmail::class])->group(function () {
     Route::post('/customer/logout', [CustomerAuthController::class,'logout']);

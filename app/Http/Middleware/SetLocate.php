@@ -17,13 +17,12 @@ class SetLocate
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(session()->has('locale')){
-            app()->setLocale(session('locale'));
+        if($request->hasHeader('Accept-Language')){
+            App::setLocale($request->header('Accept-Language'));
         }
-
-//        if($request->hasHeader('Accept-Language')){
-//            app()->setLocale($request->header('Accept-Language'));
-//        }
+        if(Session::has('lang')){
+            App::setLocale(Session::get('lang'));
+        }
         return $next($request);
     }
 }

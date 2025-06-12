@@ -5,49 +5,41 @@ namespace App\Services\Auth
 
 use App\Models\User;
 use App\Models\Customer;
-use Illuminate\Auth\Events\Registered;
+use App\Traits\CodeTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class CustomerAuthService implements CustomerAuthServiceInterface
 {
-    public function register(Request $request): array
+    use CodeTrait;
+    public function register( $request): array
     {
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6|confirmed',
-            'phone' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'age' => 'nullable|integer|min:1',
-            'gender' => 'nullable|in:male,female',
-        ]);
-
         $imagePath = $request->hasFile('image')
             ? $request->file('image')->store('users', 'public')
             : null;
 
         $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => bcrypt($validated['password']),
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => bcrypt($request['password']),
         ]);
 
         $user->assignRole('customer');
 
         // إنشاء ملف تعريف المستخدم
         $user->customerProfile()->create([
-            'phone' => $validated['phone'] ?? null,
+            'phone' => $request['phone'] ?? null,
             'image' => $imagePath,
-            'age' => $validated['age'] ?? null,
-            'gender' => $validated['gender'] ?? null,
+            'age' => $request['age'] ?? null,
+            'gender' => $request['gender'] ?? null,
         ]);
 
         $token = $user->createToken('mobile')->plainTextToken;
 
+        //Send verification code to user
+        $this->sendVerificationCode($user);
 
-        event(new Registered($user));
         return [
             'user' => $this->formatUser($user),
             'token' => $token,
@@ -57,7 +49,7 @@ class CustomerAuthService implements CustomerAuthServiceInterface
     public function login(Request $request): array
     {
         if (!Auth::attempt($request->only('email', 'password'))) {
-            throw new \Exception('Incorrect data', 401);
+            throw new \Exception(__('strings.email_password_mismatch'), 401);
         }
 
         $user = Auth::user();
@@ -91,6 +83,8 @@ class CustomerAuthService implements CustomerAuthServiceInterface
             'age' => $profile->age ?? null,
             'gender' => $profile->gender ?? null,
             'role' => $user->getRoleNames(),
+            'created_at' => $user->created_at,
+            'email_verified_at' => $user->email_verified_at,
         ];
     }
 }

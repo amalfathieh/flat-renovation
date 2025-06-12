@@ -16,7 +16,7 @@ class VerifiedEmail
     public function handle(Request $request, Closure $next)
     {
         if (!$request->user() || ($request->user() instanceof  MustVerifyEmail && ! $request->user()->hasVerifiedEmail())){
-            return Response::Error( 'Your email address is not verified.');
+            return Response::Error( __('strings.account_not_verified'));
         }
         return $next($request);
     }
