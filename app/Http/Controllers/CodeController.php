@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\VerificationCode;
 use App\Traits\CodeTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CodeController extends Controller
@@ -58,6 +59,24 @@ class CodeController extends Controller
             if(!$user){
                 return Response::Error('account for this email not exist', 404);
             }
+
+            //Send verification code to user
+            $this->sendVerificationCode($user);
+
+            return Response::Success(null, __('strings.code_sent_email') );
+
+        } catch (\Exception $ex) {
+            return Response::Error(  $ex->getMessage());
+        }
+    }
+
+    public function resendCode()
+    {
+        try {
+            $user = Auth::user();
+            VerificationCode::where('email', $user->email)->delete();
+
+            $user = User::where('email', $user->email)->first();
 
             //Send verification code to user
             $this->sendVerificationCode($user);

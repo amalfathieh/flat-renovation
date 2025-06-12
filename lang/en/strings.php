@@ -32,5 +32,7 @@ return [
     'password_reset_success' => 'password has been successfully reset',
     'code_sent_email' => 'We sent code to your email. Check your email please',
     'code_is_correct' => 'code is correct',
+    "created_successfully" => "تم الإنشاء بنجاح",
+
 
 ];

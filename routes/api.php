@@ -40,11 +40,11 @@ Route::post('/auth/google/token', [SocialAuthController::class, 'handleGoogleTok
 
 Route::controller(CodeController::class)->group(function (){
 
-    Route::post('verifyAccount',  'verifyAccount');
-    Route::post('resendCode', 'sendCodeVerification')->middleware('throttle:6,1');
+    Route::post('verifyAccount',  'verifyAccount')->middleware(['auth:sanctum']);
+    Route::get('resendCode', 'resendCode')->middleware(['auth:sanctum']);
 
     // Send Code For Reset Password Or Resend Code
-    Route::post('forgetPassword', 'sendCodeVerification');
+    Route::get('forgetPassword', 'sendCodeVerification');
     Route::post('checkCode', 'checkCode');
     Route::post('resetPassword', 'resetPassword');
 });

@@ -30,7 +30,8 @@ return [
     'password_correct' => 'كلمة المرور صحيحة',
     'password_incorrect' => 'كلمة المرور غير صحيحة',
     'password_reset_success' => 'تم إعادة تعيين كلمة المرور بنجاح',
-    'code_sent_email' => 'تم إرسال الرمز إلى بريدك الإلكتروني. الرجاء التحقق من بريدك الإلكتروني',
     'code_is_correct' => 'الرمز صحيح',
+    "created_successfully" => "تم الإنشاء بنجاح",
+
 ];
 
