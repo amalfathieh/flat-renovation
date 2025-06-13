@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CompanyController;
 use App\Http\Middleware\VerifiedEmail;
 use App\Http\Responses\Response;
 use App\Models\User;
@@ -55,9 +56,9 @@ Route::post('/customer/register', [CustomerAuthController::class, 'register']);
 Route::post('/customer/login', [CustomerAuthController::class, 'login']);
 Route::post('/auth/google/token', [SocialAuthController::class, 'handleGoogleToken']);
 
+Route::get('/companies', [CompanyController::class, 'index']);
 
-
-Route::middleware(['auth:sanctum', 'role:customer', VerifiedEmail::class])->group(function () {
+Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::post('/customer/logout', [CustomerAuthController::class,'logout']);
 
 
