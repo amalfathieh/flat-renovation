@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('phone');
             $table->date('starting_date');
             $table->date('birth_day')->nullable();
-            $table->string('description');
+            $table->string('description')->nullable()->change();;
             $table->timestamps();
         });
     }

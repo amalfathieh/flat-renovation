@@ -17,22 +17,18 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RolesAndPermissionsSeeder::class,
-            CompanySeeder::class,
-            ServiceSeeder::class,
-            ProjectSeeder::class,
-            ProjectImageSeeder::class,
             UserSeeder::class,
         ]);
 
 
-//        Company::factory(4)->create();
-//        Employee::factory(20)->create();
+        Company::factory(4)->create();
+        Employee::factory(20)->create();
 
-//        User::factory(2)->withRole('employee')->create();
+        User::factory(2)->withRole('employee')->create();
 
-//        User::factory()->create([
-//            'name' => 'Test User',
-//            'email' => 'test@example.com',
-//        ]);
+        User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+        ]);
     }
 }
