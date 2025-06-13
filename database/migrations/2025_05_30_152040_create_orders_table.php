@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('company_id')
                 ->constrained('companies')
                 ->cascadeOnDelete();
+            $table->foreignId('employee_id')->nullable()->constrained()->onDelete('set null');
             $table->enum('status', ['accepted', 'waiting', 'rejected'])->default('waiting');
             $table->text('notes');
             $table->timestamps();

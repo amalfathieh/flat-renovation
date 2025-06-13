@@ -46,18 +46,18 @@ class RolesAndPermissionsSeeder extends Seeder
 
         ];
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::firstOrCreate(['name' => $permission]);
         }
 
-        $owner = Role::create(['name' => 'admin'])->givePermissionTo($permissions);
+        $owner = Role::firstOrCreate(['name' => 'admin'])->givePermissionTo($permissions);
 
-        $userRole = Role::create(['name' => 'customer'])->givePermissionTo([
+        $userRole = Role::firstOrCreate(['name' => 'customer'])->givePermissionTo([
             'complaint_create', 'user_create', 'user_view','user_edit', 'user_delete', 'project_view',
             'service_view', 'objection_create', 'objection_view', 'objection_delete',
             'order_create', 'order_view', 'order_delete',
         ]);
 
-        $companyRole = Role::create(['name' => 'company'])->givePermissionTo([
+        $companyRole = Role::firstOrCreate(['name' => 'company'])->givePermissionTo([
 //            'role_control',
             'employee_control', 'employee_view',
             'company_create',  'company_view', 'company_edit',
@@ -70,7 +70,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'objection_create', 'objection_view',
         ]);
 
-        Role::create(['name' => 'control_panel_employee'])->givePermissionTo([
+        Role::firstOrCreate(['name' => 'control_panel_employee'])->givePermissionTo([
             'company_view',
             'user_view','user_edit', 'user_delete',
             'block_user',
@@ -81,7 +81,7 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
 
-        Role::create(['name' => 'supervisor'])->givePermissionTo([
+        Role::firstOrCreate(['name' => 'supervisor'])->givePermissionTo([
             'view_company_dashboard',
             //الشكاوي
              'complaint_view',
@@ -92,6 +92,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'service_view',
         ]);
 
-        Role::create(['name' => 'employee']);
+        Role::firstOrCreate(['name' => 'employee']);
     }
 }
