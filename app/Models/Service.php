@@ -8,14 +8,19 @@ class Service extends Model
 {
     //
 
-    protected $fillable = ['name', 'description', 'image'];
+    protected $fillable = ['company_id','name', 'description', 'image'];
 
     public function company(){
         return $this->belongsTo(Company::class);
     }
 
+
     public function serviceTypes(){
         return $this->hasMany(ServiceType::class);
     }
 
+
+    public function questions() {
+        return $this->hasMany(QuestionService::class);
+    }
 }
