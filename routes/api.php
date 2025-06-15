@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\SearchController;
 use App\Http\Middleware\VerifiedEmail;
 use App\Http\Responses\Response;
 use App\Models\User;
@@ -54,12 +55,14 @@ Route::middleware(['auth:sanctum', 'role:customer',VerifiedEmail::class])->group
     Route::post('/customer/logout', [CustomerAuthController::class,'logout']);
 
 
-    Route::get('/customer/profile', [CustomerProfileController::class, 'show']);
+    Route::get('/customer/getprofile', [CustomerProfileController::class, 'show']);
     Route::post('/customer/profile', [CustomerProfileController::class, 'update']);
     Route::post('/customer/change-password', [CustomerProfileController::class, 'changePassword']);
 
    Route::get('/companies', [CompanyController::class,'index']);
 
     Route::get('/companies/{company}/projects', [CompanyController::class,'show']);
+    Route::post('/companies/search', [SearchController::class, 'search']);
+
 });
 

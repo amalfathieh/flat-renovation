@@ -18,7 +18,9 @@ class CustomerProfileService
             'name' => $user->name,
             'email' => $user->email,
             'phone' => $profile?->phone,
-            'image' => $profile?->image ? basename($profile->image) : null,
+            'image' => $profile?->image
+                ? asset('storage/' . $profile->image)
+                : null,
             'age' => $profile?->age,
             'gender' => $profile?->gender,
             'role' => $user->getRoleNames(),
