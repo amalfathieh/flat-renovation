@@ -139,10 +139,10 @@ class EmployeeResource extends Resource
                     ->color(function (string $state):string {
                         return match($state){
                             'admin' => 'danger',
-                            'control_panel_employee' =>'info',
+                            'control_panel_employee' =>'gray',
                             'supervisor' => 'primary',
                             'company' => 'info',
-                            'employee' => 'gray',
+                            'employee' => 'info',
                             'customer' => 'success'
                         };
                     })

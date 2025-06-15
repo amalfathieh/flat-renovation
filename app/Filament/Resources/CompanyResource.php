@@ -58,6 +58,8 @@ class CompanyResource extends Resource
     {
         return $table
             ->columns([
+
+                Tables\Columns\ImageColumn::make('logo')->label('الشعار'),
                 Tables\Columns\TextColumn::make('user_id')
                     ->numeric()
                     ->sortable(),
@@ -77,9 +79,6 @@ class CompanyResource extends Resource
                 Tables\Columns\TextColumn::make('employees_count')
                     ->label('عدد الموظفين')
                     ->counts('employees'),
-
-                Tables\Columns\TextColumn::make('location')
-                    ->searchable(),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('تاريخ الإنشاء')
@@ -103,7 +102,7 @@ class CompanyResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\EmployeesRelationManager::class,
         ];
     }
 
@@ -112,42 +111,33 @@ class CompanyResource extends Resource
     {
         return $infolist
             ->schema([
-                Section::make('معلومات الشركة')
-                    ->schema([
-                        TextEntry::make('name')
-                            ->label('اسم الشركة'),
+                    Section::make('معلومات الشركة')
+                        ->schema([
+                            TextEntry::make('name')
+                                ->label('اسم الشركة'),
 
-                        TextEntry::make('location')
-                            ->label('الموقع'),
+                            TextEntry::make('location')
+                                ->label('الموقع'),
 
-                        TextEntry::make('about')
-                            ->label('عن الشركة')
-                            ->columnSpanFull(),
+                            TextEntry::make('about')
+                                ->label('عن الشركة'),
 
-                        ImageEntry::make('logo')
-                            ->label('الشعار')
-                            ->disk('public')
-                            ->height(100),
-                    ])->columns(2),
+                                    ImageEntry::make('logo')
+                                        ->label('الشعار')
+                                        ->disk('public')
+                                        ->height(150),
+                        ])->columns(2),
 
-                Section::make('الموظفين')
-                    ->schema([
-                        RepeatableEntry::make('employees')
-                            ->label('')
-                            ->schema([
-                                TextEntry::make('user.name')
-                                    ->label('الاسم'),
+                    Section::make('المالك')
+                        ->schema([
+                            TextEntry::make('owner.name')
+                                ->label('الاسم'),
 
-                                TextEntry::make('user.email')
-                                    ->label('البريد الإلكتروني'),
+                            TextEntry::make('owner.email')
+                                ->label('البريد الإلكتروني'),
 
-                                TextEntry::make('starting_date')
-                                    ->label('تاريخ التعيين')
-                                    ->date(),
+                        ])->columns(2)
 
-                            ])
-                            ->columns(4)
-                    ])
             ]);
     }
     public static function getPages(): array
@@ -155,8 +145,8 @@ class CompanyResource extends Resource
         return [
             'index' => Pages\ListCompanies::route('/'),
 //            'create' => Pages\CreateCompany::route('/create'),
-//            'view' => Pages\ViewCompany::route('/{record}'),
-//            'edit' => Pages\EditCompany::route('/{record}/edit'),
+            'view' => Pages\ViewCompany::route('/{record}'),
+            'edit' => Pages\EditCompany::route('/{record}/edit'),
         ];
     }
 }
