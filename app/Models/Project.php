@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
+
+
+    //oooppp Hiba 0983449075
     use HasFactory;
     protected $fillable = [
         'company_id',
@@ -54,6 +57,8 @@ class Project extends Model
 //    public function objections() {
 //        return $this->hasMany(Objection::class);
 //    }
+
+
 
     protected $casts = [
         'created_at' => 'datetime:Y-m-d',

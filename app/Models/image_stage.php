@@ -15,6 +15,7 @@ class image_stage extends Model
 
         return $this->belongsTo(ProjectStage::class);
     }
+
     protected $casts = [
         'created_at' => 'datetime:Y-m-d',
         'updated_at' => 'datetime:Y-m-d',

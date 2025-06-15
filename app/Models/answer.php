@@ -22,6 +22,7 @@ class answer extends Model
     {
         return $this->belongsTo(QuestionService::class);
     }
+    //
 
     //
     protected $casts = [

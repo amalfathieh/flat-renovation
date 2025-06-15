@@ -14,14 +14,13 @@ class Objection extends Model
     ];
 
 
-    public function project() {
-        return $this->belongsTo(Project::class);
+    public function projectStage() {
+        return $this->belongsTo(ProjectStage::class);
     }
 
     public function customer() {
         return $this->belongsTo(Customer::class);
     }
-
 
 
     protected $casts = [

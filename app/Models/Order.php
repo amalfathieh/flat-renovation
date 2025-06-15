@@ -17,26 +17,29 @@ class Order extends Model
         'budget',
     ];
 
-    //
+
     public function customer() {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(Customer::class);
     }
 
-    public function employee() {
-        return $this->belongsTo(Employee::class);
-    }
+
 
     public function company() {
         return $this->belongsTo(Company::class);
     }
 
-    public function appointments() {
-        return $this->hasMany(Appointment::class);
-    }
 
     public function project() {
         return $this->hasOne(Project::class);
     }
+
+
+    public function answers() {
+        return $this->hasMany(Answer::class);
+    }
+
+
+
     protected $casts = [
         'created_at' => 'datetime:Y-m-d',
         'updated_at' => 'datetime:Y-m-d',

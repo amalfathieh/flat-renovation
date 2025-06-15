@@ -25,6 +25,7 @@ class Service extends Model
     public function questions() {
         return $this->hasMany(QuestionService::class);
     }
+
     protected $casts = [
         'created_at' => 'datetime:Y-m-d',
         'updated_at' => 'datetime:Y-m-d',

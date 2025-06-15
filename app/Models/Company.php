@@ -11,7 +11,7 @@ class Company extends Model
     use HasFactory;
 
     protected $fillable = [
-      'user_id', 'name', 'slug', 'logo', 'location', 'about','phone','email'
+        'user_id', 'name', 'slug', 'logo', 'location', 'about','phone','email'
     ];
 
     public function user() {
@@ -61,6 +61,10 @@ class Company extends Model
     public function orders() {
         return $this->hasMany(Order::class);
     }
+
+
+
+
 
     protected $casts = [
         'created_at' => 'datetime:Y-m-d',
