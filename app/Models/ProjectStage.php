@@ -30,5 +30,8 @@ class ProjectStage extends Model
     public function objections() {
         return $this->hasMany(Objection::class);
     }
-
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d',
+        'updated_at' => 'datetime:Y-m-d',
+    ];
 }

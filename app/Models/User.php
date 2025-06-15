@@ -131,5 +131,8 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
     {
         return $this->hasOne(Customer::class);
     }
-
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d',
+        'updated_at' => 'datetime:Y-m-d',
+    ];
 }

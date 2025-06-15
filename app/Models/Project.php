@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -54,6 +55,19 @@ class Project extends Model
 //        return $this->hasMany(Objection::class);
 //    }
 
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d',
+        'updated_at' => 'datetime:Y-m-d',
+    ];
+    protected $appends = ['duration_in_days']; // لإضافته تلقائيًا في JSON
 
+    public function getDurationInDaysAttribute()
+    {
+        if (!$this->start_date || !$this->end_date) {
+            return null;
+        }
+
+        return Carbon::parse($this->start_date)->diffInDays(Carbon::parse($this->end_date));
+    }
 }
 

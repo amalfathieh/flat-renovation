@@ -19,4 +19,8 @@ class ProjectImage extends Model
     {
         return $this->belongsTo(Project::class);
     }
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d',
+        'updated_at' => 'datetime:Y-m-d',
+    ];
 }

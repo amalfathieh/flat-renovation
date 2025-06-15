@@ -50,7 +50,7 @@ Route::controller(CodeController::class)->group(function (){
     Route::post('resetPassword', 'resetPassword');
 });
 
-Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:customer',VerifiedEmail::class])->group(function () {
     Route::post('/customer/logout', [CustomerAuthController::class,'logout']);
 
 
