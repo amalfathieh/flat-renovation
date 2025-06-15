@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Services\Auth\CustomerProfileService;
 use Illuminate\Http\Request;
+use App\Http\Responses\Response; // ✅ استدعاء كلاس Response
 
 class CustomerProfileController extends Controller
 {
@@ -18,13 +18,13 @@ class CustomerProfileController extends Controller
     public function show(Request $request)
     {
         $data = $this->profileService->show($request->user());
-        return response()->json(['user' => $data]);
+        return Response::success(['user' => $data], 'تم جلب البيانات بنجاح');
     }
 
     public function update(Request $request)
     {
         $data = $this->profileService->update($request, $request->user());
-        return response()->json(['user' => $data]);
+        return Response::success(['user' => $data], 'تم تحديث البيانات بنجاح');
     }
 
     public function changePassword(Request $request)
@@ -32,9 +32,9 @@ class CustomerProfileController extends Controller
         $result = $this->profileService->changePassword($request, $request->user());
 
         if (isset($result['error'])) {
-            return response()->json(['message' => $result['error']], 403);
+            return Response::error($result['error'], 403);
         }
 
-        return response()->json(['message' => $result['message']]);
+        return Response::success(null, $result['message']);
     }
 }

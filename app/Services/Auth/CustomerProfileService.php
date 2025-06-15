@@ -18,9 +18,7 @@ class CustomerProfileService
             'name' => $user->name,
             'email' => $user->email,
             'phone' => $profile?->phone,
-            'image' => $profile?->image
-                ? asset('storage/' . $profile->image)
-                : null,
+            'image' => $this->imagePath($profile?->image),
             'age' => $profile?->age,
             'gender' => $profile?->gender,
             'role' => $user->getRoleNames(),
@@ -40,11 +38,9 @@ class CustomerProfileService
         $profile = $user->customerProfile;
 
         if (!$profile) {
-            // إذا ما كان عنده بروفايل، ننشئ واحد
             $profile = new Customer(['user_id' => $user->id]);
         }
 
-        // تحديث صورة
         if ($request->hasFile('image')) {
             if ($profile->image && Storage::disk('public')->exists($profile->image)) {
                 Storage::disk('public')->delete($profile->image);
@@ -52,13 +48,11 @@ class CustomerProfileService
             $profile->image = $request->file('image')->store('users', 'public');
         }
 
-        // تحديث بيانات البروفايل
         $profile->phone = $validated['phone'] ?? $profile->phone;
         $profile->age = $validated['age'] ?? $profile->age;
         $profile->gender = $validated['gender'] ?? $profile->gender;
         $profile->save();
 
-        // تحديث الاسم في جدول المستخدمين (users)
         if (isset($validated['name'])) {
             $user->name = $validated['name'];
             $user->save();
@@ -83,5 +77,13 @@ class CustomerProfileService
         ]);
 
         return ['message' => 'Password changed successfully'];
+    }
+
+    private function imagePath($path)
+    {
+        if (!$path) return null;
+
+        return '/storage/' . ltrim($path, '/');
+
     }
 }

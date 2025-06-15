@@ -18,14 +18,10 @@ class Company extends Model
         return $this->belongsTo(User::class);
     }
 
-//    public function employees(){
-//        return $this->hasMany(Employee::class);
-//    }
-
-//    public function owner()
-//    {
-//        return $this->belongsTo(User::class, 'user_id');
-//    }
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function getBrandLogo()
     {
@@ -61,9 +57,6 @@ class Company extends Model
     public function orders() {
         return $this->hasMany(Order::class);
     }
-
-
-
 
 
     protected $casts = [

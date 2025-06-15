@@ -48,7 +48,6 @@ class ServiceResource extends Resource
 
                     ]),
             ]);
-
     }
 
     public static function table(Table $table): Table
@@ -96,8 +95,8 @@ class ServiceResource extends Resource
         ];
     }
 
-//    public static function getNavigationLabel(): string
-//    {
-//        return __('strings.navigation.services');
-//    }
+    //    public static function getNavigationLabel(): string
+    //    {
+    //        return __('strings.navigation.services');
+    //    }
 }

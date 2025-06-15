@@ -61,6 +61,7 @@ class SearchController extends Controller
 
     private function imagePath($path)
     {
-        return $path ? asset('storage/' . ltrim($path, '/')) : null;
+        return '/storage/' . ltrim($path, '/');
     }
+
 }
