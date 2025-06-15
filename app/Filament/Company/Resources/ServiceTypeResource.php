@@ -23,18 +23,18 @@ class ServiceTypeResource extends Resource
 
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    public static ?string $tenantOwnershipRelationshipName ='service';
+    public static ?string $tenantOwnershipRelationshipName = 'service';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Select::make('service_id')
-                    ->relationship('service', 'name', modifyQueryUsing:function ($query){
-                        if(Auth::user()->hasRole('employee')){
+                    ->relationship('service', 'name', modifyQueryUsing: function ($query) {
+                        if (Auth::user()->hasRole('employee')) {
                             $query->where('company_id',  auth()->user()->employee->company_id);
                         }
-                        if(Auth::user()->hasRole('company')){
+                        if (Auth::user()->hasRole('company')) {
                             $query->where('company_id',  Auth::user()->company->id);
                         }
                     })

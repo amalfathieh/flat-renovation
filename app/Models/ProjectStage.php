@@ -1,35 +1,36 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Customer extends Model
+class ProjectStage extends Model
 {
     use HasFactory;
-
     protected $fillable = [
-        'user_id',
-        'phone',
-        'image',
-        'age',
-        'gender',
+        'project_id',
+        'stage_name',
+        'description',
+        'started_at',
+        'completed_at',
+        'status',
+        'cost',
     ];
 
-    public function user()
+    public function project()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Project::class);
+    }
+
+    public function ImageStage() {
+
+        return $this->hasMany(image_stage::class);
     }
 
     public function objections() {
         return $this->hasMany(Objection::class);
     }
 
-
-    public function orders() {
-        return $this->hasMany(Order::class);
-    }
 
     protected $casts = [
         'created_at' => 'datetime:Y-m-d',

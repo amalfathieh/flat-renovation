@@ -13,14 +13,12 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-                ->constrained()
-                ->cascadeOnDelete();
-            $table->foreignId('company_id')
-                ->constrained('companies')
-                ->cascadeOnDelete();
-            $table->enum('status', ['accepted', 'waiting', 'rejected'])->default('waiting');
-            $table->text('notes');
+            $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
+            $table->enum('status', ['accepted', 'waiting', 'rejected'])->default('accepted');
+            $table->text('cost_of_examination');
+            $table->text('location');
+            $table->text('budget');
             $table->timestamps();
         });
     }

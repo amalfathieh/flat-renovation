@@ -9,12 +9,13 @@ use Illuminate\Support\Facades\Storage;
 class Company extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-      'user_id', 'name', 'slug', 'logo', 'location', 'about'
+        'user_id', 'name', 'slug', 'logo', 'location', 'about','phone','email'
     ];
 
-    public function employees(){
-        return $this->hasMany(Employee::class);
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 
     public function owner()
@@ -45,4 +46,21 @@ class Company extends Model
     public function services(){
         return $this->hasMany(Service::class);
     }
+
+    public function employees(){
+        return $this->hasMany(Employee::class);
+    }
+    public function projects() {
+        return $this->hasMany(Project::class);
+    }
+
+    public function orders() {
+        return $this->hasMany(Order::class);
+    }
+
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d',
+        'updated_at' => 'datetime:Y-m-d',
+    ];
 }

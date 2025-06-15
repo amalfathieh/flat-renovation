@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('service_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('service_id')
-                ->constrained('services')
-                ->cascadeOnDelete();
+            $table->foreignId('service_id')->constrained('services')->cascadeOnDelete();
             $table->string('name');
             $table->text('description');
             $table->string('unit');
+            $table->string('image')->nullable();
             $table->decimal('price_per_unit');
             $table->timestamps();
         });

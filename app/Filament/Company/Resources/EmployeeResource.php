@@ -63,7 +63,7 @@ class EmployeeResource extends Resource
                                             table: 'users',
                                             column: 'email',
                                             ignoreRecord: true,
-                                            ignorable: fn ($record) => $record?->user
+                                            ignorable: fn($record) => $record?->user
                                         ),
 
                                     TextInput::make('user.password')
@@ -73,7 +73,7 @@ class EmployeeResource extends Resource
                                         ->columnSpanFull()
                                         ->helperText('سيتم إرسال كلمة مرور مؤقتة إلى البريد الإلكتروني للموظف')
                                         ->hiddenOn(['edit', 'view'])
-                                        ->dehydrated(fn ($state) => filled($state)),
+                                        ->dehydrated(fn($state) => filled($state)),
 
                                     Select::make('user.roles')
                                         ->label('الدور')
@@ -136,10 +136,10 @@ class EmployeeResource extends Resource
                 Tables\Columns\TextColumn::make('user.roles.name')
                     ->label('الدور')
                     ->badge()
-                    ->color(function (string $state):string {
-                        return match($state){
+                    ->color(function (string $state): string {
+                        return match ($state) {
                             'admin' => 'danger',
-                            'control_panel_employee' =>'gray',
+                            'control_panel_employee' => 'gray',
                             'supervisor' => 'primary',
                             'company' => 'info',
                             'employee' => 'info',
@@ -199,22 +199,22 @@ class EmployeeResource extends Resource
                         TextEntry::make('user.name')
                             ->label('اسم المستخدم'),
 
-                   TextEntry::make('user.email')
-                       ->label('البريد الإلكتروني'),
+                        TextEntry::make('user.email')
+                            ->label('البريد الإلكتروني'),
 
-                    TextEntry::make('user.roles.name')
-                        ->badge()
-                        ->color(function (string $state):string {
-                            return match($state){
-                                'admin' => 'danger',
-                                'control_panel_employee' =>'info',
-                                'supervisor' => 'primary',
-                                'company' => 'info',
-                                'employee' => 'gray',
-                                'customer' => 'success'
-                            };
-                        })
-                       ->label('الدور'),
+                        TextEntry::make('user.roles.name')
+                            ->badge()
+                            ->color(function (string $state): string {
+                                return match ($state) {
+                                    'admin' => 'danger',
+                                    'control_panel_employee' => 'info',
+                                    'supervisor' => 'primary',
+                                    'company' => 'info',
+                                    'employee' => 'gray',
+                                    'customer' => 'success'
+                                };
+                            })
+                            ->label('الدور'),
 
                     ])->columns(2),
 
@@ -233,10 +233,10 @@ class EmployeeResource extends Resource
                             ->label('تاريخ الميلاد'),
                     ])->columns(2),
             ]);
-
     }
 
-    public static function getRoles(){
+    public static function getRoles()
+    {
         return Role::where('name', '!=', 'employee')->pluck('name', 'name')->toArray();
     }
 
@@ -252,10 +252,8 @@ class EmployeeResource extends Resource
         return [
             'index' => Pages\ListEmployees::route('/'),
             'create' => Pages\CreateEmployee::route('/create'),
-//            'view' => Pages\ViewEmployee::route('/{record}'),
+            //            'view' => Pages\ViewEmployee::route('/{record}'),
             'edit' => Pages\EditEmployee::route('/{record}/edit'),
         ];
     }
-
-
 }

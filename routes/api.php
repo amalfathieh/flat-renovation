@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CodeController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Middleware\VerifiedEmail;
 use App\Http\Responses\Response;
 use App\Models\User;
@@ -16,16 +17,16 @@ use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\CustomerProfileController;
 use App\Http\Controllers\SocialAuthController;
 
-Route::get('tests', function (){
+Route::get('tests', function () {
     return Auth::user();
 })->middleware(['auth:sanctum', VerifiedEmail::class]);
 
-Route::post('register' , function (Request $request){
+Route::post('register', function (Request $request) {
     $user = User::create([
-        'name'=> $request['name'],
+        'name' => $request['name'],
         'email' => $request['email'],
         'password' => bcrypt($request['password']),
-        'phone_number'=> $request['phone_number']?? null,
+        'phone_number' => $request['phone_number'] ?? null,
     ]);
     $user->assignRole('company');
     event(new Registered($user));
@@ -38,26 +39,29 @@ Route::post('/customer/login', [CustomerAuthController::class, 'login']);
 Route::post('/auth/google/token', [SocialAuthController::class, 'handleGoogleToken']);
 
 
-Route::controller(CodeController::class)->group(function (){
+Route::controller(CodeController::class)->group(function () {
 
     Route::post('verifyAccount',  'verifyAccount')->middleware(['auth:sanctum']);
-    Route::get('resendCode', 'resendCode')->middleware(['auth:sanctum']);
+    Route::get('resendCode', 'resendCode')->middleware(['auth:sanctum', 'throttle:6,1']);
 
     // Send Code For Reset Password Or Resend Code
-    Route::get('forgetPassword', 'sendCodeVerification');
+    Route::post('forgetPassword', 'sendCodeVerification');
     Route::post('checkCode', 'checkCode');
     Route::post('resetPassword', 'resetPassword');
 });
 
 Route::middleware(['auth:sanctum', 'role:customer', VerifiedEmail::class])->group(function () {
-    Route::post('/customer/logout', [CustomerAuthController::class,'logout']);
+
+    Route::post('/customer/logout', [CustomerAuthController::class, 'logout']);
+
+    Route::controller(CustomerProfileController::class)->prefix('customer')->group(function () {
+        Route::get('profile', 'show');
+        Route::post('profile', 'update');
+        Route::post('change-password',  'changePassword');
+    });
 
 
-    Route::get('/customer/profile', [CustomerProfileController::class, 'show']);
-    Route::post('/customer/profile', [CustomerProfileController::class, 'update']);
-    Route::post('/customer/change-password', [CustomerProfileController::class, 'changePassword']);
+    Route::get('/companies', [CompanyController::class, 'index']);
 
-
-
+    Route::get('/companies/{company}/projects', [CompanyController::class, 'show']);
 });
-

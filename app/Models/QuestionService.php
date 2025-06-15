@@ -5,16 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class QuestionService extends Model
 {
     use HasFactory;
-
-    protected $fillable = ['url','imageable_id', 'imageable_type'];
-
-    public function imageable()
-    {
-        return $this->morphTo();
+    protected $fillable = [
+        'service_id', 'question',
+    ];
+    public function service() {
+        return $this->belongsTo(Service::class);
     }
+
+
+    public function answer() {
+        return $this->hasOne(answer::class);
+    }
+
+
+
     protected $casts = [
         'created_at' => 'datetime:Y-m-d',
         'updated_at' => 'datetime:Y-m-d',

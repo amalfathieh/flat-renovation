@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-                ->constrained('users')
-                ->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('company_id')
                 ->constrained('companies')
                 ->cascadeOnDelete();
@@ -25,6 +23,7 @@ return new class extends Migration
             $table->string('phone');
             $table->date('starting_date');
             $table->date('birth_day')->nullable();
+            $table->string('description')->nullable()->change();
             $table->timestamps();
         });
     }

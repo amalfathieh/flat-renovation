@@ -5,16 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class ProjectImage extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'project_id',
+        'before_image',
+        'after_image',
+        'caption',
+    ];
 
-    protected $fillable = ['url','imageable_id', 'imageable_type'];
-
-    public function imageable()
+    public function project()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Project::class);
     }
+
     protected $casts = [
         'created_at' => 'datetime:Y-m-d',
         'updated_at' => 'datetime:Y-m-d',

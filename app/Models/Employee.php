@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Employee extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'user_id', 'company_id','first_name','last_name','gender','phone','starting_date','birth_day','description'
+    ];
+
     protected $guarded = [
     ];
 
@@ -18,10 +22,7 @@ class Employee extends Model
         });
     }
 
-    public function image()
-    {
-        return $this->morphOne(Image::class,'imageable');
-    }
+
 
     public function company(){
         return $this->belongsTo(Company::class);
@@ -31,5 +32,14 @@ class Employee extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function projects() {
+        return $this->hasMany(Project::class);
+    }
 
+
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d',
+        'updated_at' => 'datetime:Y-m-d',
+    ];
 }

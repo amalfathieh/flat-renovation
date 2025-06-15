@@ -129,7 +129,12 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
     }
     public function customerProfile()
     {
-        return $this->hasOne(\App\Models\Customer::class);
+        return $this->hasOne(Customer::class);
     }
 
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d',
+        'updated_at' => 'datetime:Y-m-d',
+    ];
 }
