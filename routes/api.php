@@ -49,6 +49,8 @@ Route::controller(CodeController::class)->group(function (){
     Route::post('forgetPassword', 'sendCodeVerification');
     Route::post('checkCode', 'checkCode');
     Route::post('resetPassword', 'resetPassword');
+    Route::get('/companies', [CompanyController::class,'index']);
+    Route::get('/companies/{company}/projects', [CompanyController::class,'show']);
 });
 
 Route::middleware(['auth:sanctum', 'role:customer',VerifiedEmail::class])->group(function () {
@@ -60,7 +62,6 @@ Route::middleware(['auth:sanctum', 'role:customer',VerifiedEmail::class])->group
     Route::post('/customer/change-password', [CustomerProfileController::class, 'changePassword']);
 
    Route::get('/companies', [CompanyController::class,'index']);
-
     Route::get('/companies/{company}/projects', [CompanyController::class,'show']);
     Route::post('/companies/search', [SearchController::class, 'search']);
 

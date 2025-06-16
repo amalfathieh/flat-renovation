@@ -19,10 +19,10 @@ class ServiceSeeder extends Seeder
         $company = Company::first();
 
         $services = [
-            ['name' => 'أرضيات', 'description' => 'خدمة تركيب الأرضيات', 'image' => 'flooring.png'],
-            ['name' => 'دهان', 'description' => 'خدمة دهان الجدران والأسقف', 'image' => 'painting.png'],
-            ['name' => 'تمديدات صحية', 'description' => 'خدمة التمديدات الصحية للحمامات والمطابخ', 'image' => 'plumbing.png'],
-            ['name' => 'كهرباء', 'description' => 'خدمة التمديدات الكهربائية', 'image' => 'electricity.png'],
+            ['name' => 'أرضيات', 'description' => 'خدمة تركيب الأرضيات', 'image' => 'companies-logo/service1.png'],
+            ['name' => 'دهان', 'description' => 'خدمة دهان الجدران والأسقف', 'image' => 'companies-logo/service2.jpg'],
+            ['name' => 'تمديدات صحية', 'description' => 'خدمة التمديدات الصحية للحمامات والمطابخ', 'image' => 'companies-logo/service3.jpg'],
+            ['name' => 'كهرباء', 'description' => 'خدمة التمديدات الكهربائية', 'image' => 'companies-logo/after2.jpg'],
         ];
 
         foreach ($services as $service) {

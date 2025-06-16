@@ -18,7 +18,7 @@ class CustomerProfileService
             'name' => $user->name,
             'email' => $user->email,
             'phone' => $profile?->phone,
-            'image' => $this->imagePath($profile?->image),
+            'image'=> $profile->image,
             'age' => $profile?->age,
             'gender' => $profile?->gender,
             'role' => $user->getRoleNames(),
@@ -42,11 +42,18 @@ class CustomerProfileService
         }
 
         if ($request->hasFile('image')) {
-            if ($profile->image && Storage::disk('public')->exists($profile->image)) {
-                Storage::disk('public')->delete($profile->image);
-            }
-            $profile->image = $request->file('image')->store('users', 'public');
+            $image = $request->file('image');
+            $avatarName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $avatarName);
+            $imagePath = 'images/' . $avatarName;
+            $profile->image = $imagePath;
         }
+//        if ($request->hasFile('image')) {
+//            if ($profile->image && Storage::disk('public')->exists($profile->image)) {
+//                Storage::disk('public')->delete($profile->image);
+//            }
+//            $profile->image = $request->file('image')->store('users', 'public');
+//        }
 
         $profile->phone = $validated['phone'] ?? $profile->phone;
         $profile->age = $validated['age'] ?? $profile->age;

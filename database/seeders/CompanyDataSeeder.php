@@ -20,7 +20,7 @@ class CompanyDataSeeder extends Seeder
             'location' => 'Damascus',
             'phone' => '0999888777',
             'about' => 'شركة وهمية لاختبار API.',
-            'logo' => 'logo.png',
+            'logo' =>'companies-logo/logo.png'
         ]);
     }
 }

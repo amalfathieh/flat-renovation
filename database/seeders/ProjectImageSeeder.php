@@ -20,8 +20,8 @@ class ProjectImageSeeder extends Seeder
 
         ProjectImage::create([
             'project_id' => $project->id,
-            'before_image' => 'before1.jpg',
-            'after_image' => 'after1.jpg',
+            'before_image' => 'companies-logo/before1.jpg',
+            'after_image' => 'companies-logo/after1.jpg',
             'caption' => 'صورة المشروع قبل وبعد التنفيذ',
         ]);
 
