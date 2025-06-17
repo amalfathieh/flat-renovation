@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Customer;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class CustomerSeeder extends Seeder
@@ -14,13 +13,17 @@ class CustomerSeeder extends Seeder
      */
     public function run(): void
     {
+        // إنشاء 10 مستخدمين بدور customer
+        $customerUsers = User::factory(10)->create()->each(function ($user) {
+            $user->assignRole('customer'); // إذا عندك roles
+        });
 
-        $user = User::where('email', 'customer@example.com')->first();
-
-        Customer::factory()->create([
-            'user_id' => $user->id,
-        ]);
-
-
+        // إنشاء العملاء وربطهم بالمستخدمين
+        foreach ($customerUsers as $user) {
+            Customer::factory()->create([
+                'user_id' => $user->id,
+            ]);
+        }
     }
 }
+

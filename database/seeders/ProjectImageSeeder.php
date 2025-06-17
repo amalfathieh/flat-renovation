@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Project;
 use App\Models\ProjectImage;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ProjectImageSeeder extends Seeder
@@ -14,18 +13,17 @@ class ProjectImageSeeder extends Seeder
      */
     public function run(): void
     {
+        $projects = Project::all();
 
-
-        $project = Project::first();
-
-        ProjectImage::create([
-            'project_id' => $project->id,
-            'before_image' => 'companies-logo/before1.jpg',
-            'after_image' => 'companies-logo/after1.jpg',
-            'caption' => 'صورة المشروع قبل وبعد التنفيذ',
-        ]);
-
-
-
+        foreach ($projects as $project) {
+            for ($i = 1; $i <= 3; $i++) {
+                ProjectImage::create([
+                    'project_id' => $project->id,
+                    'before_image' => 'companies-logo/before' . $i . '.jpg',
+                    'after_image' => 'companies-logo/after' . $i . '.jpg',
+                    'caption' => 'صورة رقم ' . $i . ' لمشروع ' . $project->project_name,
+                ]);
+            }
+        }
     }
 }

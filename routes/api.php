@@ -53,7 +53,7 @@ Route::controller(CodeController::class)->group(function (){
     Route::get('/companies/{company}/projects', [CompanyController::class,'show']);
 });
 
-Route::middleware(['auth:sanctum', 'role:customer',VerifiedEmail::class])->group(function () {
+Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::post('/customer/logout', [CustomerAuthController::class,'logout']);
 
 

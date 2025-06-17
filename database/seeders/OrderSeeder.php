@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Company;
 use App\Models\Customer;
 use App\Models\Order;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class OrderSeeder extends Seeder
@@ -15,23 +14,26 @@ class OrderSeeder extends Seeder
      */
     public function run(): void
     {
+        $customers = Customer::all();
+        $companies = Company::all();
 
-        $customer = Customer::first();
-        $company = Company::first();
+        if ($customers->isEmpty() || $companies->isEmpty()) {
+            $this->command->warn('لا يوجد بيانات كافية من customers أو companies.');
+            return;
+        }
 
-        Order::create([
-            'customer_id' => $customer->id,
-            'company_id' => $company->id,
-            'status' => 'accepted',
-            'cost_of_examination' => 100.00,
-            'location' => 'دمشق',
-            'budget' => 3000.00,
-        ]);
+        foreach ($companies as $company) {
+            $ordersCount = rand(2, 5);
 
-
-
-
-
-
-    }
-}
+            for ($i = 0; $i < $ordersCount; $i++) {
+                Order::create([
+                    'customer_id' => $customers->random()->id,
+                    'company_id' => $company->id,
+                    'status' => 'accepted',
+                    'cost_of_examination' => rand(50, 150),
+                    'location' => fake()->address(),
+                    'budget' => rand(1000, 5000),
+                ]);
+            }
+        }
+    }}
