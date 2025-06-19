@@ -33,5 +33,8 @@ return [
     'code_is_correct' => 'الرمز صحيح',
     "created_successfully" => "تم الإنشاء بنجاح",
 
+
+    'invalid_code' => 'الرمز المحدد غير صالح.',
+    'email_account_not_exist' => 'لا يوجد حساب مرتبط بهذا البريد الإلكتروني.',
 ];
 

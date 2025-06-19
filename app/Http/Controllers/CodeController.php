@@ -24,7 +24,7 @@ class CodeController extends Controller
             $ver_code = VerificationCode::where('code', $request->code)->where('email', Auth::user()->email)->first();
 
             if (!$ver_code) {
-                return Response::Error("The selected code is invalid.", 404);
+                return Response::Error(__('strings.invalid_code'), 404);
             }
             // find user's email
             $user = User::where('email', $ver_code->email)->first();
@@ -55,7 +55,7 @@ class CodeController extends Controller
             $user = User::where('email', $request->email)->first();
 
             if (!$user) {
-                return Response::Error('account for this email not exist', 404);
+                return Response::Error(__('strings.email_account_not_exist'));
             }
 
             //Send verification code to user

@@ -20,6 +20,12 @@ class UserSeeder extends Seeder
             'email_verified_at'=> now(),
             'password' => Hash::make('12345678'),
         ]);
+        $user1->customerProfile()->create([
+            'phone' =>  '123456789',
+            'image' => null,
+            'age' => null,
+            'gender' => 'female',
+        ]);
         $user1->syncRoles('customer');
 
         $user2 =User::create([
