@@ -1,4 +1,70 @@
 <?php
+//
+//namespace Database\Seeders;
+//
+//use App\Models\User;
+//use App\Models\Company;
+//use Illuminate\Database\Seeder;
+//use Illuminate\Support\Str;
+//
+//class CompanyDataSeeder extends Seeder
+//{
+//    public function run(): void
+//    {
+//        $ownerUser = User::where('email', 'owner@example.com')->first();
+//
+//        $companies = [
+//            [
+//                'name' => 'Test Company',
+//                'location' => 'Damascus',
+//                'phone' => '0999888777',
+//                'about' => 'شركة وهمية لاختبار API.',
+//                'logo' => 'companies-logo/logo.png',
+//            ],
+//            [
+//                'name' => 'Alpha Solutions',
+//                'location' => 'Aleppo',
+//                'phone' => '0988123456',
+//                'about' => 'شركة تقنية تقدم حلولاً برمجية.',
+//                'logo' => 'companies-logo/alpha.png',
+//            ],
+//            [
+//                'name' => 'Beta Marketing',
+//                'location' => 'Homs',
+//                'phone' => '0933445566',
+//                'about' => 'متخصصة في التسويق الرقمي.',
+//                'logo' => 'companies-logo/beta.png',
+//            ],
+//            [
+//                'name' => 'Gamma Constructions',
+//                'location' => 'Latakia',
+//                'phone' => '0944556677',
+//                'about' => 'شركة بناء وتشييد حديثة.',
+//                'logo' => 'companies-logo/gamma.png',
+//            ],
+//            [
+//                'name' => 'Delta Logistics',
+//                'location' => 'Tartous',
+//                'phone' => '0955667788',
+//                'about' => 'خدمات لوجستية وشحن.',
+//                'logo' => 'companies-logo/delta.png',
+//            ],
+//        ];
+//
+//        foreach ($companies as $company) {
+//            Company::create([
+//                'user_id' => $ownerUser->id,
+//                'name' => $company['name'],
+//                'slug' => Str::slug($company['name']),
+//                'location' => $company['location'],
+//                'phone' => $company['phone'],
+//                'about' => $company['about'],
+//                'logo' => $company['logo'],
+//            ]);
+//        }
+//    }
+//}
+
 
 namespace Database\Seeders;
 
@@ -24,7 +90,7 @@ class CompanyDataSeeder extends Seeder
                 'location' => 'دمشق',
                 'phone' => "09999$c$c$c$c",
                 'about' => 'شركة لأغراض الاختبار',
-                'logo' => 'logo.png',
+                'logo' => 'companies-logo/logo.png',
             ]);
 
             // خدمات الشركة
@@ -33,7 +99,7 @@ class CompanyDataSeeder extends Seeder
                     'company_id' => $company->id,
                     'name' => "خدمة $s من شركة $c",
                     'description' => "وصف خدمة $s من شركة $c",
-                    'image' => "service$s.png",
+                    'image' => "companies-logo/service$s.png",
                 ]);
             }
 
@@ -89,8 +155,8 @@ class CompanyDataSeeder extends Seeder
                     for ($img = 1; $img <= 4; $img++) {
                         ProjectImage::create([
                             'project_id' => $project->id,
-                            'before_image' => "before$img.jpg",
-                            'after_image' => "after$img.jpg",
+                            'before_image' => "companies-logo/before$img.jpg",
+                            'after_image' => "companies-logo/after$img.jpg",
                             'caption' => "صورة $img قبل وبعد",
                         ]);
                     }

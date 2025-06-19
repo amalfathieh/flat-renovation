@@ -84,5 +84,30 @@ class UserSeeder extends Seeder
             'password' => Hash::make('12345678'),
         ]);
         $user5->syncRoles(['control_panel_employee', 'employee']);
+
+
+        /// safa
+
+        // مالك شركة
+        User::factory()->create([
+            'name' => 'Test Owner',
+            'email' => 'owner@example.com',
+        ]);
+
+        // موظف
+        User::factory()->create([
+            'name' => 'الموظف الأول',
+            'email' => 'employee@example.com',
+        ]);
+
+        // زبون
+        User::factory()->create([
+            'name' => 'اسم الزبون',
+            'email' => 'customer@example.com',
+        ]);
     }
+
+
+
+
 }
