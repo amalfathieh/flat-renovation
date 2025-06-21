@@ -9,32 +9,19 @@ use Illuminate\Database\Seeder;
 
 class EmployeeSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+
+    public static array $employees = [];
+
     public function run(): void
     {
-        $companies = Company::all();
-
-        // المستخدمين يلي دورهم "موظف" (تأكد عندك جدول users فيه عمود role)
-        $employeeUsers = User::where('role', 'customer')->get();
-
-        if ($employeeUsers->isEmpty()) {
-            $this->command->warn('⚠️ لا يوجد مستخدمين بدور "employee"، الرجاء إضافتهم أولاً.');
-            return;
-        }
-
-        foreach ($companies as $company) {
-            $employeesCount = rand(3, 5);
-
-            for ($i = 1; $i <= $employeesCount; $i++) {
-                $user = $employeeUsers->random();
-
-                Employee::factory()->create([
+        foreach (CompanyDataSeeder::$companies as $c => $company) {
+            for ($e = 1; $e <= 2; $e++) {
+                $user = UserSeeder::$employees["$c-$e"];
+                self::$employees["$c-$e"] = Employee::factory()->create([
                     'user_id' => $user->id,
                     'company_id' => $company->id,
-                    'first_name' => 'موظف ' . $i,
-                    'last_name' => 'من ' . $company->name,
+                    'first_name' => "موظف $e",
+                    'last_name' => "شركة $c",
                 ]);
             }
         }
