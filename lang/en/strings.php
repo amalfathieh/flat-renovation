@@ -34,5 +34,6 @@ return [
     'code_is_correct' => 'code is correct',
     "created_successfully" => "تم الإنشاء بنجاح",
 
-
+    'invalid_code' => 'The selected code is invalid.',
+    'email_account_not_exist' => 'The account for this email does not exist.',
 ];
