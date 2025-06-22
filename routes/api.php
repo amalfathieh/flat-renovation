@@ -2,13 +2,13 @@
 
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ObjectionController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectStageController;
 use App\Http\Controllers\SearchController;
 use App\Http\Middleware\VerifiedEmail;
-use App\Http\Responses\Response;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +54,25 @@ Route::controller(CodeController::class)->group(function (){
 });
 
 Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
+
+    Route::controller(ProjectController::class)->prefix('projects')->group(function (){
+
+        Route::get('myProject', 'getMyProjects');
+
+        Route::get('allPublishProjects', 'getAllPublishProjects')->withoutMiddleware('role:customer');
+    });
+
+    Route::controller(ProjectStageController::class)->group(function (){
+        Route::get('projectStages/{id}', 'getProjectStages');
+//        Route::get('serviceTypes/{id}', 'getServiceTypes');
+//        Route::post('editServiceType/{id}', 'editServiceType');
+    });
+
+    Route::controller(ObjectionController::class)->prefix('objections')->group(function (){
+        Route::post('create/{id}', 'create');
+    });
+
+
     Route::post('/customer/logout', [CustomerAuthController::class,'logout']);
 
 
@@ -63,6 +82,8 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
 
    Route::get('/companies', [CompanyController::class,'index']);
     Route::get('/companies/{company}/projects', [CompanyController::class,'show']);
+    Route::get('/companies/CompanyPublishProjects/{id}', [CompanyController::class,'getCompanyPublishProjects'])->withoutMiddleware('role:customer');
+
     Route::post('/companies/search', [SearchController::class, 'search']);
 
 });

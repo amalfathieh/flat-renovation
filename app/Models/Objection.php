@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Objection extends Model
 {
     use HasFactory;
-    // app/Models/Objection.php
+
     protected $fillable = [
-        'stage_id', 'user_id', 'text',
+        'project_stage_id',
+        'customer_id',
+        'text',
     ];
 
 

@@ -70,7 +70,17 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use App\Models\{User, Company, Customer, Employee, Order, Project, ProjectImage, Service};
+use App\Models\{ProjectRating,
+    ProjectStage,
+    ServiceType,
+    User,
+    Company,
+    Customer,
+    Employee,
+    Order,
+    Project,
+    ProjectImage,
+    Service};
 
 class CompanyDataSeeder extends Seeder
 {
@@ -95,12 +105,22 @@ class CompanyDataSeeder extends Seeder
 
             // خدمات الشركة
             for ($s = 1; $s <= 3; $s++) {
-                Service::create([
+                $serr = Service::create([
                     'company_id' => $company->id,
                     'name' => "خدمة $s من شركة $c",
                     'description' => "وصف خدمة $s من شركة $c",
                     'image' => "companies-logo/service$s.png",
                 ]);
+                // خدمات الشركة
+                for ($s = 1; $s <= 2; $s++) {
+                    ServiceType::create([
+                        'service_id' => $serr->id,
+                        'name' => 'name type ',
+                        'description' => 'وصف لنوع ' . $serr['name'],
+                        'unit' => 'km',
+                        'price_per_unit' => 2,
+                    ]);
+                }
             }
 
             // موظفين
@@ -139,6 +159,7 @@ class CompanyDataSeeder extends Seeder
 
                     $project = Project::create([
                         'company_id' => $company->id,
+                        'customer_id' => 1,
                         'order_id' => $order->id,
                         'employee_id' => $employee->id,
                         'project_name' => "مشروع زبون $z لشركة $c",
@@ -147,20 +168,38 @@ class CompanyDataSeeder extends Seeder
                         'status' => 'finished',
                         'description' => 'تفاصيل المشروع',
                         'final_cost' => rand(1500, 6000),
-                        'rate' => rand(1, 5),
-                        'comment' => 'تعليق جيد',
+                        'is_publish' => (bool) rand(0, 1),
                     ]);
 
                     // صور المشروع (4 صور)
                     for ($img = 1; $img <= 4; $img++) {
                         ProjectImage::create([
                             'project_id' => $project->id,
-                            'before_image' => "companies-logo/before$img.jpg",
-                            'after_image' => "companies-logo/after$img.jpg",
+                            'image' => "companies-logo/before$img.jpg",
+                            'type' => "before",
                             'caption' => "صورة $img قبل وبعد",
                         ]);
                     }
+
+                    for ($rate = 1; $rate <= 4; $rate++) {
+                        ProjectRating::create([
+                            'project_id' => $project->id,
+                            'customer_id' => 1,
+                            'rating' => random_int(1, 5),
+                        ]);
+                    }
+                    $ser = Service::first();
+                    foreach ($ser->serviceTypes as $serviceType)
+                        ProjectStage::create([
+                            'project_id' => $project->id,
+                            'stage_name' => "Stage Name",
+                            "service_id" => $serr->id,
+                            "service_type_id" => $serviceType->id,
+                            "description" => "description mnjyidus",
+                            'cost' => 200,
+                        ]);
                 }
+
             }
         }
     }

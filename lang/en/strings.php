@@ -36,4 +36,9 @@ return [
 
     'invalid_code' => 'The selected code is invalid.',
     'email_account_not_exist' => 'The account for this email does not exist.',
+
+    "authorization_required"=> "You do not have the required authorization.",
+
+    'updated_successfully' => 'Updated successfully',
+    'deleted_successfully' => 'deleted successfully',
 ];

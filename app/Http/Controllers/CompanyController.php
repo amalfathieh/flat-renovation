@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProjectResource;
 use App\Models\Company;
 use App\Http\Responses\Response;
+use App\Models\Project;
 use Illuminate\Support\Facades\Storage;
 
 class CompanyController extends Controller
@@ -43,5 +45,14 @@ class CompanyController extends Controller
         return Response::Success($projects, 'تم جلب مشاريع الشركة');
     }
 
+    public function getCompanyPublishProjects($id){
+
+//        return "g";
+        $projects = Project::with('company')->where('is_publish', true)
+            ->where('company_id', $id)->get();
+
+        return Response::Success(ProjectResource::collection($projects), 'success');
+
+    }
 
 }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
             $table->string('project_name');
@@ -22,8 +23,7 @@ return new class extends Migration
             $table->enum('status', ['finished', 'In progress', 'Preparing'])->default('Preparing');
             $table->text('description')->nullable();
             $table->double('final_cost')->nullable();
-            $table->bigInteger('rate')->nullable();
-            $table->string('comment')->nullable();
+            $table->boolean('is_publish')->default(false);
             $table->timestamps();
         });
     }

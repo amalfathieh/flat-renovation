@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('project_images', function (Blueprint $table) {
+        Schema::create('project_ratings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();
-
-            $table->string('image')->nullable();
-            $table->enum('type', ['before', 'after']);
-            $table->string('caption')->nullable();
+            $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
+            $table->unsignedTinyInteger('rating'); // من 1 إلى 5
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('project_images');
+        Schema::dropIfExists('project_ratings');
     }
 };

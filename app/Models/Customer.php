@@ -31,6 +31,11 @@ class Customer extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function projectRatings()
+    {
+        return $this->hasMany(ProjectRating::class);
+    }
+
     protected $casts = [
         'created_at' => 'datetime:Y-m-d',
         'updated_at' => 'datetime:Y-m-d',

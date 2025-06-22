@@ -44,6 +44,16 @@ class Project extends Model
         return $this->belongsTo(Order::class);
     }
 
+    public function ratings()
+    {
+        return $this->hasMany(ProjectRating::class);
+    }
+
+
+    public function averageRating()
+    {
+        return $this->ratings()->avg('rating');
+    }
 
 
     public function stages() {

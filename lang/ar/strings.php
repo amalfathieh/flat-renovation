@@ -36,5 +36,11 @@ return [
 
     'invalid_code' => 'الرمز المحدد غير صالح.',
     'email_account_not_exist' => 'لا يوجد حساب مرتبط بهذا البريد الإلكتروني.',
+
+    "authorization_required"=> "لا تمتلك الصلاحيات المطلوبة",
+
+    'updated_successfully' => 'تم التحديث بنجاح',
+    'deleted_successfully' => 'تم الحذف بنجاح',
+
 ];
 

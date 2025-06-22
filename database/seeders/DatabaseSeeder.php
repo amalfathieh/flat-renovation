@@ -71,13 +71,14 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesAndPermissionsSeeder::class,
             UserSeeder::class,
+            ServiceSeeder::class,
             CompanyDataSeeder::class
         ]);
 
 
-//        Company::factory(4)->create();
-//       Employee::factory(20)->create();
-//        Customer::factory(20)->create();
+        Company::factory(4)->create();
+       Employee::factory(20)->create();
+        Customer::factory(20)->create();
 
 //        User::factory(2)->withRole('employee')->create();
 //
