@@ -25,6 +25,7 @@ class CompanyDataSeeder extends Seeder
                 'about' => 'شركة لأغراض الاختبار',
                 'logo' => 'logo.png',
                 'cost_of_examination' => rand(1000, 900_000),
+
             ]);
         }
 
