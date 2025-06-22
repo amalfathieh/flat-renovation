@@ -32,6 +32,7 @@ class CustomerAuthService implements CustomerAuthServiceInterface
         // تعيين الدور
         $user->assignRole('customer');
 
+
         // إنشاء الملف الشخصي للمستخدم
         $user->customerProfile()->create([
             'phone'  => $request['phone'] ?? null,
@@ -97,4 +98,4 @@ class CustomerAuthService implements CustomerAuthServiceInterface
         ];
     }
 }
-//? basename($profile->image)
+

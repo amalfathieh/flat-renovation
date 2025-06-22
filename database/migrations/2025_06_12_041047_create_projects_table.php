@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
             $table->string('project_name');
             $table->date('start_date');
-            $table->date('end_date');
+            $table->date('end_date')->nullable();
             $table->enum('status', ['finished', 'In progress', 'Preparing'])->default('Preparing');
             $table->text('description')->nullable();
             $table->double('final_cost')->nullable();

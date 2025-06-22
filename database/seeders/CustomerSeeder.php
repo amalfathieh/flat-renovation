@@ -4,26 +4,20 @@ namespace Database\Seeders;
 
 use App\Models\Customer;
 use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class CustomerSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+    public static array $customers = [];
     public function run(): void
     {
-        // إنشاء 10 مستخدمين بدور customer
-        $customerUsers = User::factory(10)->create()->each(function ($user) {
-            $user->assignRole('customer'); // إذا عندك roles
-        });
-
-        // إنشاء العملاء وربطهم بالمستخدمين
-        foreach ($customerUsers as $user) {
-            Customer::factory()->create([
+        foreach (UserSeeder::$customers as $key => $user) {
+            self::$customers[$key] = Customer::factory()->create([
                 'user_id' => $user->id,
             ]);
-        }
+
+            }
+
     }
 }
-

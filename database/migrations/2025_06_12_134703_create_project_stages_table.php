@@ -22,6 +22,7 @@ return new class extends Migration
             $table->timestamp('completed_at')->nullable();
             $table->enum('status', ['finished', 'In progress', 'Preparing'])->default('Preparing');
             $table->double('cost');
+            $table->boolean('is_confirmed')->default(false);
             $table->timestamps();
         });
     }

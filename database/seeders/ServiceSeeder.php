@@ -3,93 +3,81 @@
 namespace Database\Seeders;
 
 use App\Models\Company;
+use App\Models\QuestionService;
 use App\Models\Service;
-use App\Models\ServiceType;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ServiceSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+
     public function run(): void
     {
+
+        $companies = Company::all();
+
+        if ($companies->isEmpty()) {
+            $this->command->warn('لا توجد شركات لإضافة الخدمات لها.');
+            return;
+        }
+
         $services = [
             [
                 'name' => 'أرضيات',
                 'description' => 'خدمة تركيب الأرضيات',
-                'image' => 'companies-logo/service1.png',
-                'types' => [
-                    ['name' => 'دهان زيتي', 'unit' => 'متر مربع', 'price_per_unit' => 15],
-                    ['name' => 'دهان مائي', 'unit' => 'متر مربع', 'price_per_unit' => 10],
-                ]
+                'image' => 'flooring.png',
+                'questions' => [
+                    'ما نوع الأرضية التي تريد تركيبها؟',
+                    'ما هي مساحة الأرض المطلوب تغطيتها (بالمتر المربع)؟',
+                    'هل تحتاج إلى إزالة الأرضية القديمة؟',
+                ],
             ],
             [
                 'name' => 'دهان',
                 'description' => 'خدمة دهان الجدران والأسقف',
-                'image' => 'companies-logo/service2.jpg',
-                'types' => [
-                    ['name' => 'دهان زيتي', 'unit' => 'متر مربع', 'price_per_unit' => 15],
-                    ['name' => 'دهان مائي', 'unit' => 'متر مربع', 'price_per_unit' => 10],
-                ]
+                'image' => 'painting.png',
+                'questions' => [
+                    'ما نوع الطلاء المطلوب استخدامه؟',
+                    'ما مساحة الجدران المطلوب تغطيتها بالطلاء (بالمتر المربع )؟',
+                    'هل تحتاج إلى إزالة الطلاء القديم؟',
+                ],
             ],
             [
                 'name' => 'تمديدات صحية',
                 'description' => 'خدمة التمديدات الصحية للحمامات والمطابخ',
-                'image' => 'companies-logo/service3.jpg',
-                'types' => [
-                    ['name' => 'تمديدات داخلية', 'unit' => 'متر مربع', 'price_per_unit' => 15],
-                    ['name' => 'تمديدات خارجية', 'unit' => 'متر مربع', 'price_per_unit' => 10],
-                ]
+                'image' => 'plumbing.png',
+                'questions' => [
+                    'ما نوع الأنابيب التي تريد استخدامها ؟',
+                    'ما هو الطول التقريبي المطلوب لتمديدات الصحية (بالمتر)؟',
+                    'هل هناك تمديدات قديمة يجب إزالتها؟',
+                ],
             ],
             [
                 'name' => 'كهرباء',
                 'description' => 'خدمة التمديدات الكهربائية',
-                'image' => 'companies-logo/after2.jpg',
-                'types' => [
-                    ['name' => 'نقاط إضاءة', 'unit' => 'قطعة', 'price_per_unit' => 30],
-                    ['name' => 'مفاتيح', 'unit' => 'قطعة', 'price_per_unit' => 20],
-                ]
-            ],
-            [
-                'name' => 'نجارة',
-                'description' => 'خدمة أعمال النجارة الداخلية والخارجية',
-                'image' => 'companies-logo/service4.jpg',
-                'types' => [
-                    ['name' => 'نقاط إضاءة', 'unit' => 'قطعة', 'price_per_unit' => 30],
-                    ['name' => 'مفاتيح', 'unit' => 'قطعة', 'price_per_unit' => 20],
-                ]
-            ],
-            [
-                'name' => 'ديكور',
-                'description' => 'تصميم وتنفيذ الديكورات الحديثة',
-                'image' => 'companies-logo/service5.jpg',
-                'types' => [
-                    ['name' => 'نقاط إضاءة', 'unit' => 'قطعة', 'price_per_unit' => 30],
-                    ['name' => 'مفاتيح', 'unit' => 'قطعة', 'price_per_unit' => 20],
-                ]
+                'image' => 'electricity.png',
+                'questions' => [
+                    'ما نوع الأسلاك الكهربائية التي ترغب في تركيبها؟',
+                    'ما هو المتر الطولي المطلوب لتمديدات الكهرباء (بالمتر)؟',
+                    'هل الموقع مزود بلوحة توزيع كهربائية رئيسية؟',
+                ],
             ],
         ];
 
-        $companies = Company::all();
-
         foreach ($companies as $company) {
-            foreach ($services as $service) {
-
-                $se = Service::create([
+            foreach ($services as $serviceData) {
+                $service = Service::create([
                     'company_id' => $company->id,
-                    'name' => $service['name'],
-                    'description' => $service['description'],
-                    'image' => $service['image'],
+                    'name' => $serviceData['name'],
+                    'description' => $serviceData['description'],
+                    'image' => $serviceData['image'],
                 ]);
 
-                foreach ($service['types'] as $type) {
-                    ServiceType::create([
-                        'service_id' => $se->id,
-                        'name' => $type['name'],
-                        'description' => 'وصف لنوع ' . $type['name'],
-                        'unit' => $type['unit'],
-                        'price_per_unit' => $type['price_per_unit'],
+                foreach ($serviceData['questions'] as $question) {
+                    QuestionService::create([
+                        'service_id' => $service->id,
+                        'question' => $question,
+                        //                        'has_options' => str_starts_with($question, 'ما نوع') || str_starts_with($question, 'ما هو'),
                     ]);
                 }
             }
