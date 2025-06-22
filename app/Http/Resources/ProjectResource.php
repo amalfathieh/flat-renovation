@@ -21,8 +21,9 @@ class ProjectResource extends JsonResource
             'status' => $this->status,
             'description' => $this->description,
             'rating' => round($this->averageRating(), 1),
+            'is_publish' => $this->is_publish,
             'images' => $this->projectImages,
-//            'images' => ProjectImageResource::collection($this->projectImages),
+
         ];
     }
 }
