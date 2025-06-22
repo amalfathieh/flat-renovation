@@ -15,6 +15,12 @@ class Order extends Model
         'cost_of_examination',
         'location',
         'budget',
+         'payment_intent_id',
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d\TH:i:s',
+        'updated_at' => 'datetime:Y-m-d\TH:i:s',
     ];
 
 
@@ -40,8 +46,4 @@ class Order extends Model
 
 
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d',
-        'updated_at' => 'datetime:Y-m-d',
-    ];
 }

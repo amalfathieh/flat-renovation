@@ -20,11 +20,13 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
 {
     use HasFactory, Notifiable, HasRoles, HasApiTokens;
 
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
+
     protected $fillable = [
         'name',
         'email',
@@ -35,21 +37,31 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
     ];
 
 
+
     /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
      */
+
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
 
     /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d\TH:i:s',
+        'updated_at' => 'datetime:Y-m-d\TH:i:s',
+    ];
+
+
     protected function casts(): array
     {
         return [
@@ -133,8 +145,5 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
     }
 
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d',
-        'updated_at' => 'datetime:Y-m-d',
-    ];
+
 }

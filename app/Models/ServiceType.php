@@ -10,6 +10,14 @@ class ServiceType extends Model
     use HasFactory;
     protected $fillable = ['service_id', 'name', 'description', 'unit', 'price_per_unit','image'];
 
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d\TH:i:s',
+        'updated_at' => 'datetime:Y-m-d\TH:i:s',
+    ];
+
+
+
 //    public function images()
 //    {
 //        return $this->morphMany(Image::class,'imageable');
@@ -23,8 +31,5 @@ class ServiceType extends Model
         return $this->belongsTo(Service::class);
     }
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d',
-        'updated_at' => 'datetime:Y-m-d',
-    ];
+
 }

@@ -57,14 +57,14 @@ class CustomerAuthService implements CustomerAuthServiceInterface
     {
         // التحقق من صحة البريد وكلمة المرور
         if (!Auth::attempt($request->only('email', 'password'))) {
-            throw new \Exception(__('strings.email_password_mismatch'), 401);
+            throw new \Exception(('strings.email_password_mismatch'), 401);
         }
 
         $user = Auth::user();
 
         // التحقق من أن المستخدم يملك دور "customer"
         if (!$user->hasRole('customer')) {
-            throw new \Exception(__('strings.no_mobile_permission'), 403);
+            throw new \Exception(('strings.no_mobile_permission'), 403);
         }
 
         $token = $user->createToken('mobile')->plainTextToken;
@@ -98,4 +98,3 @@ class CustomerAuthService implements CustomerAuthServiceInterface
         ];
     }
 }
-

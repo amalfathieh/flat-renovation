@@ -9,8 +9,16 @@ class QuestionService extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'service_id', 'question',
+
+        'service_id', 'question','has_options',
     ];
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d\TH:i:s',
+        'updated_at' => 'datetime:Y-m-d\TH:i:s',
+    ];
+
+
     public function service() {
         return $this->belongsTo(Service::class);
     }
@@ -22,8 +30,5 @@ class QuestionService extends Model
 
 
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d',
-        'updated_at' => 'datetime:Y-m-d',
-    ];
+
 }

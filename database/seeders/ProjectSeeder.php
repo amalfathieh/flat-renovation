@@ -23,7 +23,9 @@ class ProjectSeeder extends Seeder
 
             self::$projects[$key] = Project::create([
                 'company_id' => $order->company_id,
+
                 'customer_id' => $order->customer_id,
+
                 'order_id' => $order->id,
                 'employee_id' => $employee->id,
                 'project_name' => "مشروع زبون $z لشركة $c",
@@ -32,8 +34,17 @@ class ProjectSeeder extends Seeder
                 'status' => 'finished',
                 'description' => 'تفاصيل المشروع',
                 'final_cost' => rand(1500, 6000),
+
                 'is_publish' => (bool) rand(0, 1),
+
+                'rate' => rand(1, 5),
+                'comment' => 'تعليق جيد',
             ]);
         }
+
+
+
+
+
     }
 }

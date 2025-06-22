@@ -17,6 +17,12 @@ class Customer extends Model
         'gender',
     ];
 
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d\TH:i:s',
+        'updated_at' => 'datetime:Y-m-d\TH:i:s',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -31,13 +37,11 @@ class Customer extends Model
         return $this->hasMany(Order::class);
     }
 
+
     public function projectRatings()
     {
         return $this->hasMany(ProjectRating::class);
     }
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d',
-        'updated_at' => 'datetime:Y-m-d',
-    ];
+
 }

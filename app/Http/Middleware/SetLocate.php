@@ -18,26 +18,22 @@ class SetLocate
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Session::has('lang')){
+        if (Session::has('lang')) {
             App::setLocale(Session::get('lang'));
-        }
-        else if($request->hasHeader('Accept-Language')){
+        } else if ($request->hasHeader('Accept-Language')) {
             $raw = $request->header('Accept-Language');
 
             $locale = Str::before($raw, ',');
             $locale = str_replace('-', '_', $locale);
 
             $supported = ['en', 'ar'];
-             if (in_array($locale, $supported)){
+            if (in_array($locale, $supported)) {
                 App::setLocale($locale);
-
-            }
-
-    //            App::setLocale($request->header('Accept-Language'));
-            else if(Session::has('lang')){
+            } else if (Session::has('lang')) {
                 App::setLocale(Session::get('lang'));
             }
         }
+
         return $next($request);
     }
 }

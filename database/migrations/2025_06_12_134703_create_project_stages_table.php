@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('stage_name');
             $table->foreignId('service_id')->constrained()->cascadeOnDelete();
             $table->foreignId('service_type_id')->constrained()->cascadeOnDelete();
+
+        //    $table->foreignId('service_id')->constrained()->onDelete('cascade');
+
             $table->text('description')->nullable();
             $table->timestamp('started_at')->nullable();
             $table->timestamp('completed_at')->nullable();

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+
 use App\Http\Resources\ProjectResource;
 use App\Models\Company;
 use App\Http\Responses\Response;
 use App\Models\Project;
+
+
 use Illuminate\Support\Facades\Storage;
 
 class CompanyController extends Controller
@@ -45,6 +48,7 @@ class CompanyController extends Controller
         return Response::Success($projects, 'تم جلب مشاريع الشركة');
     }
 
+
     public function getCompanyPublishProjects($id){
 
 //        return "g";
@@ -54,5 +58,6 @@ class CompanyController extends Controller
         return Response::Success(ProjectResource::collection($projects), 'success');
 
     }
+
 
 }
