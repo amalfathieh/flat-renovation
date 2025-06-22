@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             ServiceTypeSeeder::class,
             ProjectRatingSeeder::class,
             StageSeeder::class,
+            ProjectStageImageSeed::class,
 
 
 

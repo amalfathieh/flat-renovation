@@ -24,7 +24,7 @@ class ProjectStage extends Model
 
     public function ImageStage() {
 
-        return $this->hasMany(image_stage::class);
+        return $this->hasMany(Image_stage::class);
     }
 
     public function objections() {

@@ -8,10 +8,12 @@ class ProjectImageResource extends JsonResource
 {
     public function toArray($request)
     {
+
+//        dd($this->projectImages);
         return [
             'id' => $this->id,
-            'image_url' => $this->image,
-            'type' => $this->type,
+            'before_image' => $this->projectImages->before_image,
+            'after_image'=>$this->projectImages->after_image,
             'caption' => $this->caption,
         ];
     }

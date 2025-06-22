@@ -9,6 +9,8 @@ use Illuminate\Database\Seeder;
 
 class StageSeeder extends Seeder
 {
+    public static array $stages = [];
+
     /**
      * Run the database seeds.
      */
@@ -19,7 +21,7 @@ class StageSeeder extends Seeder
         foreach ($serviceTypes as $serviceType){
             foreach (ProjectSeeder::$projects as $key => $project) {
 
-                ProjectStage::create([
+                self::$stages[$key] = ProjectStage::create([
                     'project_id' => $project->id,
                     'stage_name' => "Stage Name",
                     "service_id" => $service->id,

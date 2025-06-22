@@ -13,7 +13,7 @@ class ProjectStageController extends Controller
 {
     public function getProjectStages($id){
 
-        $projectStages = ProjectStage::where('project_id', $id)->get();
+        $projectStages = ProjectStage::with('ImageStage')->where('project_id', $id)->get();
 
         return Response::Success($projectStages, 'success');
     }
