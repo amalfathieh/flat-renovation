@@ -37,8 +37,6 @@ class ProjectSeeder extends Seeder
 
                 'is_publish' => (bool) rand(0, 1),
 
-                'rate' => rand(1, 5),
-                'comment' => 'تعليق جيد',
             ]);
         }
 
