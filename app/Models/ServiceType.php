@@ -23,6 +23,10 @@ class ServiceType extends Model
         return $this->belongsTo(Service::class);
     }
 
+    public function satge()
+    {
+        return $this->hasOne(ProjectStage::class);
+    }
     protected $casts = [
         'created_at' => 'datetime:Y-m-d',
         'updated_at' => 'datetime:Y-m-d',

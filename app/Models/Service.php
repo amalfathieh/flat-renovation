@@ -26,6 +26,11 @@ class Service extends Model
         return $this->hasMany(QuestionService::class);
     }
 
+    public function projectSatge()
+    {
+        return $this->hasOne(ProjectStage::class);
+    }
+
     protected $casts = [
         'created_at' => 'datetime:Y-m-d',
         'updated_at' => 'datetime:Y-m-d',

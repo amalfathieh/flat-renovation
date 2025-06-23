@@ -31,6 +31,15 @@ class ProjectStage extends Model
         return $this->hasMany(Objection::class);
     }
 
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
+    }
+
+    public function serviceType()
+    {
+        return $this->belongsTo(ServiceType::class);
+    }
 
     protected $casts = [
         'created_at' => 'datetime:Y-m-d',
