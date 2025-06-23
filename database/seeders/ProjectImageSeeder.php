@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Project;
 use App\Models\ProjectImage;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
 use Illuminate\Database\Seeder;
 
 class ProjectImageSeeder extends Seeder
@@ -20,6 +23,9 @@ class ProjectImageSeeder extends Seeder
                     'caption' => "صورة $img قبل وبعد",
                 ]);
             }
-        }
-    }
+
+            }
+
+}
+
 }

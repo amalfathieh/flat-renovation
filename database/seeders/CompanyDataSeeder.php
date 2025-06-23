@@ -1,9 +1,10 @@
 <?php
 
 namespace Database\Seeders;
-
 use App\Models\Company;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
+
 
 class CompanyDataSeeder extends Seeder
 {
@@ -12,6 +13,7 @@ class CompanyDataSeeder extends Seeder
 
     public function run(): void
     {
+
         foreach (UserSeeder::$owners as $c => $owner) {
             self::$companies[$c] = Company::create([
                 'user_id' => $owner->id,
@@ -22,7 +24,10 @@ class CompanyDataSeeder extends Seeder
                 'about' => 'شركة لأغراض الاختبار',
                 'logo' => 'logo.png',
                 'cost_of_examination' => rand(1000, 900_000),
+
             ]);
         }
+
+
     }
 }

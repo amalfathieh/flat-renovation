@@ -11,7 +11,15 @@ class Company extends Model
     use HasFactory;
 
     protected $fillable = [
+
         'user_id', 'name', 'email', 'slug', 'location', 'phone', 'about', 'logo', 'cost_of_examination'
+
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d\TH:i:s',
+        'updated_at' => 'datetime:Y-m-d\TH:i:s',
+
     ];
 
 
@@ -19,10 +27,21 @@ class Company extends Model
         return $this->belongsTo(User::class);
     }
 
+
+//    public function employees(){
+//        return $this->hasMany(Employee::class);
+//    }
+
+//    public function owner()
+//    {
+//        return $this->belongsTo(User::class, 'user_id');
+//    }
+
     public function owner()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
 
     public function getBrandLogo()
     {
@@ -60,8 +79,9 @@ class Company extends Model
     }
 
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d',
-        'updated_at' => 'datetime:Y-m-d',
-    ];
+
+
+
 }
+
+

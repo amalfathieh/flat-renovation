@@ -15,6 +15,14 @@ class ProjectStage extends Model
         'completed_at',
         'status',
         'cost',
+
+    ];
+
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d\TH:i:s',
+        'updated_at' => 'datetime:Y-m-d\TH:i:s',
+
     ];
 
     public function project()
@@ -23,8 +31,8 @@ class ProjectStage extends Model
     }
 
     public function ImageStage() {
-
         return $this->hasMany(Image_stage::class);
+
     }
 
     public function objections() {
@@ -41,8 +49,5 @@ class ProjectStage extends Model
         return $this->belongsTo(ServiceType::class);
     }
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d',
-        'updated_at' => 'datetime:Y-m-d',
-    ];
+
 }

@@ -16,23 +16,23 @@ class CompanyController extends Controller
         $companies = Company::with('services')->get();
 
         // تعديل الصور لمسار كامل
-//        $companies->transform(function ($company) {
-//            if ($company->logo) {
-//                $company->logo = $this->fullImagePath($company->logo);
-//            }
-//
-//            // تعديل صور الخدمات
-//            if ($company->services) {
-//                $company->services->transform(function ($service) {
-//                    if ($service->image) {
-//                        $service->image = $this->fullImagePath($service->image);
-//                    }
-//                    return $service;
-//                });
-//            }
-//
-//            return $company;
-//        });
+        //        $companies->transform(function ($company) {
+        //            if ($company->logo) {
+        //                $company->logo = $this->fullImagePath($company->logo);
+        //            }
+        //
+        //            // تعديل صور الخدمات
+        //            if ($company->services) {
+        //                $company->services->transform(function ($service) {
+        //                    if ($service->image) {
+        //                        $service->image = $this->fullImagePath($service->image);
+        //                    }
+        //                    return $service;
+        //                });
+        //            }
+        //
+        //            return $company;
+        //        });
 
         return Response::Success($companies, 'تم جلب قائمة الشركات');
     }
@@ -45,14 +45,13 @@ class CompanyController extends Controller
         return Response::Success($projects, 'تم جلب مشاريع الشركة');
     }
 
-    public function getCompanyPublishProjects($id){
+    public function getCompanyPublishProjects($id)
+    {
 
-//        return "g";
+        //        return "g";
         $projects = Project::with('company')->where('is_publish', true)
             ->where('company_id', $id)->get();
 
         return Response::Success(ProjectResource::collection($projects), 'success');
-
     }
-
 }

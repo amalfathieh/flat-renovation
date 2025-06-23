@@ -13,6 +13,13 @@ class ProjectImage extends Model
         'before_image',
         'after_image',
         'caption',
+
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d\TH:i:s',
+        'updated_at' => 'datetime:Y-m-d\TH:i:s',
+
     ];
 
     public function project()
@@ -20,8 +27,5 @@ class ProjectImage extends Model
         return $this->belongsTo(Project::class);
     }
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d',
-        'updated_at' => 'datetime:Y-m-d',
-    ];
+
 }

@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('service_id')->constrained()->onDelete('cascade');
             $table->text('question');
+            $table->boolean('has_options')->default(false);
+
             $table->timestamps();
         });
     }

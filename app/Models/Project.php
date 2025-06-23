@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
 
-
-    //oooppp Hiba 0983449075
     use HasFactory;
+
+
     protected $fillable = [
         'company_id',
         'order_id',
@@ -22,14 +22,21 @@ class Project extends Model
         'status',
         'description',
         'final_cost',
-        'rate',
-        'comment'
+
+    ];
+
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d\TH:i:s',
+        'updated_at' => 'datetime:Y-m-d\TH:i:s',
     ];
 
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
+
+
     public function employee()
     {
         return $this->belongsTo(Employee::class);
@@ -39,6 +46,7 @@ class Project extends Model
     {
         return $this->hasMany(ProjectImage::class);
     }
+
 
     public function order() {
         return $this->belongsTo(Order::class);
@@ -56,7 +64,12 @@ class Project extends Model
     }
 
 
-    public function stages() {
+
+
+
+    public function stages()
+    {
+
         return $this->hasMany(ProjectStage::class);
     }
 
@@ -70,10 +83,6 @@ class Project extends Model
 
 
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d',
-        'updated_at' => 'datetime:Y-m-d',
-    ];
     protected $appends = ['duration_in_days']; // لإضافته تلقائيًا في JSON
 
     public function getDurationInDaysAttribute()

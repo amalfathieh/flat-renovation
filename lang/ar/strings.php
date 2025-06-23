@@ -34,6 +34,7 @@ return [
     "created_successfully" => "تم الإنشاء بنجاح",
 
 
+
     'invalid_code' => 'الرمز المحدد غير صالح.',
     'email_account_not_exist' => 'لا يوجد حساب مرتبط بهذا البريد الإلكتروني.',
 
@@ -41,6 +42,8 @@ return [
 
     'updated_successfully' => 'تم التحديث بنجاح',
     'deleted_successfully' => 'تم الحذف بنجاح',
+
+
 
 ];
 
