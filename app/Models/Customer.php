@@ -32,6 +32,10 @@ class Customer extends Model
         return $this->hasMany(Objection::class);
     }
 
+    public function projects() {
+        return $this->hasMany(Project::class);
+    }
+
 
     public function orders() {
         return $this->hasMany(Order::class);

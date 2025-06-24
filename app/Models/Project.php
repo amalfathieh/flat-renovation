@@ -47,6 +47,9 @@ class Project extends Model
         return $this->hasMany(ProjectImage::class);
     }
 
+    public function customer() {
+        return $this->belongsTo(Customer::class);
+    }
 
     public function order() {
         return $this->belongsTo(Order::class);
