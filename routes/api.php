@@ -85,6 +85,7 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
 
     Route::controller(ObjectionController::class)->prefix('objections')->group(function (){
         Route::post('create/{id}', 'create');
+        Route::get('stageObjections/{id}', 'getObjections');
     });
 
 
