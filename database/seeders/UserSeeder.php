@@ -88,20 +88,20 @@ class UserSeeder extends Seeder
 
         // 🔁 إنشاء مستخدمين مالكين وموظفين وزبائن وهميين
         for ($c = 1; $c <= 5; $c++) {
-            self::$owners[$c] = User::factory()->create([
+            self::$owners[$c] = User::factory()->withRole('company')->create([
                 'name' => "مالك $c",
                 'email' => "owner{$c}_" . uniqid() . "@example.com",
             ]);
 
             for ($e = 1; $e <= 2; $e++) {
-                self::$employees["$c-$e"] = User::factory()->create([
+                self::$employees["$c-$e"] = User::factory()->withRole('employee')->create([
                     'name' => "موظف $e في شركة $c",
                     'email' => "employee{$c}_{$e}_" . uniqid() . "@example.com",
                 ]);
             }
 
             for ($z = 1; $z <= 4; $z++) {
-                self::$customers["$c-$z"] = User::factory()->create([
+                self::$customers["$c-$z"] = User::factory()->withRole('customer')->create([
                     'name' => "زبون $z لشركة $c",
                     'email' => "customer{$c}_{$z}_" . uniqid() . "@example.com",
                 ]);
