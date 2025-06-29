@@ -49,4 +49,5 @@ class ProjectStageController extends Controller
 
         return Response::Success($stage, __('strings.updated_successfully'));
     }
+
 }

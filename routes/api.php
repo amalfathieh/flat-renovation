@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ImageStageController;
 use App\Http\Controllers\ObjectionController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectStageController;
@@ -64,6 +65,7 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
 
     Route::controller(ProjectStageController::class)->group(function (){
         Route::get('projectStages/{id}', 'getProjectStages');
+
 //        Route::get('serviceTypes/{id}', 'getServiceTypes');
 //        Route::post('editServiceType/{id}', 'editServiceType');
     });
@@ -85,6 +87,7 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::get('/companies/CompanyPublishProjects/{id}', [CompanyController::class,'getCompanyPublishProjects'])->withoutMiddleware('role:customer');
 
     Route::post('/companies/search', [SearchController::class, 'search']);
+    Route::get('/project-stages/{id}/images', [ImageStageController::class, 'images']);
 
 });
 
