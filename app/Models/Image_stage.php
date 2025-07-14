@@ -11,13 +11,16 @@ class Image_stage extends Model
 
     protected $fillable = ['image','project_stage_id','description','stage_date'];
 
+
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d\TH:i:s',
+        'updated_at' => 'datetime:Y-m-d\TH:i:s',
+    ];
+
     public function projectStage() {
 
         return $this->belongsTo(ProjectStage::class);
     }
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d',
-        'updated_at' => 'datetime:Y-m-d',
-    ];
 }

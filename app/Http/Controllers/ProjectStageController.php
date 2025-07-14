@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\StageResource;
 use App\Http\Responses\Response;
 use App\Models\ProjectStage;
 use App\Models\Service;
@@ -11,37 +12,43 @@ use Illuminate\Support\Facades\Auth;
 
 class ProjectStageController extends Controller
 {
-    public function getProjectStages($id){
+    public function getProjectStages($id)
+    {
+        try {
+            $projectStages = ProjectStage::with('ImageStage')->where('project_id', $id)->get();
 
-        $projectStages = ProjectStage::with('ImageStage')->where('project_id', $id)->get();
-
-        return Response::Success($projectStages, 'success');
+            return Response::Success(StageResource::collection($projectStages), 'success');
+        } catch (\Exception $ex) {
+            return Response::Error($ex->getMessage(), $ex->getCode() ?: 404);
+        }
     }
 
-    public function getServiceTypes($id){
+    public function getServiceTypes($id)
+    {
         $service = Service::find($id)->first();
-        if(!$service){
+        if (!$service) {
             return Response::Error('error service');
         }
         return Response::Success($service->serviceTypes, 'success');
     }
 
-    public function editServiceType($id, Request $request){
+    public function editServiceType($id, Request $request)
+    {
         $request->validate([
             'service_type_id' => ['required', 'int'],
         ]);
         $stage = ProjectStage::where('id', $id)->first();
 
-        if(!$stage){
+        if (!$stage) {
             return Response::Error('not found', 404);
         }
-        if($stage->project->customer_id != Auth::id()){
+        if ($stage->project->customer_id != Auth::id()) {
             return Response::Error(__('strings.authorization_required'));
         }
 
         $serviceType = ServiceType::where('id', $request->service_type_id)->first();
 
-        if (!$serviceType){
+        if (!$serviceType) {
             return Response::Error('error type');
         }
         $stage->service_type_id = $serviceType->id;

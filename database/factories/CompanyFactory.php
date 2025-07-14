@@ -29,7 +29,10 @@ class CompanyFactory extends Factory
             "location" => fake()->address(),
             "phone" => fake()->phoneNumber(),
             "about" => $this->faker->paragraph(),
-            'logo' => $this->faker->imageUrl(640, 480, 'business'), // صورة وهمية
+
+            'logo' => $this->faker->imageUrl(640, 480, 'business'),
+            'cost_of_examination' => $this->faker->randomFloat(0, 25000, 100000),
+
         ];
     }
 }

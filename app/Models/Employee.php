@@ -12,6 +12,12 @@ class Employee extends Model
         'user_id', 'company_id','first_name','last_name','gender','phone','starting_date','birth_day','description'
     ];
 
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d\TH:i:s',
+        'updated_at' => 'datetime:Y-m-d\TH:i:s',
+    ];
+
     protected $guarded = [
     ];
 
@@ -37,9 +43,4 @@ class Employee extends Model
     }
 
 
-
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d',
-        'updated_at' => 'datetime:Y-m-d',
-    ];
 }

@@ -77,10 +77,17 @@ class ServiceSeeder extends Seeder
                     QuestionService::create([
                         'service_id' => $service->id,
                         'question' => $question,
-                        //                        'has_options' => str_starts_with($question, 'ما نوع') || str_starts_with($question, 'ما هو'),
+                'has_options' => str_starts_with($question, 'ما نوع') || str_starts_with($question, 'ما هو'),
                     ]);
                 }
+
             }
+
+
         }
+
     }
+
+
+
 }

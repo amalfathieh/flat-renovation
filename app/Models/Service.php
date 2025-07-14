@@ -11,6 +11,12 @@ class Service extends Model
 
     protected $fillable = ['company_id','name', 'description', 'image'];
 
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d\TH:i:s',
+        'updated_at' => 'datetime:Y-m-d\TH:i:s',
+    ];
+
+
 
     public function company(){
         return $this->belongsTo(Company::class);
@@ -26,8 +32,9 @@ class Service extends Model
         return $this->hasMany(QuestionService::class);
     }
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d',
-        'updated_at' => 'datetime:Y-m-d',
-    ];
+    public function projectSatge()
+    {
+        return $this->hasOne(ProjectStage::class);
+    }
+
 }
