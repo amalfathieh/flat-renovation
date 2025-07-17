@@ -30,7 +30,7 @@ class StageResource extends JsonResource
             'is_confirmed' => $this->is_confirmed,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'image_stage' => $this->ImageStage,
+            'image_stage' => $this->imagesStage,
         ];
     }
 }
