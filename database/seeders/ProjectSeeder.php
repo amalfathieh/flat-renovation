@@ -17,6 +17,7 @@ class ProjectSeeder extends Seeder
     {
 
         foreach (OrderSeeder::$orders as $key => $order) {
+            $userName = $order->customer->user->name;
             [$c, $z] = explode('-', $key);
             $employeeIndex = ($z <= 2) ? "1" : "2";
             $employee = EmployeeSeeder::$employees["$c-$employeeIndex"];
@@ -24,7 +25,7 @@ class ProjectSeeder extends Seeder
             self::$projects[$key] = Project::create([
                 'company_id' => $order->company_id,
 
-                'customer_id' => $order->customer_id,
+                'customer_name' => $userName,
 
                 'order_id' => $order->id,
                 'employee_id' => $employee->id,

@@ -23,10 +23,6 @@ class ServiceType extends Model
 //        return $this->morphMany(Image::class,'imageable');
 //    }
 
-    public function company(){
-        return $this->service?->company();
-    }
-
     public function service(){
         return $this->belongsTo(Service::class);
     }
@@ -34,5 +30,16 @@ class ServiceType extends Model
     public function satge()
     {
         return $this->hasOne(ProjectStage::class);
+    }
+    public function company()
+    {
+        return $this->hasOneThrough(
+            Company::class,
+            Service::class,
+            'id', // Foreign key on projects table
+            'id', // Foreign key on companies table
+            'service_id', // Local key on project_stages table
+            'company_id' // Local key on projects table
+        );
     }
 }

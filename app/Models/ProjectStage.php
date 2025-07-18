@@ -15,6 +15,9 @@ class ProjectStage extends Model
         'completed_at',
         'status',
         'cost',
+        'service_id',
+        'service_type_id',
+        'is_confirmed'
 
     ];
 
@@ -30,7 +33,7 @@ class ProjectStage extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function ImageStage() {
+    public function imagesStage() {
         return $this->hasMany(Image_stage::class);
 
     }
@@ -49,6 +52,17 @@ class ProjectStage extends Model
         return $this->belongsTo(ServiceType::class);
     }
 
+    public function company()
+    {
+        return $this->hasOneThrough(
+            Company::class,
+            Project::class,
+            'id', // Foreign key on projects table
+            'id', // Foreign key on companies table
+            'project_id', // Local key on project_stages table
+            'company_id' // Local key on projects table
+        );
+    }
 
 
 }

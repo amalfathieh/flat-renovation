@@ -62,6 +62,16 @@ class Company extends Model
             'id',
         );
     }
+    public function projectStages(){
+        return $this->hasManyThrough(
+            ProjectStage::class,
+            Project::class,
+            'company_id',
+            'project_id',
+            'id',
+            'id',
+        );
+    }
 
     public function services(){
         return $this->hasMany(Service::class);
