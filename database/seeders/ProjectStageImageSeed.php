@@ -17,7 +17,7 @@ class ProjectStageImageSeed extends Seeder
             for ($img = 1; $img <= 4; $img++) {
                 Image_stage::create([
                     'project_stage_id' => $stage->id,
-                    'image' => "$img.jpg",
+                    'image' => "project-stage-images/$img.jpg",
                 ]);
             }
         }

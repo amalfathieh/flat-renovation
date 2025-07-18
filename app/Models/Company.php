@@ -79,6 +79,17 @@ class Company extends Model
     }
 
 
+    public function projectRatings()
+    {
+        return $this->hasManyThrough(
+            \App\Models\ProjectRating::class,
+            \App\Models\Project::class,
+            'company_id',
+            'project_id',
+            'id',
+            'id'
+        );
+    }
 
 
 

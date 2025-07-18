@@ -13,45 +13,55 @@ class CompanyController extends Controller
 {
     public function index()
     {
-        $companies = Company::with('services')->get();
+        $companies = Company::with('services', 'projectRatings')->get();
 
-        // تعديل الصور لمسار كامل
-        //        $companies->transform(function ($company) {
-        //            if ($company->logo) {
-        //                $company->logo = $this->fullImagePath($company->logo);
-        //            }
-        //
-        //            // تعديل صور الخدمات
-        //            if ($company->services) {
-        //                $company->services->transform(function ($service) {
-        //                    if ($service->image) {
-        //                        $service->image = $this->fullImagePath($service->image);
-        //                    }
-        //                    return $service;
-        //                });
-        //            }
-        //
-        //            return $company;
-        //        });
+        $data = $companies->map(function ($company) {
+            return [
+                'id' => $company->id,
+                'name' => $company->name,
+                'location' => $company->location,
+                'phone' => $company->phone,
+                'about' => $company->about,
+                'logo' => $company->logo,
+                'services' => $company->services,
+                'average_rating' => round($company->projectRatings->avg('rating'), 2), // متوسط تقييم المشاريع
+            ];
+        });
 
-        return Response::Success($companies, 'تم جلب قائمة الشركات');
+        return Response::Success($data, 'تم جلب قائمة الشركات مع التقييمات');
     }
+
 
     public function show(Company $company)
     {
-        $projects = $company->projects()->with('projectImages')->get();
+        $projects = $company->projects()
+            ->where('is_publish', true)
+            ->with(['projectImages', 'ratings']) // جلب صور المشروع والتقييم
+            ->get()
+            ->map(function ($project) {
+                return [
+                    'id' => $project->id,
+                    'project_name' => $project->project_name,
+                    'status' => $project->status,
+                    'final_cost' => $project->final_cost,
+                    'start_date' => $project->start_date,
+                    'end_date' => $project->end_date,
+                    'images' => $project->projectImages,
+                    'customer_rating' => optional($project->rating)->rating,
+                    'customer_comment' => optional($project->rating)->comment,
+                ];
+            });
 
-
-        return Response::Success($projects, 'تم جلب مشاريع الشركة');
+        return Response::Success($projects, 'تم جلب مشاريع الشركة مع التقييم');
     }
 
-    public function getCompanyPublishProjects($id)
-    {
-
-        //        return "g";
-        $projects = Project::with('company')->where('is_publish', true)
-            ->where('company_id', $id)->get();
-
-        return Response::Success(ProjectResource::collection($projects), 'success');
-    }
+//    public function getCompanyPublishProjects($id)
+//    {
+//
+//        //        return "g";
+//        $projects = Project::with('company')->where('is_publish', true)
+//            ->where('company_id', $id)->get();
+//
+//        return Response::Success(ProjectResource::collection($projects), 'success');
+//    }
 }

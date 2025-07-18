@@ -57,7 +57,7 @@ class Project extends Model
 
     public function ratings()
     {
-        return $this->hasMany(ProjectRating::class);
+        return $this->hasOne(ProjectRating::class);
     }
 
 

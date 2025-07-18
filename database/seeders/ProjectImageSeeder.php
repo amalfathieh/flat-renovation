@@ -18,8 +18,8 @@ class ProjectImageSeeder extends Seeder
             for ($img = 1; $img <= 4; $img++) {
                 ProjectImage::create([
                     'project_id' => $project->id,
-                    'before_image' => "before$img.jpg",
-                    'after_image' => "after$img.jpg",
+                    'before_image' => "project-images/before$img.jpg",
+                    'after_image' => "project-images/after$img.jpg",
                     'caption' => "صورة $img قبل وبعد",
                 ]);
             }

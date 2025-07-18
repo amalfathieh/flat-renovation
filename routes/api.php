@@ -133,6 +133,7 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::get('/companies/{company}/projects', [CompanyController::class,'show']);
     Route::post('/companies/search', [SearchController::class, 'search']);
 
+    Route::post('/project/{project}/rating', [ProjectController::class, 'store']);
 
 });
 
