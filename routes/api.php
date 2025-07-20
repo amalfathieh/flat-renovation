@@ -49,7 +49,7 @@ Route::post('/auth/google/token', [SocialAuthController::class, 'handleGoogleTok
 
 Route::controller(CodeController::class)->group(function (){
 
-    Route::post('verifyAccount',  'verifyAccount');
+    Route::post('verifyAccount',  'verifyAccount')->middleware('auth:sanctum');
     Route::post('resendCode', 'sendCodeVerification')->middleware('throttle:6,1');
 
     // Send Code For Reset Password Or Resend Code
@@ -133,6 +133,7 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::get('/companies/{company}/projects', [CompanyController::class,'show']);
     Route::post('/companies/search', [SearchController::class, 'search']);
 
+    Route::get('/projects/{projectId}/my-review', [ProjectController::class, 'showUserReview']);
     Route::post('/project/{project}/rating', [ProjectController::class, 'store']);
 
 });

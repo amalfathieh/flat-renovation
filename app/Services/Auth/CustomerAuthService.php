@@ -13,7 +13,7 @@ class CustomerAuthService implements CustomerAuthServiceInterface
 
     public function register($request): array
     {
-        // رفع الصورة إذا كانت موجودة
+
         $imagePath = null;
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -22,18 +22,18 @@ class CustomerAuthService implements CustomerAuthServiceInterface
             $imagePath = 'images/' . $avatarName;
         }
 
-        // إنشاء المستخدم
+
         $user = User::create([
             'name'     => $request['name'],
             'email'    => $request['email'],
             'password' => bcrypt($request['password']),
         ]);
 
-        // تعيين الدور
+
         $user->assignRole('customer');
 
 
-        // إنشاء الملف الشخصي للمستخدم
+
         $user->customerProfile()->create([
             'phone'  => $request['phone'] ?? null,
             'image'  => $imagePath,
@@ -41,10 +41,10 @@ class CustomerAuthService implements CustomerAuthServiceInterface
             'gender' => $request['gender'] ?? null,
         ]);
 
-        // إنشاء التوكن
+
         $token = $user->createToken('mobile')->plainTextToken;
 
-        // إرسال رمز التحقق
+
         $this->sendVerificationCode($user);
 
         return [
@@ -55,14 +55,14 @@ class CustomerAuthService implements CustomerAuthServiceInterface
 
     public function login(Request $request): array
     {
-        // التحقق من صحة البريد وكلمة المرور
+
         if (!Auth::attempt($request->only('email', 'password'))) {
             throw new \Exception(__('strings.email_password_mismatch'), 401);
         }
 
         $user = Auth::user();
 
-        // التحقق من أن المستخدم يملك دور "customer"
+
         if (!$user->hasRole('customer')) {
             throw new \Exception(__('strings.no_mobile_permission'), 403);
         }

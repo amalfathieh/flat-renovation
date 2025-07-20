@@ -44,11 +44,12 @@ class CompanyController extends Controller
                     'project_name' => $project->project_name,
                     'status' => $project->status,
                     'final_cost' => $project->final_cost,
+                    'description' =>  $project->description,
                     'start_date' => $project->start_date,
                     'end_date' => $project->end_date,
                     'images' => $project->projectImages,
-                    'customer_rating' => optional($project->rating)->rating,
-                    'customer_comment' => optional($project->rating)->comment,
+                    'customer_rating' => optional($project->ratings)->rating,
+                    'customer_comment' => optional($project->ratings)->comment,
                 ];
             });
 

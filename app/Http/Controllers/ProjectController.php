@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ProjectResource;
 use App\Http\Responses\Response;
+use App\Models\Customer;
 use App\Models\Project;
 use App\Models\ProjectRating;
 use Illuminate\Http\Request;
@@ -35,22 +36,34 @@ class ProjectController extends Controller
             'comment' => 'nullable|string|max:1000',
         ]);
 
-        $project = Project::findOrFail($projectId);
-        $customerId = auth()->id();
+
+        $project = Project::with('order.customer')->findOrFail($projectId);
 
 
-        if ($project->customer_id !== $customerId) {
+        $customer = Customer::where('user_id', auth()->id())->first();
+
+        if (!$customer) {
+            return response()->json(['error' => 'الزبون غير موجود أو غير مسجل الدخول'], 403);
+        }
+
+
+        if ($project->order->customer_id !== $customer->id) {
             return response()->json(['error' => 'غير مصرح لك بتقييم هذا المشروع'], 403);
         }
 
 
-        if ($project->ratings) {
+        $existingReview = ProjectRating::where('project_id', $project->id)
+            ->where('customer_id', $customer->id)
+            ->first();
+
+        if ($existingReview) {
             return response()->json(['error' => 'تم تقييم المشروع مسبقًا'], 400);
         }
 
+
         $review = ProjectRating::create([
             'project_id' => $project->id,
-            'customer_id' => $customerId,
+            'customer_id' => $customer->id,
             'rating' => $validated['rating'],
             'comment' => $validated['comment'] ?? null,
         ]);
@@ -60,13 +73,42 @@ class ProjectController extends Controller
             'review' => $review,
         ]);
     }
-    public function projectLog($projectId)
+    public function showUserReview($projectId)
     {
+
+        $customer = Customer::where('user_id', auth()->id())->first();
+
+        if (!$customer) {
+            return response()->json(['message' => 'الزبون غير موجود أو غير مسجل الدخول'], 403);
+        }
+
+
+        $review = ProjectRating::where('project_id', $projectId)
+            ->where('customer_id', $customer->id)
+            ->first();
+
+        if (!$review) {
+            return response()->json(['message' => 'لا يوجد تقييم لهذا المشروع من هذا المستخدم'], 404);
+        }
+
+        return response()->json([
+            'message' => 'تم جلب التقييم بنجاح',
+            'review' => $review,
+        ]);
+    }
+
+    public function projectHistory($projectId)
+    {
+        $user = auth()->user();
+
         $project = Project::with([
-            'stages.notes.employee',
-            'stages.images',
-            'payments'
-        ])->where('user_id', auth()->id())->findOrFail($projectId);
+            'projectStages.imagesStage',
+            'projectStages.objections',
+            'ratings',
+            'company',
+        ])
+            ->where('customer_id', $user->id)
+            ->findOrFail($projectId);
 
         return response()->json($project);
     }
