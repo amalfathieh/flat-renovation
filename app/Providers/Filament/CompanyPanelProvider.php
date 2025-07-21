@@ -35,7 +35,7 @@ class CompanyPanelProvider extends PanelProvider
             ->emailVerification()
             ->profile()
             ->colors([
-                'primary' => Color::Red,
+                'primary' => Color::Orange,
             ])
             ->favicon(asset('images/favicon.jpg'))
             ->discoverResources(in: app_path('Filament/Company/Resources'), for: 'App\\Filament\\Company\\Resources')

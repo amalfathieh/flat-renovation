@@ -19,6 +19,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use App\Enums\ProjectStatusEnum;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectStageResource extends Resource
 {
@@ -28,6 +30,20 @@ class ProjectStageResource extends Resource
 
     protected static ?string $pluralModelLabel = 'مراحل المشروع';
     protected static ?string $modelLabel = 'مرحلة';
+
+
+//    public static function getEloquentQuery(): Builder
+//    {
+//        $user =  Auth::user();
+//        if ($user->hasRole('employee')){
+//            $employee = $user->employee;
+//
+//            return ProjectStage::whereHas('project', function (Builder $query) use ($employee){
+//                $query->where('employee_id'  == $employee->id);
+//            });
+//        }
+//        return parent::getEloquentQuery();;
+//    }
 
     public static function form(Form $form): Form
     {
@@ -49,10 +65,12 @@ class ProjectStageResource extends Resource
                                     ->required(),
 
                                 Forms\Components\TextInput::make('stage_name')
+                                    ->label('اسم المرحلة')
                                     ->required()
                                     ->maxLength(255),
 
                                 Forms\Components\Select::make('service_id')
+                                    ->label('اسم الخدمة')
                                     ->options(function () {
                                         $companyId = Filament::getTenant()?->id;
 
@@ -68,6 +86,7 @@ class ProjectStageResource extends Resource
                                     ->required(),
 
                                 Forms\Components\Select::make('service_type_id')
+                                    ->label('نوع الخدمة')
                                     ->options( fn(Get $get): Collection => ServiceType::query()
                                         ->where('service_id', $get('service_id'))
                                         ->pluck('name', 'id'))
@@ -77,6 +96,7 @@ class ProjectStageResource extends Resource
                                     ->required(),
 
                                 Forms\Components\MarkdownEditor::make('description')
+                                    ->label('الوصف')
                                     ->columnSpanFull(),
                             ])->columns(2),
                     ]),
@@ -86,19 +106,24 @@ class ProjectStageResource extends Resource
                         Forms\Components\Section::make('Status')
                             ->schema([
 
-                                Forms\Components\DatePicker::make('started_at'),
+                                Forms\Components\DatePicker::make('started_at')
+                                    ->label('تاريخ البداية'),
 
-                                Forms\Components\DatePicker::make('completed_at'),
+                                Forms\Components\DatePicker::make('completed_at')
+                                    ->label('تاريخ النهاية'),
 
                                 Forms\Components\Select::make('status')
+                                    ->label('الحالة')
                                     ->options(ProjectStatusEnum::options())
                                     ->default('Preparing'),
 
                                 Forms\Components\TextInput::make('cost')
+                                    ->label('التكلفة')
                                     ->required()
                                     ->numeric()
                                     ->prefix('$'),
                                 Forms\Components\Toggle::make('is_confirmed')
+                                    ->label('تم التاكيد؟')
                                     ->disabled(),
                             ])->columns(2),
 

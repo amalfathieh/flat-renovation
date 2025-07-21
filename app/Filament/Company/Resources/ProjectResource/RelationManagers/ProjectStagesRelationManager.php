@@ -34,10 +34,12 @@ class ProjectStagesRelationManager extends RelationManager
                             ->schema([
 
                                 Forms\Components\TextInput::make('stage_name')
+                                    ->label('اسم المرحلة')
                                     ->required()
                                     ->maxLength(255),
 
                                 Forms\Components\Select::make('service_id')
+                                    ->label('اسم الخدمة')
                                     ->options(function () {
                                         $companyId = Filament::getTenant()?->id;
 
@@ -53,6 +55,7 @@ class ProjectStagesRelationManager extends RelationManager
                                     ->required(),
 
                                 Forms\Components\Select::make('service_type_id')
+                                    ->label('نوع الخدمة')
                                     ->options( fn(Get $get): Collection => ServiceType::query()
                                         ->where('service_id', $get('service_id'))
                                         ->pluck('name', 'id'))
@@ -71,19 +74,24 @@ class ProjectStagesRelationManager extends RelationManager
                         Forms\Components\Section::make('Status')
                             ->schema([
 
-                                Forms\Components\DatePicker::make('started_at'),
+                                Forms\Components\DatePicker::make('started_at')
+                                    ->label('تاريخ البداية'),
 
-                                Forms\Components\DatePicker::make('completed_at'),
+                                Forms\Components\DatePicker::make('completed_at')
+                                    ->label('تاريخ النهاية'),
 
                                 Forms\Components\Select::make('status')
+                                    ->label('الحالة')
                                     ->options(ProjectStatusEnum::options())
                                     ->default('Preparing'),
 
                                 Forms\Components\TextInput::make('cost')
+                                    ->label('التكلفة')
                                     ->required()
                                     ->numeric()
                                     ->prefix('$'),
                                 Forms\Components\Toggle::make('is_confirmed')
+                                    ->label('تم التاكيد؟')
                                     ->required(),
                             ])->columns(2),
 
@@ -121,12 +129,16 @@ class ProjectStagesRelationManager extends RelationManager
                     ->label('اسم المشروع')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('stage_name')
+                    ->label('عنوان المرحلة')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('status')
+                    ->label('حالة'),
                 Tables\Columns\TextColumn::make('cost')
+                    ->label('التكلفة')
                     ->money()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_confirmed')
+                    ->label('مؤكد؟')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

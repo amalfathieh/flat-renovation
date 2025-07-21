@@ -14,9 +14,10 @@ class ProjectController extends Controller
 {
 
     public function getMyProjects(){
-        $customerId =  Auth::user()->customerProfile->id;
 
-        $projects = Project::with('company')->where('customer_id', $customerId)->get();
+        $customer_name =  Auth::user()->name;
+
+        $projects = Project::with('company')->where('customer_name', $customer_name)->get();
 
         return Response::Success(ProjectResource::collection($projects), 'success');
 

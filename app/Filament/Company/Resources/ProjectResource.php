@@ -10,12 +10,16 @@ use App\Models\Project;
 use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Group;
+use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use App\Enums\ProjectStatusEnum;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectResource extends Resource
 {
@@ -26,16 +30,26 @@ class ProjectResource extends Resource
     protected static ?string $pluralModelLabel = 'المشاريع';
     protected static ?string $modelLabel = 'مشروع';
 
+    public static function getEloquentQuery(): Builder
+    {
+        $user =  Auth::user();
+        if ($user->hasRole('employee')){
+            $employee = $user->employee;
+            return $employee->projects()->getQuery(); // projects() هي العلاقة في نموذج User
+        }
+        return parent::getEloquentQuery();
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Group::make()
                     ->schema([
-                        Forms\Components\Section::make('Order')
+                        Forms\Components\Section::make('Order Info')
                             ->schema([
                                 Forms\Components\Select::make('order_id')
-                                    ->label('Order')
+                                    ->label('رقم الطلب')
                                     ->options(function () {
                                         $companyId = Filament::getTenant()?->id;
 
@@ -57,7 +71,7 @@ class ProjectResource extends Resource
                                     }),
 
                                 Forms\Components\TextInput::make('customer_name')
-                                    ->label('Customer Name')
+                                    ->label('اسم الزبون')
                                     ->disabled()
                                     ->dehydrated()
                                     ->required(),
@@ -71,6 +85,7 @@ class ProjectResource extends Resource
                                             ->get()
                                             ->pluck('first_name', 'id');
                                     })
+                                    ->disabled(!Auth::user()->hasRole('company'))
                                     ->searchable()
                                     ->required()
                                     ->columnSpanFull(),
@@ -79,10 +94,12 @@ class ProjectResource extends Resource
                         Forms\Components\Section::make()
                             ->schema([
                                 Forms\Components\TextInput::make('project_name')
+                                    ->label('اسم المشروع')
                                     ->required()
                                     ->maxLength(255),
 
                                 Forms\Components\MarkdownEditor::make('description')
+                                    ->label('الوصف')
                                     ->columnSpanFull(),
 
                             ]),
@@ -92,21 +109,27 @@ class ProjectResource extends Resource
                          Forms\Components\Section::make('Status')
                              ->schema([
                                  Forms\Components\DatePicker::make('start_date')
-                                     ->required(),
-                                 Forms\Components\DatePicker::make('end_date'),
+                                     ->label('تاريخ البداية')
+                                    ->required(),
+                                 Forms\Components\DatePicker::make('end_date')
+                                     ->label('تاريخ النهاية'),
 
                                  Forms\Components\Select::make('status')
+                                     ->label('الحالة')
                                      ->options(ProjectStatusEnum::options())->required(),
 
 
                                  Forms\Components\TextInput::make('final_cost')
+                                     ->label('التكلفة النهائية')
                                      ->numeric(),
 
                              Forms\Components\Toggle::make('is_publish')
-                                 ->label('نشر المشروع')
+                                 ->label('نشر المشروع؟')
                                  ->reactive()
                                  ->disabled(fn(callable $get) => $get('status') !== 'finished')
-                                 ->helperText("يمكن النشر فقط عندما تكون حالة المشروع مكتمل")
+                                 ->helperText("يمكن النشر فقط عندما تكون حالة المشروع مكتمل، عند النشر
+                                  سيظهر المشروع داخل بروفايل الشركة لجميع مستخدمي تطبيق الموبيل .")
+
                                 ->columnSpanFull(),
 
                          ])->columns(2),
@@ -179,43 +202,58 @@ class ProjectResource extends Resource
     {
         return $infolist
             ->schema([
-                TextEntry::make('id'),
+                /*Group::make()->schema([
+                    Section::make('معلومات')
+                        ->schema([
+                            TextEntry::make('id')
+                                ->label('معرف المشروع'),
+                            TextEntry::make('order_id')
+                                ->label('رقم الطلب'),
 
-                TextEntry::make('customer_name')
-                    ->label('اسم الزبون'),
+                            TextEntry::make('customer_name')
+                                ->label('اسم الزبون'),
 
-                TextEntry::make('employee.first_name')
-                    ->label('اسم الموظف'),
+                            TextEntry::make('employee.first_name')
+                                ->label('اسم الموظف المشرف'),
+                        ])->columns(2),
+                ]),
 
-                TextEntry::make('project_name')
-                    ->label('اسم المشروع'),
+                Group::make()->schema([
+                    Section::make('المالك')
+                        ->schema([
+                            TextEntry::make('project_name')
+                                ->label('اسم المشروع'),
 
-                TextEntry::make('status'),
+                            TextEntry::make('status'),
 
-                TextEntry::make('description'),
+                            TextEntry::make('description')
+                                ->columnSpanFull(),
 
-                TextEntry::make('final_cost'),
+                            TextEntry::make('final_cost'),
 
-                TextEntry::make('file'),
+                            TextEntry::make('is_publish'),
 
-                TextEntry::make('is_publish'),
+                            TextEntry::make('start_date')
+                                ->date(),
+                            TextEntry::make('end_date')
+                                ->date(),
 
-                TextEntry::make('start_date')
-                    ->date(),
-                TextEntry::make('end_date')
-                    ->date(),
+                            TextEntry::make('created_at')
+                                ->date(),
 
-                TextEntry::make('created_at')
-                    ->date(),
-                TextEntry::make('file'),
+                            TextEntry::make('file'),
 
-            ])->columns(2);
+                        ])->columns(2),
+                ]),*/
+
+            ]);
     }
 
 
     public static function getPages(): array
     {
         return [
+            'view' => Pages\ViewProject::route('/{record}'),
             'index' => Pages\ListProjects::route('/'),
             'create' => Pages\CreateProject::route('/create'),
             'edit' => Pages\EditProject::route('/{record}/edit'),
