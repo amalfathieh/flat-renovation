@@ -12,7 +12,7 @@ class SearchController extends Controller
     {
         $search = trim($request->input('search'));
 
-        $companiesQuery = Company::with('services');
+        $companiesQuery = Company::with(['services', 'projectRatings']);
 
         if (!empty($search)) {
             $companiesQuery->where(function ($query) use ($search) {
@@ -31,8 +31,26 @@ class SearchController extends Controller
             return Response::error('لا توجد نتائج مطابقة', 404);
         }
 
+
+        $companies->getCollection()->transform(function ($company) {
+            return [
+                'id' => $company->id,
+                'name' => $company->name,
+                'location' => $company->location,
+                'phone' => $company->phone,
+                'about' => $company->about,
+                'logo' => $company->logo,
+                'services' => $company->services,
+                'average_rating' => round($company->projectRatings->avg('rating'), 2),
+            ];
+        });
+
         $message = !empty($search) ? 'نتائج البحث' : 'كل الشركات';
 
-        return Response::success($companies, $message);
+
+        return Response::success($companies->toArray(), $message);
     }
+
 }
+
+

@@ -237,7 +237,8 @@ class EmployeeResource extends Resource
 
     public static function getRoles()
     {
-        return Role::where('name', '!=', 'employee')->pluck('name', 'name')->toArray();
+        return Role::whereNotIn('name', ['employee', 'admin', 'company', 'customer'])
+            ->pluck('name', 'name')->toArray();
     }
 
     public static function getRelations(): array

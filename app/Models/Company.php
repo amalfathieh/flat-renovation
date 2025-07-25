@@ -62,6 +62,16 @@ class Company extends Model
             'id',
         );
     }
+    public function projectStages(){
+        return $this->hasManyThrough(
+            ProjectStage::class,
+            Project::class,
+            'company_id',
+            'project_id',
+            'id',
+            'id',
+        );
+    }
 
     public function services(){
         return $this->hasMany(Service::class);
@@ -78,7 +88,6 @@ class Company extends Model
         return $this->hasMany(Order::class);
     }
 
-
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
@@ -87,6 +96,19 @@ class Company extends Model
     public function stageTransactions()
     {
         return $this->hasMany(stage_transactions::class);
+    }
+
+
+    public function projectRatings()
+    {
+        return $this->hasManyThrough(
+            \App\Models\ProjectRating::class,
+            \App\Models\Project::class,
+            'company_id',
+            'project_id',
+            'id',
+            'id'
+        );
     }
 
 

@@ -40,7 +40,8 @@ class RolesAndPermissionsSeeder extends Seeder
 
             'appointment_create', 'appointment_view', 'appointment_delete',
 
-            'project_create', 'project_view',  'project_edit', 'project_delete', 'update_project_stage',
+            'project_create', 'project_view',  'project_edit', 'project_delete',
+            'create_stage', 'view_stage', 'update_stage', 'delete_stage',
 
             'service_create', 'service_view','service_edit', 'service_delete',
             //الاعتراضات
@@ -87,9 +88,13 @@ class RolesAndPermissionsSeeder extends Seeder
             'view_company_dashboard',
             //الشكاوي
              'complaint_view',
+            'create_stage','update_stage',
+
+            'order_view','order_status_edit',
             //الاعتراضات
             'objection_create', 'objection_view',
-            'project_view', 'project_edit', 'update_project_stage',
+            'project_create','project_view', 'project_edit',
+            'create_stage', 'view_stage', 'update_stage', 'delete_stage',
 
             'service_view',
         ]);

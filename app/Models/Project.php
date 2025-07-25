@@ -14,6 +14,7 @@ class Project extends Model
 
     protected $fillable = [
         'company_id',
+        'customer_name',
         'order_id',
         'employee_id',
         'project_name',
@@ -22,6 +23,8 @@ class Project extends Model
         'status',
         'description',
         'final_cost',
+        'is_publish',
+        'file',
 
     ];
 
@@ -57,7 +60,7 @@ class Project extends Model
 
     public function ratings()
     {
-        return $this->hasMany(ProjectRating::class);
+        return $this->hasOne(ProjectRating::class);
     }
 
 
@@ -70,7 +73,7 @@ class Project extends Model
 
 
 
-    public function stages()
+    public function projectStages()
     {
 
         return $this->hasMany(ProjectStage::class);

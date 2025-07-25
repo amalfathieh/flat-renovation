@@ -24,7 +24,7 @@ class ObjectionController extends Controller
             return Response::Error('stage not found', 404);
         }
 
-        if ($stage->project->customer_id != $customerId) {
+        if ($stage->project->order->customer_id != $customerId) {
             return Response::Error(__('strings.authorization_required'));
         }
 
@@ -45,7 +45,7 @@ class ObjectionController extends Controller
         }
 
         $customerId = Auth::user()->customerProfile->id;
-        if ($stage->project->customer_id != $customerId) {
+        if ($stage->project->order->customer_id != $customerId) {
             return Response::Error(__('strings.authorization_required'));
         }
         return Response::Success($stage->objections, 'success');

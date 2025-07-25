@@ -15,9 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('project_stage_id')->constrained()->onDelete('cascade');
             $table->text('image');
+            $table->text('description')->nullable(); // الحقل الجديد
+            $table->date('stage_date')->nullable(); // <-- حقل التاريخ
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

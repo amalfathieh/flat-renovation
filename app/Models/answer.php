@@ -14,15 +14,6 @@ class answer extends Model
         'order_id',
         'answer',
     ];
-
-
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d\TH:i:s',
-        'updated_at' => 'datetime:Y-m-d\TH:i:s',
-    ];
-
-
-
     public function order()
     {
         return $this->belongsTo(Order::class);
@@ -31,6 +22,11 @@ class answer extends Model
     {
         return $this->belongsTo(QuestionService::class);
     }
+    //
 
-
+    //
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d\TH:i:s',
+        'updated_at' => 'datetime:Y-m-d\TH:i:s',
+    ];
 }

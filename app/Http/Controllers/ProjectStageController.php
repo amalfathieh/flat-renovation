@@ -17,7 +17,7 @@ class ProjectStageController extends Controller
     public function getProjectStages($id)
     {
         try {
-            $projectStages = ProjectStage::with('ImageStage')->where('project_id', $id)->get();
+            $projectStages = ProjectStage::with('imagesStage')->where('project_id', $id)->get();
 
             return Response::Success(StageResource::collection($projectStages), 'success');
         } catch (\Exception $ex) {
@@ -58,6 +58,7 @@ class ProjectStageController extends Controller
 
         return Response::Success($stage, __('strings.updated_successfully'));
     }
+
 
 
     //================================================================================
@@ -167,6 +168,7 @@ class ProjectStageController extends Controller
             ], 500);
         }
     }
+
 
 
 

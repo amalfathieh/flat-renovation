@@ -7,6 +7,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\Tenancy\EditTenantProfile;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -31,7 +32,8 @@ class EditCompanyProfile extends EditTenantProfile
                             return ;
                         }
                         $set('slug', Str::slug($state));
-                    }),
+                    })
+                ->disabled(Auth::user()->cannot('company_edit')),
 
                 TextInput::make('slug')
                     ->disabled()
@@ -39,8 +41,11 @@ class EditCompanyProfile extends EditTenantProfile
                     ->required()
                     ->unique(Company::class, 'slug', ignoreRecord: true),
 
-                TextInput::make('location'),
-                TextInput::make('about'),
+                TextInput::make('location')
+                    ->disabled(Auth::user()->cannot('company_edit')),
+
+                TextInput::make('about')
+                    ->disabled(Auth::user()->cannot('company_edit')),
 
                 Forms\Components\FileUpload::make('logo')
                     ->getUploadedFileNameForStorageUsing(function ( $file, $record){
@@ -54,7 +59,8 @@ class EditCompanyProfile extends EditTenantProfile
                     ->directory('companies-logo')
                     ->image()
                     ->imageEditor()
-                    ->nullable(),
+                    ->nullable()
+                    ->disabled(Auth::user()->cannot('company_edit')),
             ]);
 
     }

@@ -6,7 +6,6 @@ use App\Filament\Company\Resources\ServiceTypeResource\Pages;
 use App\Filament\Company\Resources\ServiceTypeResource\RelationManagers;
 use App\Models\ServiceType;
 use Filament\Forms;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -23,7 +22,6 @@ class ServiceTypeResource extends Resource
 
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    public static ?string $tenantOwnershipRelationshipName = 'service';
 
     public static function form(Form $form): Form
     {
@@ -45,11 +43,6 @@ class ServiceTypeResource extends Resource
                     ->label('اسم النوع')
                     ->maxLength(255),
 
-                Textarea::make('description')
-                    ->required()
-                    ->label('وصف النوع')
-                    ->columnSpanFull(),
-
                 TextInput::make('unit')
                     ->required()
                     ->label('الوحدة(م2 ، قطعة،..')
@@ -59,6 +52,17 @@ class ServiceTypeResource extends Resource
                     ->required()
                     ->label('السعر للوحدة')
                     ->numeric(),
+
+                Forms\Components\MarkdownEditor::make('description')
+                    ->label('وصف النوع'),
+
+                Forms\Components\FileUpload::make('image')
+                    ->label(__('strings.image'))
+                    ->directory('service-type-image')
+                    ->preserveFilenames()
+                    ->image()
+                    ->imageEditor(),
+
             ]);
     }
 
@@ -66,9 +70,14 @@ class ServiceTypeResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('image'),
                 Tables\Columns\TextColumn::make('service.name')
                     ->label('التصنيق')
                     ->sortable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('service.company_id')
+                    ->label('الشركة')
+                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->label('اسم النوع')
@@ -85,7 +94,11 @@ class ServiceTypeResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

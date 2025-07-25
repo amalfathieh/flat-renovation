@@ -17,12 +17,6 @@ class Customer extends Model
         'gender',
     ];
 
-
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d\TH:i:s',
-        'updated_at' => 'datetime:Y-m-d\TH:i:s',
-    ];
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -32,15 +26,10 @@ class Customer extends Model
         return $this->hasMany(Objection::class);
     }
 
-    public function projects() {
-        return $this->hasMany(Project::class);
-    }
-
 
     public function orders() {
         return $this->hasMany(Order::class);
     }
-
 
     public function projectRatings()
     {
@@ -49,10 +38,16 @@ class Customer extends Model
 
 
 
+
     public function stageTransactions()
     {
         return $this->hasMany(stage_transactions::class);
     }
 
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d',
+        'updated_at' => 'datetime:Y-m-d',
+    ];
 
 }

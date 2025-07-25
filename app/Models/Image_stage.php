@@ -9,7 +9,7 @@ class Image_stage extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['image','project_stage_id'];
+    protected $fillable = ['image','project_stage_id','description','stage_date'];
 
 
 

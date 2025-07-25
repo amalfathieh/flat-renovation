@@ -11,7 +11,7 @@ class UserServices
 {
     public function register(array $request): array
     {
-// إنشاء المستخدم الجديد مع gender و age
+
         $user = User::create([
             'name'     => $request['name'],
             'email'    => $request['email'],
@@ -20,18 +20,18 @@ class UserServices
             'age'      => $request['age'] ?? null,
         ]);
 
-// تعيين دور "customer"
+
         $customerRole = Role::where('name', 'customer')->first();
         $user->assignRole($customerRole);
 
-// منح صلاحيات الدور للمستخدم
+
         $permissions = $customerRole->permissions()->pluck('name')->toArray();
         $user->givePermissionTo($permissions);
 
-// تحميل العلاقات
+
         $user->load(['roles', 'permissions']);
 
-// إنشاء توكن
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return [

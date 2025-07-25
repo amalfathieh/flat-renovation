@@ -15,19 +15,18 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
 
-            $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
+            $table->string('customer_name')->nullable();
 
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
             $table->string('project_name');
             $table->date('start_date');
-
             $table->date('end_date')->nullable();
             $table->enum('status', ['finished', 'In progress', 'Preparing'])->default('Preparing');
             $table->text('description')->nullable();
             $table->double('final_cost')->nullable();
             $table->boolean('is_publish')->default(false);
-
+            $table->string('file')->nullable();
 
             $table->timestamps();
         });

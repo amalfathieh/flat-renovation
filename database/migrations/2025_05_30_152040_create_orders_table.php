@@ -22,7 +22,6 @@ return new class extends Migration
             $table->text('budget');
             $table->string('payment_intent_id')->nullable();
             $table->string('refund_id')->nullable();
-
             $table->timestamps();
         });
     }

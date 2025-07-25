@@ -32,6 +32,17 @@ class Objection extends Model
         return $this->belongsTo(Customer::class);
     }
 
+    public function company()
+    {
+        return $this->hasOneThrough(
+            \App\Models\Company::class,
+            \App\Models\ProjectStage::class,
+            'id', // Foreign key on ProjectStage (used in Objection)
+            'id', // Foreign key on Company (used in Project)
+            'project_stage_id', // Local key on Objection
+            'project_id' // Local key on ProjectStage
+        )->join('projects', 'projects.id', '=', 'project_stages.project_id');
+    }
 
 
 

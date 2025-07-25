@@ -17,15 +17,14 @@ class ProjectSeeder extends Seeder
     {
 
         foreach (OrderSeeder::$orders as $key => $order) {
+            $userName = $order->customer->user->name;
             [$c, $z] = explode('-', $key);
             $employeeIndex = ($z <= 2) ? "1" : "2";
             $employee = EmployeeSeeder::$employees["$c-$employeeIndex"];
 
             self::$projects[$key] = Project::create([
                 'company_id' => $order->company_id,
-
-                'customer_id' => $order->customer_id,
-
+                'customer_name' => $userName,
                 'order_id' => $order->id,
                 'employee_id' => $employee->id,
                 'project_name' => "مشروع زبون $z لشركة $c",
@@ -34,9 +33,7 @@ class ProjectSeeder extends Seeder
                 'status' => 'finished',
                 'description' => 'تفاصيل المشروع',
                 'final_cost' => rand(1500, 6000),
-
                 'is_publish' => (bool) rand(0, 1),
-
             ]);
         }
 
