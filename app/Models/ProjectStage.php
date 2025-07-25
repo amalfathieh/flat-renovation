@@ -10,11 +10,15 @@ class ProjectStage extends Model
     protected $fillable = [
         'project_id',
         'stage_name',
+        'service_id',
+        'service_type_id',
         'description',
         'started_at',
         'completed_at',
         'status',
         'cost',
+        'is_confirmed',
+        'payment_intent_id',
 
     ];
 
@@ -48,6 +52,15 @@ class ProjectStage extends Model
     {
         return $this->belongsTo(ServiceType::class);
     }
+
+
+
+    public function stageTransactions()
+    {
+        return $this->hasMany(stage_transactions::class, 'project_stage_id');
+    }
+
+
 
 
 }

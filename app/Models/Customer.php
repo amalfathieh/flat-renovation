@@ -48,4 +48,11 @@ class Customer extends Model
     }
 
 
+
+    public function stageTransactions()
+    {
+        return $this->hasMany(stage_transactions::class);
+    }
+
+
 }

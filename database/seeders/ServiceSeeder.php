@@ -58,7 +58,7 @@ class ServiceSeeder extends Seeder
                 'image' => 'electricity.png',
                 'questions' => [
                     'ما نوع الأسلاك الكهربائية التي ترغب في تركيبها؟',
-                    'ما هو المتر الطولي المطلوب لتمديدات الكهرباء (بالمتر)؟',
+                    'ما هو الطول التقريبي المطلوب لتمديدات الكهرباء (بالمتر)؟',
                     'هل الموقع مزود بلوحة توزيع كهربائية رئيسية؟',
                 ],
             ],
@@ -77,7 +77,7 @@ class ServiceSeeder extends Seeder
                     QuestionService::create([
                         'service_id' => $service->id,
                         'question' => $question,
-                'has_options' => str_starts_with($question, 'ما نوع') || str_starts_with($question, 'ما هو'),
+                'has_options' => str_starts_with($question, 'ما نوع'),
                     ]);
                 }
 

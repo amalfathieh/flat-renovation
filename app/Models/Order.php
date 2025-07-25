@@ -11,11 +11,13 @@ class Order extends Model
     protected $fillable = [
         'customer_id',
         'company_id',
+        'employee_id',
         'status',
         'cost_of_examination',
         'location',
         'budget',
          'payment_intent_id',
+         'refund_id',
     ];
 
     protected $casts = [
@@ -45,5 +47,14 @@ class Order extends Model
     }
 
 
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 
 }

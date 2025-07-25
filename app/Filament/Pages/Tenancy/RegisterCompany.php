@@ -8,6 +8,9 @@ use Filament\Forms\Form;
 use Filament\Pages\Tenancy\RegisterTenant;
 use Illuminate\Support\Str;
 
+use Stripe\Stripe;
+use Stripe\Account;
+
 use Filament\Forms;
 
 class RegisterCompany extends RegisterTenant
@@ -67,6 +70,7 @@ class RegisterCompany extends RegisterTenant
     }
     protected function handleRegistration(array $data): Company
     {
+
         $company = new Company($data);
         $company->owner()->associate(auth()->user());
         $company->save();

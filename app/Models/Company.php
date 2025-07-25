@@ -12,7 +12,7 @@ class Company extends Model
 
     protected $fillable = [
 
-        'user_id', 'name', 'email', 'slug', 'location', 'phone', 'about', 'logo', 'cost_of_examination'
+        'user_id', 'name', 'email', 'slug', 'location', 'phone', 'about', 'logo', 'cost_of_examination','balance',
 
     ];
 
@@ -78,6 +78,16 @@ class Company extends Model
         return $this->hasMany(Order::class);
     }
 
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function stageTransactions()
+    {
+        return $this->hasMany(stage_transactions::class);
+    }
 
 
 

@@ -94,7 +94,12 @@ class CompanyServiceController extends Controller
             'services.*.service_id' => 'required|integer|exists:services,id',
             'services.*.answers' => 'required|array|min:1',
             'services.*.answers.*.question_id' => 'required|integer|exists:question_services,id',
-            'services.*.answers.*.answer' => 'required|string',
+            'services.*.answers.*.answer' => [
+                'required',
+                'string',
+                'not_regex:/[٠-٩]/u',
+            ],
+
         ]);
 
         if ($validator->fails()) {
@@ -117,12 +122,12 @@ class CompanyServiceController extends Controller
                     $serviceType = ServiceType::find($serviceTypeId);
 
                     if ($serviceType) {
-                        
+
                         $quantity = null;
                         foreach ($answers as $q) {
                             if ($q['question_id'] !== $item['question_id']) {
                                 $relatedQuestion = QuestionService::find($q['question_id']);
-                                if (str_contains($relatedQuestion->question, 'مساحة') || str_contains($relatedQuestion->question, 'عدد')) {
+                                if (str_contains($relatedQuestion->question, 'مساحة') || str_contains($relatedQuestion->question, 'الطول')) {
                                     $quantity = floatval($q['answer']);
                                     break;
                                 }
