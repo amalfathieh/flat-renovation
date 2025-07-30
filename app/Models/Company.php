@@ -111,6 +111,31 @@ class Company extends Model
         );
     }
 
+    public function activeSubscription()
+    {
+        return $this->hasOne(CompanySubscription::class)
+            ->where('status', 'active')
+            ->whereDate('start_date', '<=', now())
+            ->whereDate('end_date', '>=', now());
+    }
+
+    public function canCreateProject()
+    {
+        // إذا لم يكن هناك اشتراك فعال
+        if (!$this->activeSubscription) {
+            return false;
+        }
+
+        $activeProjectsCount = $this->activeSubscription->used_projects;
+
+        return $activeProjectsCount < $this->activeSubscription->subscriptionPlan->project_limit;
+    }
+
+//  // علاقة مع CompanySubscriptions
+    public function companySubscriptions()
+    {
+        return $this->hasMany(CompanySubscription::class);
+    }
 
 
 

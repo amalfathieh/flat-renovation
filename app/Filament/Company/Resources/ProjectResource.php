@@ -20,6 +20,7 @@ use Filament\Tables\Table;
 use App\Enums\ProjectStatusEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class ProjectResource extends Resource
 {
@@ -39,6 +40,20 @@ class ProjectResource extends Resource
         }
         return parent::getEloquentQuery();
     }
+    public static function canCreate(): bool
+    {
+        return true;
+    }
+
+   /* public static function canCreate(): bool
+    {
+        $company = Filament::getTenant();
+
+        if (!$company->canCreateProject()) {
+            return false;
+        }
+        return true;
+    }*/
 
     public static function form(Form $form): Form
     {
@@ -78,6 +93,7 @@ class ProjectResource extends Resource
 
                                 Forms\Components\Select::make('employee_id')
                                     ->label('الموظف المسؤول')
+//                                    ->options(Employee::pluck('first_name', 'id'))
                                     ->options(function () {
                                         $companyId = Filament::getTenant()?->id;
 
@@ -253,7 +269,7 @@ class ProjectResource extends Resource
     public static function getPages(): array
     {
         return [
-            'view' => Pages\ViewProject::route('/{record}'),
+//            'view' => Pages\ViewProject::route('/{record}'),
             'index' => Pages\ListProjects::route('/'),
             'create' => Pages\CreateProject::route('/create'),
             'edit' => Pages\EditProject::route('/{record}/edit'),

@@ -8,6 +8,7 @@ use App\Models\Objection;
 use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -33,7 +34,7 @@ class ObjectionResource extends Resource
                     ->required(),
 
                 Select::make('customer_id')
-                    ->relationship('customer', 'name') // إذا عندك علاقة customer
+                    ->relationship('customer.user', 'name') // إذا عندك علاقة customer
                     ->label('العميل')
                     ->required(),
 
@@ -48,6 +49,7 @@ class ObjectionResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('projectStage.project.project_name')->label('المشروع'),
+                TextColumn::make('customer.user.name')->label('العميل'),
                 TextColumn::make('projectStage.stage_name')->label('المرحلة'),
                 TextColumn::make('text')->label('نص الاعتراض')->limit(50),
                 TextColumn::make('created_at')->label('تاريخ الإضافة')->date(),
@@ -70,7 +72,7 @@ class ObjectionResource extends Resource
         ];
     }
 
-    public static function getEloquentQuery(): Builder
+   /* public static function getEloquentQuery(): Builder
     {
         $user = Filament::auth()->user();
 
@@ -97,5 +99,5 @@ class ObjectionResource extends Resource
 
 
         return parent::getEloquentQuery()->whereRaw('0 = 1');
-    }
+    }*/
 }
