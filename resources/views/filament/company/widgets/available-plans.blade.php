@@ -3,47 +3,47 @@
 {{--@dd($this->getPlans()["comSub"]->subscription_plan_id)--}}
 {{--@dd( Filament::getTenant())--}}
 
-{{--<x-filament-widgets::widget>--}}
-{{--    <x-filament::section>--}}
-{{--        باقات الاشتراك--}}
-{{--        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">--}}
-{{--            @foreach ($this->getPlans()["plans"] as $plan)--}}
-{{--                <div class=" rounded-xl shadow p-6 border">--}}
-{{--                    <h3 class="text-lg font-bold text-orange-600" style="color: darkorange">{{ $plan->name }}</h3>--}}
-{{--                    <p class="text-gray-400">{{ $plan->description }}</p>--}}
-{{--                    <div class="mt-4 text-sm text-gray-500">--}}
-{{--                        <p><strong>السعر:</strong> {{ $plan->price }} $</p>--}}
-{{--                        <p><strong>عدد المشاريع:</strong> {{ $plan->project_limit }}</p>--}}
-{{--                        <p><strong>المدة:</strong> {{ $plan->duration_in_days }} يوم</p>--}}
-{{--                    </div>--}}
-{{--                    <button--}}
-{{--                        class="mt-4 bg-orange-500 text-white px-4 py-1 my-2 rounded hover:bg-orange-600 transition" style="background-color: orangered">--}}
-
-{{--                                اشترك الآن--}}
-{{--                    </button>--}}
-{{--                </div>--}}
-{{--            @endforeach--}}
-{{--        </div>--}}
-{{--    </x-filament::section>--}}
-{{--</x-filament-widgets::widget>--}}
-
-
-
-
-
-
-
-
-
 <x-filament-widgets::widget>
     <x-filament::section>
+        باقات الاشتراك
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            @foreach ($this->getPlans()["plans"] as $plan)
+                <div class=" rounded-xl shadow p-6 border">
+                    <h3 class="text-lg font-bold text-orange-600" style="color: darkorange">{{ $plan->name }}</h3>
+                    <p class="text-gray-400">{{ $plan->description }}</p>
+                    <div class="mt-4 text-sm text-gray-500">
+                        <p><strong>السعر:</strong> {{ $plan->price }} $</p>
+                        <p><strong>عدد المشاريع:</strong> {{ $plan->project_limit }}</p>
+                        <p><strong>المدة:</strong> {{ $plan->duration_in_days }} يوم</p>
+                    </div>
+                    <button
+                        class="mt-4 bg-orange-500 text-white px-4 py-1 my-2 rounded hover:bg-orange-600 transition" style="background-color: orangered">
 
-        <div class="bg-red-500 text-white p-4 rounded">
-            Tailwind شغال داخل Filament ✅
+                                اشترك الآن
+                    </button>
+                </div>
+            @endforeach
         </div>
-
     </x-filament::section>
 </x-filament-widgets::widget>
+
+
+
+
+
+
+
+
+
+{{--<x-filament-widgets::widget>--}}
+{{--    <x-filament::section>--}}
+
+{{--        <div class="bg-red-500 text-white p-4 rounded">--}}
+{{--            Tailwind شغال داخل Filament ✅--}}
+{{--        </div>--}}
+
+{{--    </x-filament::section>--}}
+{{--</x-filament-widgets::widget>--}}
 <!-- component -->
 {{--<section class="bg-gray-900 py-12">--}}
 {{--    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">--}}
