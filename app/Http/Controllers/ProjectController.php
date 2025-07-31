@@ -115,46 +115,5 @@ class ProjectController extends Controller
         return response()->json($project);
     }
 
-//    public function getProjectTimeline(Request $request, $projectId)
-//    {
-//        $statusFilter = $request->query('status'); // ممكن يكون: finished, In progress, Preparing
-//
-//
-//        $project = Project::with(['projectStages.imagesStage'])->find($projectId);
-//
-//        if (!$project) {
-//            return Response::Error('المشروع غير موجود', 404);
-//        }
-//
-//
-//        $stages = $project->projectStages
-//            ->when($statusFilter, function ($stages, $statusFilter) {
-//                return $stages->where('status', $statusFilter);
-//            })
-//            ->sortBy('started_at')
-//            ->values();
-//
-//
-//        $timeline = $stages->map(function ($stage) {
-//            return [
-//                'id' => $stage->id,
-//                'stage_name' => $stage->stage_name,
-//                'description' => $stage->description,
-//                'status' => $stage->status,
-//                'is_confirmed' => $stage->is_confirmed,
-//                'started_at' => optional($stage->started_at)->toDateString(),
-//                'completed_at' => optional($stage->completed_at)->toDateString(),
-//                'cost' => $stage->cost,
-//                'images' => $stage->imagesStage->map(function ($image) {
-//                    return [
-//                        'url' => $image->image,
-//                        'description' => $image->description,
-//                        'date' => $image->stage_date,
-//                    ];
-//                }),
-//            ];
-//        });
-//
-//        return Response::Success($timeline, 'تم جلب مراحل المشروع بنجاح');
-//    }
+
 }

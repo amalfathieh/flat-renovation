@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\Auth\CustomerProfileService;
 use Illuminate\Http\Request;
-use App\Http\Responses\Response; // ✅ استدعاء كلاس Response
+use App\Http\Responses\Response;
 
 class CustomerProfileController extends Controller
 {
