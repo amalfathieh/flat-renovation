@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Company\Resources\CompanySubscriptionResource\Widgets\AvailablePlans;
 use App\Filament\Company\Resources\UserResource\Pages\Auth\Register;
 use App\Filament\Pages\Tenancy\EditCompanyProfile;
 use App\Filament\Pages\Tenancy\RegisterCompany;
@@ -37,6 +38,7 @@ class CompanyPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Orange,
             ])
+            ->sidebarCollapsibleOnDesktop()
             ->favicon(asset('images/favicon.jpg'))
             ->discoverResources(in: app_path('Filament/Company/Resources'), for: 'App\\Filament\\Company\\Resources')
             ->discoverPages(in: app_path('Filament/Company/Pages'), for: 'App\\Filament\\Company\\Pages')

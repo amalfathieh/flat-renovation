@@ -23,6 +23,7 @@ return new class extends Migration
             $table->enum('status', ['finished', 'In progress', 'Preparing'])->default('Preparing');
             $table->double('cost');
             $table->boolean('is_confirmed')->default(false);
+            $table->string('payment_intent_id')->nullable();
             $table->timestamps();
         });
     }

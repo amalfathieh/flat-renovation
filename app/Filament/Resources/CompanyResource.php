@@ -29,9 +29,11 @@ class CompanyResource extends Resource
         return $form
             ->schema([
 
+
                 Forms\Components\TextInput::make('user_id')
                     ->required()
                     ->numeric(),
+
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -51,7 +53,12 @@ class CompanyResource extends Resource
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('logo')
                     ->maxLength(255),
+
+
+
             ]);
+
+
     }
 
     public static function table(Table $table): Table
@@ -91,6 +98,7 @@ class CompanyResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -144,7 +152,7 @@ class CompanyResource extends Resource
     {
         return [
             'index' => Pages\ListCompanies::route('/'),
-//            'create' => Pages\CreateCompany::route('/create'),
+           //'create' => Pages\CreateCompany::route('/create'),
             'view' => Pages\ViewCompany::route('/{record}'),
             'edit' => Pages\EditCompany::route('/{record}/edit'),
         ];

@@ -129,6 +129,12 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::post('/checkout-session', [OrderController::class, 'createCheckoutSession']);
 
 
+// stage payment
+
+    Route::get('/project-stages/createStagePaymentIntent/{stageId}', [ProjectStageController::class, 'createStagePaymentIntent']);
+    Route::post('/project-stages/confirmStagePayment/{stageId}', [ProjectStageController::class, 'confirmStagePayment']);
+
+
 
 
     Route::get('/companies/{company}/projects', [CompanyController::class,'show']);

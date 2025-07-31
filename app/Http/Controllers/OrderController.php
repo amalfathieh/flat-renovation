@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Responses\Response;
 use App\Models\answer;
 use App\Models\Order;
 
-use App\Http\Responses\Response;
+
+
+
+use App\Models\Transaction;
+
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
@@ -112,6 +117,8 @@ class OrderController extends Controller
 
             $company = Company::find($request->company_id);
 
+            $amount = $company->cost_of_examination;
+
             $order = Order::create([
                 'customer_id' => $customer->id,
                 'company_id' => $request->company_id,
@@ -128,6 +135,23 @@ class OrderController extends Controller
                     'answer' => $answerData['answer'],
                 ]);
             }
+
+
+
+
+            $company->increment('balance', $amount);
+
+
+            Transaction::create([
+                'company_id' => $company->id,
+                'type' => 'credit',
+                'amount' => $amount,
+                'order_id' => $order->id,
+
+            ]);
+
+
+
 
             return response()->json([
                 'status' => true,
@@ -152,7 +176,7 @@ class OrderController extends Controller
         Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
         $company = Company::findOrFail($request->company_id);
-        $price = $company->cost_of_examination * 100; // Stripe يستخدم القروش أو السنتات
+        $price = $company->cost_of_examination * 100;
 
         $session = StripeSession::create([
             'payment_method_types' => ['card'],

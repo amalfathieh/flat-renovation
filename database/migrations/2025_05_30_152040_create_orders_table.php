@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
-            $table->enum('status', ['accepted', 'waiting', 'rejected'])->default('accepted');
-            $table->text('cost_of_examination');
+            $table->foreignId('employee_id')->nullable()->constrained()->onDelete('set null');
+            $table->enum('status', ['accepted', 'completed','waiting', 'rejected'])->default('waiting');
+            $table->double('cost_of_examination')->nullable();
             $table->text('location');
             $table->text('budget');
+            $table->string('payment_intent_id')->nullable();
+            $table->string('refund_id')->nullable();
             $table->timestamps();
         });
     }

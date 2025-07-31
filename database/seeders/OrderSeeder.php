@@ -21,7 +21,7 @@ class OrderSeeder extends Seeder
                 self::$orders["$c-$z"] = Order::create([
                     'customer_id' => $customer->id,
                     'company_id' => $company->id,
-                    'status' => 'accepted',
+                    'status' => 'waiting',
                     'cost_of_examination' => rand(50, 200),
                     'location' => 'دمشق',
                     'budget' => rand(1000, 5000),

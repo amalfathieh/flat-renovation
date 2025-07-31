@@ -10,14 +10,20 @@ class ProjectStage extends Model
     protected $fillable = [
         'project_id',
         'stage_name',
+        'service_id',
+        'service_type_id',
         'description',
         'started_at',
         'completed_at',
         'status',
         'cost',
+
+        'is_confirmed',
+        'payment_intent_id',
+
         'service_id',
         'service_type_id',
-        'is_confirmed'
+
 
     ];
 
@@ -63,6 +69,15 @@ class ProjectStage extends Model
             'company_id' // Local key on projects table
         );
     }
+
+
+
+    public function stageTransactions()
+    {
+        return $this->hasMany(stage_transactions::class, 'project_stage_id');
+    }
+
+
 
 
 }

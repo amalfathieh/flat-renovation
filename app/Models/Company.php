@@ -12,7 +12,7 @@ class Company extends Model
 
     protected $fillable = [
 
-        'user_id', 'name', 'email', 'slug', 'location', 'phone', 'about', 'logo', 'cost_of_examination'
+        'user_id', 'name', 'email', 'slug', 'location', 'phone', 'about', 'logo', 'cost_of_examination','balance',
 
     ];
 
@@ -88,6 +88,16 @@ class Company extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function stageTransactions()
+    {
+        return $this->hasMany(stage_transactions::class);
+    }
+
 
     public function projectRatings()
     {
@@ -99,6 +109,32 @@ class Company extends Model
             'id',
             'id'
         );
+    }
+
+    public function activeSubscription()
+    {
+        return $this->hasOne(CompanySubscription::class)
+            ->where('status', 'active')
+            ->whereDate('start_date', '<=', now())
+            ->whereDate('end_date', '>=', now());
+    }
+
+    public function canCreateProject()
+    {
+        // إذا لم يكن هناك اشتراك فعال
+        if (!$this->activeSubscription) {
+            return false;
+        }
+
+        $activeProjectsCount = $this->activeSubscription->used_projects;
+
+        return $activeProjectsCount < $this->activeSubscription->subscriptionPlan->project_limit;
+    }
+
+//  // علاقة مع CompanySubscriptions
+    public function companySubscriptions()
+    {
+        return $this->hasMany(CompanySubscription::class);
     }
 
 

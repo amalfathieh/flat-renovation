@@ -16,4 +16,7 @@ class ViewCompany extends ViewRecord
             Actions\EditAction::make(),
         ];
     }
+
+
+
 }

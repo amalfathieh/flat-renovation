@@ -87,6 +87,11 @@ class RolesAndPermissionsSeeder extends Seeder
             'view_company_dashboard',
             //الشكاوي
             'complaint_view',
+
+             'complaint_view',
+
+            'order_view','order_status_edit',
+
             //الاعتراضات
             'objection_create', 'objection_view',
             'project_view', 'project_edit', 'update_project_stage',
