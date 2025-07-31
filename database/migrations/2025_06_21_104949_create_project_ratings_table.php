@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();
             $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
-            $table->unsignedTinyInteger('rating'); // من 1 إلى 5
+            $table->unsignedTinyInteger('rating')->nullable();
             $table->string('comment')->nullable();
             $table->timestamps();
         });

@@ -34,7 +34,7 @@ class ObjectionResource extends Resource
                     ->required(),
 
                 Select::make('customer_id')
-                    ->relationship('customer.user', 'name') // إذا عندك علاقة customer
+                    ->relationship('customer.user', 'name')
                     ->label('العميل')
                     ->required(),
 
@@ -72,7 +72,7 @@ class ObjectionResource extends Resource
         ];
     }
 
-<<<<<<< HEAD
+
 //    public static function getEloquentQuery(): Builder
 //    {
 //        $user = Filament::auth()->user();
@@ -97,10 +97,10 @@ class ObjectionResource extends Resource
 //                    $q->where('employee_id', $user->id);
 //                });
 //        }
+
+
     public static function getEloquentQuery(): Builder
-=======
-   /* public static function getEloquentQuery(): Builder
->>>>>>> origin/main
+
     {
         $user = Filament::auth()->user();
 
@@ -129,10 +129,6 @@ class ObjectionResource extends Resource
 
         // افتراضيًا ما يعرض شي
         return parent::getEloquentQuery()->whereRaw('0 = 1');
-<<<<<<< HEAD
-    }
 
-=======
-    }*/
->>>>>>> origin/main
+    }
 }
