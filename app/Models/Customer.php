@@ -40,4 +40,11 @@ class Customer extends Model
         'created_at' => 'datetime:Y-m-d',
         'updated_at' => 'datetime:Y-m-d',
     ];
+// app/Models/Customer.php
+
+    public function favorite()
+    {
+        return $this->belongsToMany(Company::class, 'favorites')->withTimestamps();
+    }
+
 }

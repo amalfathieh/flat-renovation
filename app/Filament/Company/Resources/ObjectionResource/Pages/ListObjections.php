@@ -16,4 +16,9 @@ class ListObjections extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
 }

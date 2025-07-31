@@ -70,32 +70,59 @@ class ObjectionResource extends Resource
         ];
     }
 
+//    public static function getEloquentQuery(): Builder
+//    {
+//        $user = Filament::auth()->user();
+//
+//
+//        if ($user->hasRole('admin')) {
+//            return parent::getEloquentQuery();
+//        }
+//
+//
+//        if ($user->hasRole('company')) {
+//            return parent::getEloquentQuery()
+//                ->whereHas('projectStage.project', function ($q) use ($user) {
+//                    $q->where('company_id', $user->company_id);
+//                });
+//        }
+//
+//
+//        if ($user->hasRole('employee')) {
+//            return parent::getEloquentQuery()
+//                ->whereHas('projectStage.project', function ($q) use ($user) {
+//                    $q->where('employee_id', $user->id);
+//                });
+//        }
     public static function getEloquentQuery(): Builder
     {
         $user = Filament::auth()->user();
 
-
+        // للمسؤولين، رجّع كل شي
         if ($user->hasRole('admin')) {
             return parent::getEloquentQuery();
         }
 
-
+        // للشركات
         if ($user->hasRole('company')) {
             return parent::getEloquentQuery()
                 ->whereHas('projectStage.project', function ($q) use ($user) {
                     $q->where('company_id', $user->company_id);
-                });
+                })
+                ->with(['projectStage.project']); // ضروري
         }
 
-
+        // للموظفين
         if ($user->hasRole('employee')) {
             return parent::getEloquentQuery()
                 ->whereHas('projectStage.project', function ($q) use ($user) {
                     $q->where('employee_id', $user->id);
-                });
+                })
+                ->with(['projectStage.project']);
         }
 
-
+        // افتراضيًا ما يعرض شي
         return parent::getEloquentQuery()->whereRaw('0 = 1');
     }
+
 }

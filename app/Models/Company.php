@@ -102,6 +102,12 @@ class Company extends Model
     }
 
 
+// app/Models/Company.php
+
+    public function favoredByCustomers()
+    {
+        return $this->belongsToMany(Customer::class, 'favorite')->withTimestamps();
+    }
 
 }
 

@@ -7,15 +7,19 @@ use App\Http\Resources\ProjectResource;
 use App\Models\Company;
 use App\Http\Responses\Response;
 use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class CompanyController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
+        $customer = $user?->customerprofile;
+
         $companies = Company::with('services', 'projectRatings')->get();
 
-        $data = $companies->map(function ($company) {
+        $data = $companies->map(function ($company) use ($customer) {
             return [
                 'id' => $company->id,
                 'name' => $company->name,
@@ -24,7 +28,10 @@ class CompanyController extends Controller
                 'about' => $company->about,
                 'logo' => $company->logo,
                 'services' => $company->services,
-                'average_rating' => round($company->projectRatings->avg('rating'), 2), // متوسط تقييم المشاريع
+                'average_rating' => round($company->projectRatings->avg('rating'), 2),
+                'is_favorited' => $customer
+                    ? $customer->favorite->contains($company->id)
+                    : false,
             ];
         });
 
@@ -34,9 +41,12 @@ class CompanyController extends Controller
 
     public function show(Company $company)
     {
+        $user = Auth::user();
+        $customer = $user?->customerprofile;
+
         $projects = $company->projects()
             ->where('is_publish', true)
-            ->with(['projectImages', 'ratings']) // جلب صور المشروع والتقييم
+            ->with(['projectImages', 'ratings'])
             ->get()
             ->map(function ($project) {
                 return [
@@ -44,7 +54,7 @@ class CompanyController extends Controller
                     'project_name' => $project->project_name,
                     'status' => $project->status,
                     'final_cost' => $project->final_cost,
-                    'description' =>  $project->description,
+                    'description' => $project->description,
                     'start_date' => $project->start_date,
                     'end_date' => $project->end_date,
                     'images' => $project->projectImages,
@@ -53,9 +63,20 @@ class CompanyController extends Controller
                 ];
             });
 
-        return Response::Success($projects, 'تم جلب مشاريع الشركة مع التقييم');
-    }
+        $companyInfo = [
+            'id' => $company->id,
+            'name' => $company->name,
+            'about' => $company->about,
+            'location' => $company->location,
+            'logo' => $company->logo,
+            'is_favorited' => $customer
+                ? $customer->favorite->contains($company->id)
+                : false,
+            'projects' => $projects,
+        ];
 
+        return Response::Success($companyInfo, 'تفاصيل الشركة والمشاريع');
+    }
 //    public function getCompanyPublishProjects($id)
 //    {
 //

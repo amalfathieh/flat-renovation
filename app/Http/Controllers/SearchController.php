@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Http\Responses\Response;
+use Illuminate\Support\Facades\Auth;
 
 class SearchController extends Controller
 {
     public function search(Request $request)
     {
+        $user = Auth::user();
+        $customer = $user?->customerprofile;
+
         $search = trim($request->input('search'));
 
         $companiesQuery = Company::with(['services', 'projectRatings']);
@@ -32,7 +36,7 @@ class SearchController extends Controller
         }
 
 
-        $companies->getCollection()->transform(function ($company) {
+        $companies->getCollection()->transform(function ($company) use ($customer) {
             return [
                 'id' => $company->id,
                 'name' => $company->name,
@@ -42,8 +46,12 @@ class SearchController extends Controller
                 'logo' => $company->logo,
                 'services' => $company->services,
                 'average_rating' => round($company->projectRatings->avg('rating'), 2),
+                'is_favorited' => $customer
+                    ? $customer->favorite->contains($company->id)
+                    : false,
             ];
         });
+
 
         $message = !empty($search) ? 'نتائج البحث' : 'كل الشركات';
 

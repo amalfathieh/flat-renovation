@@ -3,6 +3,7 @@
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\CompanyController;
 
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ObjectionController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectStageController;
@@ -135,6 +136,11 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
 
     Route::get('/projects/{projectId}/my-review', [ProjectController::class, 'showUserReview']);
     Route::post('/project/{project}/rating', [ProjectController::class, 'store']);
+//favorite
+    Route::post('/companies/{company}/favorite', [FavoriteController::class, 'toggleFavorite']);
+    Route::get('/favorites', [FavoriteController::class, 'listFavorites']);
+    Route::get('/customer/orders', [OrderController::class, 'customerOrders']);
+    Route::get('/projects/{projectId}/stages', [ProjectController::class, 'getProjectTimeline']);
 
 });
 
