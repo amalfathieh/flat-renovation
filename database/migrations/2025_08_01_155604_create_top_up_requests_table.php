@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->text('admin_note')->nullable();
             $table->text('Invoice_number')->nullable();
-            $table->foreignId('payment_method_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('payment_method_id')->nullable()->constrained('payment_methods')->nullOnDelete();
 
             $table->timestamps();
         });

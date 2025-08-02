@@ -26,9 +26,9 @@ class Top_up_request extends Model
     }
 
 
-    public function transactions()
+    public function transactionsAll()
     {
-        return $this->morphMany(TransactionsAll::class, 'related');
+        return $this->morphOne(TransactionsAll::class, 'related');
     }
 
 
@@ -36,5 +36,7 @@ class Top_up_request extends Model
     {
         return $this->belongsTo(payment_method::class);
     }
+
+
 
 }

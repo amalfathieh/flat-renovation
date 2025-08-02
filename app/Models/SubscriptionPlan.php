@@ -13,6 +13,12 @@ class SubscriptionPlan extends Model
       'name', 'price', 'project_limit', 'duration_in_days', 'description', 'is_active'
     ];
 
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d',
+        'updated_at' => 'datetime:Y-m-d',
+    ];
+
 //    // علاقة مع CompanySubscriptions
     public function companySubscriptions()
     {

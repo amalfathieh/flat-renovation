@@ -165,6 +165,15 @@ class Company extends Model
     }
 
 
+
+
+    public function receivedExternalTransfers()
+    {
+        return $this->hasMany(ExternalTransfer::class);
+    }
+
+
+
 }
 
 

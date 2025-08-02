@@ -13,6 +13,12 @@ class CompanySubscription extends Model
         'company_id', 'subscription_plan_id', 'start_date', 'end_date', 'status'
     ];
 
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d',
+        'updated_at' => 'datetime:Y-m-d',
+    ];
+
     // علاقة مع SubscriptionPlan
     public function subscriptionPlan()
     {
@@ -25,13 +31,18 @@ class CompanySubscription extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function invoice()
-    {
-        return $this->hasOne(Invoice::class);
-    }
 
     public function projects()
     {
         return $this->belongsTo(Project::class);
     }
+
+
+
+    public function transactionsAll()
+    {
+        return $this->morphMany(TransactionsAll::class, 'related');
+    }
+
+
 }

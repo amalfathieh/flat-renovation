@@ -164,4 +164,17 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
 
 
 
+    public function sentExternalTransfers()
+    {
+        return $this->hasMany(ExternalTransfer::class, 'admin_id');
+    }
+
+
+
+
+
+
+
+
+
 }
