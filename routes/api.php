@@ -141,7 +141,9 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::post('/companies/search', [SearchController::class, 'search']);
 
     Route::get('/projects/{projectId}/my-review', [ProjectController::class, 'showUserReview']);
-    Route::post('/project/{project}/rating', [ProjectController::class, 'store']);
+    Route::post('/project/{projectId}/rate', [ProjectController::class, 'rate']);
+    Route::post('/project/{projectId}/comment', [ProjectController::class, 'comment']);
+
 //favorite
     Route::post('/companies/{company}/favorite', [FavoriteController::class, 'toggleFavorite']);
     Route::get('/favorites', [FavoriteController::class, 'listFavorites']);

@@ -30,11 +30,42 @@ class ProjectController extends Controller
         return Response::Success(ProjectResource::collection($projects), 'success');
 
     }
-    public function store(Request $request, $projectId)
+    public function comment(Request $request, $projectId)
     {
         $validated = $request->validate([
-            'rating' => 'nullable|integer|min:1|max:5',
-            'comment' => 'nullable|string|max:1000',
+            'comment' => 'required|string|max:1000',
+        ]);
+
+        $project = Project::with('order.customer')->findOrFail($projectId);
+
+        $customer = Customer::where('user_id', auth()->id())->first();
+
+        if (!$customer) {
+            return response()->json(['error' => 'الزبون غير موجود أو غير مسجل الدخول'], 403);
+        }
+
+        if ($project->order->customer_id !== $customer->id) {
+            return response()->json(['error' => 'غير مصرح لك بالتعليق على هذا المشروع'], 403);
+        }
+
+        $review = ProjectRating::firstOrNew([
+            'project_id' => $project->id,
+            'customer_id' => $customer->id,
+        ]);
+
+        $review->comment = $validated['comment'];
+        $review->save();
+
+        return response()->json([
+            'message' => 'تم حفظ التعليق بنجاح',
+            'review' => $review,
+        ]);
+    }
+
+    public function rate(Request $request, $projectId)
+    {
+        $validated = $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
         ]);
 
         $project = Project::with('order.customer')->findOrFail($projectId);
@@ -49,18 +80,20 @@ class ProjectController extends Controller
             return response()->json(['error' => 'غير مصرح لك بتقييم هذا المشروع'], 403);
         }
 
-        $review = ProjectRating::create([
+        $review = ProjectRating::firstOrNew([
             'project_id' => $project->id,
             'customer_id' => $customer->id,
-            'rating' => $validated['rating'] ?? null,
-            'comment' => $validated['comment'] ?? null,
         ]);
+
+        $review->rating = $validated['rating'];
+        $review->save();
 
         return response()->json([
             'message' => 'تم حفظ التقييم بنجاح',
             'review' => $review,
         ]);
     }
+
 
     public function showUserReview($projectId)
     {
@@ -84,22 +117,6 @@ class ProjectController extends Controller
             'message' => 'تم جلب التقييم بنجاح',
             'review' => $review,
         ]);
-    }
-
-    public function projectHistory($projectId)
-    {
-        $user = auth()->user();
-
-        $project = Project::with([
-            'projectStages.imagesStage',
-            'projectStages.objections',
-            'ratings',
-            'company',
-        ])
-            ->where('customer_id', $user->id)
-            ->findOrFail($projectId);
-
-        return response()->json($project);
     }
 
 
