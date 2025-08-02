@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->foreignId('employee_id')->nullable()->constrained()->onDelete('set null');
-            $table->enum('status', ['accepted', 'waiting', 'rejected'])->default('waiting');
+            $table->enum('status', ['accepted', 'completed','waiting', 'rejected'])->default('waiting');
             $table->double('cost_of_examination')->nullable();
             $table->text('location');
             $table->text('budget');

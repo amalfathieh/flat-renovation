@@ -27,7 +27,7 @@ class CreateEmployee extends CreateRecord
         $roles = array_merge($data['user']['roles'] ?? [], ['employee']);
         $user->syncRoles(array_unique($roles));
 
-        // إرسال الإشعار مع كلمة المرور المؤقتة
+
         $user->notify(new EmployeeInvitationNotification($tempPassword));
 
         $data['user_id'] = $user->id;

@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Responses\Response;
 use App\Models\answer;
 use App\Models\Order;
+
+
+
+
 use App\Models\Transaction;
+
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
@@ -197,6 +203,45 @@ class OrderController extends Controller
     //------------------------------------------------------------------------------------------------------------------
 
 
+
+    public function customerOrders(Request $request)
+    {
+        $customer = $request->user()->customerprofile;
+
+        if (!$customer) {
+            return Response::Error('العميل غير موجود', 404);
+        }
+
+        $orders = Order::with('company')
+            ->where('customer_id', $customer->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $formattedOrders = $orders->map(function ($order) {
+            return [
+                'id' => $order->id,
+                'status' => $order->status,
+                'cost_of_examination' => $order->cost_of_examination,
+                'location' => $order->location,
+                'budget' => $order->budget,
+                'created_at' => $order->created_at,
+
+                'company' => [
+                    'id' => $order->company->id,
+                    'name' => $order->company->name,
+                    'email' => $order->company->email,
+                    'phone' => $order->company->phone,
+                    'location' => $order->company->location,
+                    'logo' => $order->company->logo
+                ]
+            ];
+        });
+
+        return Response::Success(
+            ['orders' => $formattedOrders],
+            'تم جلب الطلبات بنجاح'
+        );
+    }
 
 
 

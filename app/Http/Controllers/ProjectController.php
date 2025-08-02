@@ -33,13 +33,11 @@ class ProjectController extends Controller
     public function store(Request $request, $projectId)
     {
         $validated = $request->validate([
-            'rating' => 'required|integer|min:1|max:5',
+            'rating' => 'nullable|integer|min:1|max:5',
             'comment' => 'nullable|string|max:1000',
         ]);
 
-
         $project = Project::with('order.customer')->findOrFail($projectId);
-
 
         $customer = Customer::where('user_id', auth()->id())->first();
 
@@ -47,25 +45,14 @@ class ProjectController extends Controller
             return response()->json(['error' => 'الزبون غير موجود أو غير مسجل الدخول'], 403);
         }
 
-
         if ($project->order->customer_id !== $customer->id) {
             return response()->json(['error' => 'غير مصرح لك بتقييم هذا المشروع'], 403);
         }
 
-
-        $existingReview = ProjectRating::where('project_id', $project->id)
-            ->where('customer_id', $customer->id)
-            ->first();
-
-        if ($existingReview) {
-            return response()->json(['error' => 'تم تقييم المشروع مسبقًا'], 400);
-        }
-
-
         $review = ProjectRating::create([
             'project_id' => $project->id,
             'customer_id' => $customer->id,
-            'rating' => $validated['rating'],
+            'rating' => $validated['rating'] ?? null,
             'comment' => $validated['comment'] ?? null,
         ]);
 
@@ -74,6 +61,7 @@ class ProjectController extends Controller
             'review' => $review,
         ]);
     }
+
     public function showUserReview($projectId)
     {
 

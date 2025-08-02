@@ -46,6 +46,7 @@ class Customer extends Model
 
 
 
+
     public function stageTransactions()
     {
         return $this->hasMany(stage_transactions::class);
@@ -71,6 +72,13 @@ class Customer extends Model
     public function topUpRequests()
     {
         return $this->morphMany(Top_up_request::class, 'requester');
+    }
+
+
+
+    public function favorite()
+    {
+        return $this->belongsToMany(Company::class, 'favorites')->withTimestamps();
     }
 
 

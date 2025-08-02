@@ -26,4 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withBindings([
         Illuminate\Contracts\Http\Kernel::class => App\Http\Kernel::class,
     ])
+    ->withCommands([
+        \App\Console\Commands\DeactivateExpiredSubscriptions::class,
+    ])
     ->create();
