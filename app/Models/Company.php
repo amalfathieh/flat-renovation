@@ -12,7 +12,7 @@ class Company extends Model
 
     protected $fillable = [
 
-        'user_id', 'name', 'email', 'slug', 'location', 'phone', 'about', 'logo', 'cost_of_examination','balance',
+        'user_id', 'name', 'email', 'slug', 'location', 'phone', 'about', 'logo', 'cost_of_examination',
 
     ];
 
@@ -112,6 +112,26 @@ class Company extends Model
     }
 
 
+
+
+
+    public function sentTransactions()
+    {
+        return $this->morphMany(TransactionsAll::class, 'payer');
+    }
+
+
+    public function receivedTransactions()
+    {
+        return $this->morphMany(TransactionsAll::class, 'receiver');
+    }
+
+
+
+    public function topUpRequests()
+    {
+        return $this->morphMany(Top_up_request::class, 'requester');
+    }
 
 
 }

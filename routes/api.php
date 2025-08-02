@@ -142,9 +142,14 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::get('/projects/{projectId}/my-review', [ProjectController::class, 'showUserReview']);
     Route::post('/project/{project}/rating', [ProjectController::class, 'store']);
 
+
+
+
+
 });
 
 
 
 
 
+Route::get('/test',[CompanyServiceController::class,'test']);

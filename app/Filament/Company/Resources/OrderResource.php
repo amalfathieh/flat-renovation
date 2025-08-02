@@ -232,7 +232,7 @@ class OrderResource extends Resource
             'index' => Pages\ListOrders::route('/'),
             'create' => Pages\CreateOrder::route('/create'),
             'edit' => Pages\EditOrder::route('/{record}/edit'),
-            'view' => Pages\ViewOrder::route('/{record}'), // هنا أضفنا صفحة العرض
+            'view' => Pages\ViewOrder::route('/{record}'),
         ];
     }
 

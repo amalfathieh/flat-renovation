@@ -80,4 +80,13 @@ class ProjectStage extends Model
 
 
 
+    public function transactionsAll()
+    {
+        return $this->morphMany(TransactionsAll::class, 'related');
+    }
+
+
+
+
+
 }

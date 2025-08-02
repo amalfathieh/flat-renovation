@@ -17,6 +17,13 @@ class Customer extends Model
         'gender',
     ];
 
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d',
+        'updated_at' => 'datetime:Y-m-d',
+    ];
+
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -45,9 +52,26 @@ class Customer extends Model
     }
 
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d',
-        'updated_at' => 'datetime:Y-m-d',
-    ];
+
+
+
+    public function sentTransactions()
+    {
+        return $this->morphMany(TransactionsAll::class, 'payer');
+    }
+
+
+    public function receivedTransactions()
+    {
+        return $this->morphMany(TransactionsAll::class, 'receiver');
+    }
+
+
+
+    public function topUpRequests()
+    {
+        return $this->morphMany(Top_up_request::class, 'requester');
+    }
+
 
 }
