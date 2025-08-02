@@ -11,13 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('invoices', function (Blueprint $table) {
+        Schema::create('external_transfers', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('admin_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
-            $table->foreignId('company_subscription_id')->constrained()->onDelete('cascade');
+
             $table->decimal('amount', 10, 2);
-            $table->timestamp('paid_at');
-            $table->enum('status', ['pending', 'success', 'failed'])->default('pending');
+            $table->string('receipt_image')->nullable();
+            $table->string('invoice_number')->nullable();
+
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->text('note')->nullable();
+
+
             $table->timestamps();
         });
     }
@@ -27,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('invoices');
+        Schema::dropIfExists('external_transfers');
     }
 };

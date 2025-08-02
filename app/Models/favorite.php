@@ -10,6 +10,11 @@ class favorite extends Model
 
     protected $fillable = ['customer_id','company_id'];
 
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d',
+        'updated_at' => 'datetime:Y-m-d',
+    ];
+
     protected $table = 'favorites';
 
     public function customer()

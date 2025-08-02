@@ -26,7 +26,6 @@ return new class extends Migration
             $table->text('cost_of_examination')->nullable();
             $table->text('about')->nullable();
             $table->string('logo')->nullable();
-            $table->decimal('balance', 10, 2)->default(0);
             $table->timestamps();
         });
     }

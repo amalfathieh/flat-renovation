@@ -17,6 +17,13 @@ class Customer extends Model
         'gender',
     ];
 
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d',
+        'updated_at' => 'datetime:Y-m-d',
+    ];
+
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -36,15 +43,43 @@ class Customer extends Model
         return $this->hasMany(ProjectRating::class);
     }
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d',
-        'updated_at' => 'datetime:Y-m-d',
-    ];
-// app/Models/Customer.php
+
+
+
+
+    public function stageTransactions()
+    {
+        return $this->hasMany(stage_transactions::class);
+    }
+
+
+
+
+
+    public function sentTransactions()
+    {
+        return $this->morphMany(TransactionsAll::class, 'payer');
+    }
+
+
+    public function receivedTransactions()
+    {
+        return $this->morphMany(TransactionsAll::class, 'receiver');
+    }
+
+
+
+    public function topUpRequests()
+    {
+        return $this->morphMany(Top_up_request::class, 'requester');
+    }
+
+
 
     public function favorite()
     {
         return $this->belongsToMany(Company::class, 'favorites')->withTimestamps();
     }
+
 
 }

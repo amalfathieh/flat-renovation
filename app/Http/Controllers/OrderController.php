@@ -152,7 +152,6 @@ class OrderController extends Controller
 
 
 
-
             return response()->json([
                 'status' => true,
                 'message' => 'تم إرسال الطلب بنجاح بعد الدفع.',

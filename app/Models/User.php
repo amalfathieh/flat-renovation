@@ -28,12 +28,15 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
      */
 
     protected $fillable = [
-        'name',
+        'full_name',
         'email',
         'password',
         'google_id',
         'email_verified_at',
-        'banned_at'
+        'banned_at',
+         'payment_phone',
+           'balance',
+
     ];
 
 
@@ -143,6 +146,34 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
     {
         return $this->hasOne(Customer::class);
     }
+
+
+
+
+
+    public function sentTransactions()
+    {
+        return $this->morphMany(TransactionsAll::class, 'payer');
+    }
+
+
+    public function receivedTransactions()
+    {
+        return $this->morphMany(TransactionsAll::class, 'receiver');
+    }
+
+
+
+    public function sentExternalTransfers()
+    {
+        return $this->hasMany(ExternalTransfer::class, 'admin_id');
+    }
+
+
+
+
+
+
 
 
 

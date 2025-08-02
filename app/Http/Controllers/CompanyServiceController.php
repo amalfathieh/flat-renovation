@@ -149,4 +149,17 @@ class CompanyServiceController extends Controller
     }
 
 
+
+    //--------------------------------------------------------------------------
+
+
+    public function test(){
+
+        return response()->json([
+            'status' => true,
+            'Name' =>"SAFA"
+        ]);
+
+    }
+
 }

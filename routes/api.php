@@ -150,9 +150,14 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::get('/customer/orders', [OrderController::class, 'customerOrders']);
     Route::get('/projects/{projectId}/stages', [ProjectController::class, 'getProjectTimeline']);
 
+
+
+
+
 });
 
 
 
 
 
+Route::get('/test',[CompanyServiceController::class,'test']);

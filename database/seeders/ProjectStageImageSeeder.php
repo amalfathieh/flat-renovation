@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Image_stage;
 use Illuminate\Database\Seeder;
 
-class ProjectStageImageSeed extends Seeder
+class ProjectStageImageSeeder extends Seeder
 {
     public function run(): void
     {

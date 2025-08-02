@@ -57,4 +57,12 @@ class Order extends Model
         return $this->hasMany(Transaction::class);
     }
 
+
+    public function transactionsAll()
+    {
+        return $this->morphMany(TransactionsAll::class, 'related');
+    }
+
+
+
 }
