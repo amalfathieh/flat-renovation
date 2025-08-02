@@ -20,6 +20,11 @@ class OrderResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $pluralModelLabel = 'الطلبات';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return parent::getEloquentQuery()->where('status', 'waiting')->count();
+    }
+
     public static function form(Form $form): Form
     {
         return $form

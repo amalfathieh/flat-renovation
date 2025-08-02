@@ -1,27 +1,28 @@
 <?php
 
-namespace App\Filament\Company\Widgets;
+namespace App\Filament\Company\Pages;
 
-use App\Models\CompanySubscription;
 use App\Models\SubscriptionPlan;
 use Filament\Facades\Filament;
-use Filament\Widgets\Widget;
+use Filament\Pages\Page;
 
-class AvailablePlans extends Widget
+class ShowPlans extends Page
 {
-    protected static string $view = 'filament.company.widgets.available-plans';
-    protected int | string | array $columnSpan = 'full'; // حتى ياخذ عرض كامل
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static ?string $pollingInterval = '15s';
-    protected static bool $isLazy = false;
+    protected static string $view = 'filament.company.pages.show-plans';
 
-    protected static ?int $sort = 2;
 
     public static function canView(): bool
     {
+        return false;
+//        return auth()->user()?->hasRole('company');
+    }
+    public static function shouldRegisterNavigation(): bool
+    {
+//        return false;
         return auth()->user()?->hasRole('company');
     }
-
     public function getPlans()
     {
         $plans = SubscriptionPlan::where('is_active', true)->get();

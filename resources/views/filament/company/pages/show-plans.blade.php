@@ -1,3 +1,4 @@
+
 <style>
     .scrolling-wrapper {
         display: flex;
@@ -77,13 +78,16 @@
     }
 </style>
 
-{{--@dd($this->getPlans())--}}
-<x-filament-widgets::widget>
-    <x-filament::section>
-        <h2 class="text-xl font-bold mb-4 text-center text-gray-800 dark:text-white">باقات الاشتراك</h2>
 
-        <div class="scrolling-wrapper">
-            @foreach ($this->getPlans()["plans"] as $plan)
+
+
+
+<x-filament-panels::page>
+
+    <h2 class="text-xl font-bold mb-4 text-center text-gray-800 dark:text-white">باقات الاشتراك</h2>
+
+    <div class="scrolling-wrapper">
+        @foreach ($this->getPlans()["plans"] as $plan)
             <div class="pricing-card dark:text-white">
                 <h3 class="text-lg font-semibold mb-2">{{ $plan->name }}</h3>
 
@@ -104,9 +108,9 @@
 
                 @if($this->getPlans()["comSub"])
                     @if ($plan->id == $this->getPlans()["comSub"]['id'] )
-                    <button class="subscribe-btn bg-gray-400 cursor-not-allowed" disabled>
-                        أنت مشترك بالفعل
-                    </button>
+                        <button class="subscribe-btn bg-gray-400 cursor-not-allowed" disabled>
+                            أنت مشترك بالفعل
+                        </button>
                     @else
                         <a href="{{ route('payment.create', $plan->id) }}" class="subscribe-btn">
                             اشترك الآن
@@ -114,13 +118,12 @@
                     @endif
 
                 @else
-                <a href="{{ route('payment.create', $plan->id) }}" class="subscribe-btn">
-                    اشترك الآن
-                </a>
+                    <a href="{{ route('payment.create', $plan->id) }}" class="subscribe-btn">
+                        اشترك الآن
+                    </a>
                 @endif
 
             </div>
-            @endforeach
-        </div>
-    </x-filament::section>
-</x-filament-widgets::widget>
+        @endforeach
+    </div>
+</x-filament-panels::page>

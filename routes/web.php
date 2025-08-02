@@ -13,10 +13,15 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Session;
 
-Route::get('/bb', function () {
-//    return "kk";
-    return view('test22');
-});
+Route::get('/bb/{id}', function ($id) {
+
+    $p = \App\Models\SubscriptionPlan::find($id)->first();
+
+    return view('test22',[
+        'plan' => $p
+    ]);
+    return view('test22', $p);
+})->name('payment.create');
 
 Route::get('/testWeb', function () {
     $user= Auth::user();
