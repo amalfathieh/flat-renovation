@@ -5,9 +5,12 @@ use App\Http\Controllers\CompanyController;
 
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ObjectionController;
+use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectStageController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\TopupRequestController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Middleware\VerifiedEmail;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -97,6 +100,7 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::post('/customer/profile', [CustomerProfileController::class, 'update']);
     Route::post('/customer/change-password', [CustomerProfileController::class, 'changePassword']);
 
+    Route::get('/customer/transactions', [TransactionController::class, 'getMyTransactions']);
    Route::get('/companies', [CompanyController::class,'index']);
 
     Route::get('/companies/{company}/projects', [CompanyController::class,'show']);
@@ -141,7 +145,9 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::post('/companies/search', [SearchController::class, 'search']);
 
     Route::get('/projects/{projectId}/my-review', [ProjectController::class, 'showUserReview']);
-    Route::post('/project/{project}/rating', [ProjectController::class, 'store']);
+    Route::post('/project/{projectId}/rate', [ProjectController::class, 'rate']);
+    Route::post('/project/{projectId}/comment', [ProjectController::class, 'comment']);
+
 //favorite
     Route::post('/companies/{company}/favorite', [FavoriteController::class, 'toggleFavorite']);
     Route::get('/favorites', [FavoriteController::class, 'listFavorites']);
@@ -149,8 +155,15 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::get('/projects/{projectId}/stages', [ProjectController::class, 'getProjectTimeline']);
 
 
+    //StoreTopUpRequest
+    Route::controller(TopupRequestController::class)->prefix('customer')->group(function (){
+        Route::post('/submitTopUp', 'creatTopUp');
+        Route::get('/top-up-requests', 'getMyTopUpRequests');
+    });
 
-
+    Route::controller(PaymentMethodController::class)->group(function (){
+        Route::get('getPaymentMethods', 'getActivePaymentMethods');
+    });
 
 });
 

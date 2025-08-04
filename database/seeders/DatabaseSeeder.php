@@ -6,7 +6,7 @@ use App\Models\Company;
 use App\Models\Customer;
 use App\Models\Employee;
 
-use App\Models\payment_method;
+use App\Models\paymentMethod;
 use App\Models\ProjectRating;
 
 use App\Models\User;
@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
             ProjectStageImageSeeder::class,
             payment_methodSeeder::class,
 
+            PlanSedder::class,
 
 
 

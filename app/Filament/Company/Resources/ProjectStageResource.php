@@ -31,19 +31,32 @@ class ProjectStageResource extends Resource
     protected static ?string $pluralModelLabel = 'مراحل المشروع';
     protected static ?string $modelLabel = 'مرحلة';
 
+    /**
+     * Override the default Eloquent query to filter project stages.
+     *
+     * If the authenticated user has the "employee" role, this method
+     * will return only the project stages that belong to projects assigned
+     * to that specific employee.
+     *
+     * Otherwise, it returns the default query for all project stages.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function getEloquentQuery(): Builder
+    {
+        $user = Auth::user();
 
-//    public static function getEloquentQuery(): Builder
-//    {
-//        $user =  Auth::user();
-//        if ($user->hasRole('employee')){
-//            $employee = $user->employee;
-//
-//            return ProjectStage::whereHas('project', function (Builder $query) use ($employee){
-//                $query->where('employee_id'  == $employee->id);
-//            });
-//        }
-//        return parent::getEloquentQuery();;
-//    }
+        if ($user->hasRole('employee')) {
+            $employee = $user->employee;
+
+            return ProjectStage::whereHas('project', function (Builder $query) use ($employee) {
+                $query->where('employee_id', $employee->id);
+            });
+        }
+
+        return parent::getEloquentQuery();
+    }
+
 
     public static function form(Form $form): Form
     {

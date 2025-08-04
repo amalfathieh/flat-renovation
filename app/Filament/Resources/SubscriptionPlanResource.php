@@ -17,6 +17,8 @@ class SubscriptionPlanResource extends Resource
 {
     protected static ?string $model = SubscriptionPlan::class;
 
+    protected static ?string $modelLabel = 'خطة الاشتراك';
+    protected static ?string $pluralModelLabel = 'خطط الاشتراك';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

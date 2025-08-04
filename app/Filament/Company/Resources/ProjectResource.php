@@ -30,16 +30,27 @@ class ProjectResource extends Resource
 
     protected static ?string $pluralModelLabel = 'المشاريع';
     protected static ?string $modelLabel = 'مشروع';
+    protected static ?int $countP = 0;
+
+    public static function getNavigationBadge(): ?string
+    {
+        return self::$countP;
+    }
 
     public static function getEloquentQuery(): Builder
     {
         $user =  Auth::user();
         if ($user->hasRole('employee')){
             $employee = $user->employee;
-            return $employee->projects()->getQuery(); // projects() هي العلاقة في نموذج User
+            $projects = $employee->projects()->getQuery();
+            self::$countP = $projects->count();
+            return $projects;
         }
-        return parent::getEloquentQuery();
+        $projects = parent::getEloquentQuery();
+        self::$countP = $projects->count();
+        return $projects;
     }
+
     public static function canCreate(): bool
     {
         return true;
@@ -132,7 +143,7 @@ class ProjectResource extends Resource
 
                                  Forms\Components\Select::make('status')
                                      ->label('الحالة')
-                                     ->options(ProjectStatusEnum::options())->required(),
+                                     ->options(ProjectStatusEnum::cases(), 'value')->required(),
 
 
                                  Forms\Components\TextInput::make('final_cost')

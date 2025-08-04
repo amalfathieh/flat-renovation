@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+use App\Enums\TransactionSource;
 return new class extends Migration
 {
     /**
@@ -13,26 +13,26 @@ return new class extends Migration
     {
         Schema::create('transactions_alls', function (Blueprint $table) {
             $table->id();
-
+            $table->text('invoice_number')->nullable();
 
             // الطرف الذي قام بالدفع (قد يكون زبون أو شركة)
             $table->nullableMorphs('payer'); // payer_type, payer_id
 
             // الطرف الذي استلم (قد يكون شركة أو أدمن)
             $table->nullableMorphs('receiver'); // receiver_type, receiver_id
-
-            $table->enum('source', [
-                'user_manual_topup',        // شحن يدوي من الزبون
-                'user_refund',              // استرجاع من شركة بعد رفض
-                'user_order_payment',       // دفع طلب كشف
-                'user_stage_payment',       // دفع مرحلة مشروع
-
-                'company_manual_topup',     // شحن يدوي من الشركة
-                'company_subscription',     // دفع باقة اشتراك
-                'company_deduction_refund', // خصم بسبب رفض كشف
-
-                'admin_monthly_clearance',  // تحويل شهرية للشركات
-            ]);
+            $table->enum('source', array_column(TransactionSource::cases(),'value'));
+//            $table->enum('source', [
+//                'user_manual_topup',        // شحن يدوي من الزبون
+//                'user_refund',              // استرجاع من شركة بعد رفض
+//                'user_order_payment',       // دفع طلب كشف
+//                'user_stage_payment',       // دفع مرحلة مشروع
+//
+//                'company_manual_topup',     // شحن يدوي من الشركة
+//                'company_subscription',     // دفع باقة اشتراك
+//                'company_deduction_refund', // خصم بسبب رفض كشف
+//
+//                'admin_monthly_clearance',  // تحويل شهرية للشركات
+//            ]);
 
             $table->decimal('amount', 10, 2);
             $table->text('note')->nullable(); // وصل الدفع أو ملاحظات
