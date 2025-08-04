@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class payment_method extends Model
+class PaymentMethod extends Model
 {
 
 
@@ -24,7 +24,7 @@ class payment_method extends Model
 
     public function topUpRequests()
     {
-        return $this->hasMany(Top_up_request::class);
+        return $this->hasMany(TopUpRequest::class);
     }
 
 }

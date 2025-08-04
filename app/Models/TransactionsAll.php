@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class TransactionsAll extends Model
 {
     protected $fillable = [
+        'invoice_number',
         'payer_id',
         'payer_type',
         'receiver_id',
@@ -47,6 +48,19 @@ class TransactionsAll extends Model
     }
 
 
+//    public function company(){
+//        return $this->belongsTo(Company::class,  'receiver_id', '', 'receivedTransactions');
+//    }
+
+    public function company(){
+        return $this->receiver()->merge($this->payer());
+    }
+//    public function company(){
+//        return $this->payer()->merge($this->receiver());
+//    }
+//    public function company(){
+//        return $this->belongsTo(Company::class,  'payer_id', '', 'transactions');
+//    }
 
 
 

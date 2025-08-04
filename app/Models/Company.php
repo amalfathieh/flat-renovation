@@ -157,11 +157,23 @@ class Company extends Model
         return $this->morphMany(TransactionsAll::class, 'receiver');
     }
 
+    public function allTransactions()
+    {
+        return TransactionsAll::query()
+            ->where(function ($q) {
+                $q->where('payer_type', self::class)
+                    ->where('payer_id', $this->id);
+            })->orWhere(function ($q) {
+                $q->where('receiver_type', self::class)
+                    ->where('receiver_id', $this->id);
+            });
+    }
+
 
 
     public function topUpRequests()
     {
-        return $this->morphMany(Top_up_request::class, 'requester');
+        return $this->morphMany(TopUpRequest::class, 'requester');
     }
 
 

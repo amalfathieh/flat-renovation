@@ -25,7 +25,7 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'full_name' => $this->faker->firstName('male') . ' ' . $this->faker->lastName . ' ' . $this->faker->lastName,
+            'name' => $this->faker->firstName('male') . ' ' . $this->faker->lastName . ' ' . $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),
             'password' => bcrypt('12345678'),
