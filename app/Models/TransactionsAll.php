@@ -14,7 +14,6 @@ class TransactionsAll extends Model
         'receiver_type',
         'source',
         'amount',
-        'status',
         'note',
         'related_type',
         'related_id',

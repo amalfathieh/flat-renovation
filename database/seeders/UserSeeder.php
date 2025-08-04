@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $user1 = User::create([
-            'full_name' => 'مستخدم عادي',
+            'name' => 'مستخدم عادي',
             'email' => 'user@ex.com',
             'email_verified_at' => now(),
             'password' => Hash::make('12345678'),
@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
         $user1->syncRoles('customer');
 
         $user2 = User::create([
-            'full_name' => 'مدير النظام',
+            'name' => 'مدير النظام',
             'email' => 'admin@ex.com',
             'email_verified_at' => now(),
             'password' => Hash::make('12345678'),
@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
         $user2->syncRoles('admin');
 
         $user3 = User::create([
-            'full_name' => 'شركة 1',
+            'name' => 'شركة 1',
             'email' => 'company@ex.com',
             'email_verified_at' => now(),
             'password' => Hash::make('12345678'),
@@ -53,7 +53,7 @@ class UserSeeder extends Seeder
         $user3->syncRoles('company');
 
         $user22 = User::create([
-            'full_name' => 'شركة 2',
+            'name' => 'شركة 2',
             'email' => 'company22@ex.com',
             'email_verified_at' => now(),
             'password' => Hash::make('12345678'),
@@ -63,7 +63,7 @@ class UserSeeder extends Seeder
         $user22->syncRoles('company');
 
         $user33 = User::create([
-            'full_name' => 'شركة 3',
+            'name' => 'شركة 3',
             'email' => 'company33@ex.com',
             'email_verified_at' => now(),
             'password' => Hash::make('12345678'),
@@ -73,7 +73,7 @@ class UserSeeder extends Seeder
         $user33->syncRoles('company');
 
         $user44 = User::create([
-            'full_name' => 'شركة 4',
+            'name' => 'شركة 4',
             'email' => 'company44@ex.com',
             'email_verified_at' => now(),
             'password' => Hash::make('12345678'),
@@ -83,7 +83,7 @@ class UserSeeder extends Seeder
         $user44->syncRoles('company');
 
         $user4 = User::create([
-            'full_name' => 'مشرف',
+            'name' => 'مشرف',
             'email' => 'comsup@ex.com',
             'email_verified_at' => now(),
             'password' => Hash::make('12345678'),
@@ -93,7 +93,7 @@ class UserSeeder extends Seeder
         $user4->syncRoles(['supervisor', 'employee']);
 
         $user5 = User::create([
-            'full_name' => 'موظف لوحة التحكم',
+            'name' => 'موظف لوحة التحكم',
             'email' => 'test@ex.com',
             'email_verified_at' => now(),
             'password' => Hash::make('12345678'),
@@ -105,20 +105,20 @@ class UserSeeder extends Seeder
         // 🔁 إنشاء مستخدمين مالكين وموظفين وزبائن وهميين
         for ($c = 1; $c <= 5; $c++) {
             self::$owners[$c] = User::factory()->withRole('company')->create([
-                'full_name' => "مالك $c",
+                'name' => "مالك $c",
                 'email' => "owner{$c}_" . uniqid() . "@example.com",
             ]);
 
             for ($e = 1; $e <= 2; $e++) {
                 self::$employees["$c-$e"] = User::factory()->withRole('employee')->create([
-                    'full_name' => "موظف $e في شركة $c",
+                    'name' => "موظف $e في شركة $c",
                     'email' => "employee{$c}_{$e}_" . uniqid() . "@example.com",
                 ]);
             }
 
             for ($z = 1; $z <= 4; $z++) {
                 self::$customers["$c-$z"] = User::factory()->withRole('customer')->create([
-                    'full_name' => "زبون $z لشركة $c",
+                    'name' => "زبون $z لشركة $c",
                     'email' => "customer{$c}_{$z}_" . uniqid() . "@example.com",
                 ]);
             }

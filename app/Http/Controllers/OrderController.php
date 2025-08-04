@@ -11,6 +11,8 @@ use App\Models\Order;
 
 use App\Models\Transaction;
 
+use App\Models\TransactionsAll;
+use Illuminate\Support\Facades\DB;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
@@ -52,7 +54,7 @@ class OrderController extends Controller
 
             return response()->json([
                 'status' => true,
-                'payment_intent_id'=>$paymentIntent->id,
+                'payment_intent_id' => $paymentIntent->id,
                 'client_secret' => $paymentIntent->client_secret,
                 'amount' => $amount,
             ]);
@@ -137,8 +139,6 @@ class OrderController extends Controller
             }
 
 
-
-
             $company->increment('balance', $amount);
 
 
@@ -149,7 +149,6 @@ class OrderController extends Controller
                 'order_id' => $order->id,
 
             ]);
-
 
 
             return response()->json([
@@ -169,7 +168,7 @@ class OrderController extends Controller
 
     //---------------------------------------------------------------------------------
 
- // for testing payment ...
+    // for testing payment ...
     public function createCheckoutSession(Request $request)
     {
         Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
@@ -201,7 +200,6 @@ class OrderController extends Controller
     }
 
     //------------------------------------------------------------------------------------------------------------------
-
 
 
     public function customerOrders(Request $request)
@@ -244,5 +242,5 @@ class OrderController extends Controller
     }
 
 
-
+    //------------------------------------------------------------------------------------------------------------------------
 }
