@@ -324,10 +324,10 @@ class OrderController extends Controller
 
 
             TransactionsAll::create([
-                'payer_type' => get_class($user),
-                'payer_id' => $user->id,
-                'receiver_type' => get_class($company->user),
-                'receiver_id' => $company->user->id,
+                'payer_type' => get_class($customer),
+                'payer_id' => $customer->id,
+                'receiver_type' => get_class($company),
+                'receiver_id' => $company->id,
                 'source' => 'user_order_payment',
                 'amount' => $amount,
                 'status' => 'completed',

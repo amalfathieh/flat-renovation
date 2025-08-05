@@ -226,10 +226,10 @@ class ProjectStageController extends Controller
 
 
             TransactionsAll::create([
-                'payer_type' => get_class($customerUser),
-                'payer_id' => $customerUser->id,
-                'receiver_type' => get_class($companyUser),
-                'receiver_id' => $companyUser->id,
+                'payer_type' => get_class($customer),
+                'payer_id' => $customer->id,
+                'receiver_type' => get_class($company),
+                'receiver_id' => $company->id,
                 'source' => 'user_stage_payment',
                 'amount' => $amount,
                 'note' => 'دفع مرحلة من مشروع',

@@ -152,10 +152,10 @@ class OrderResource extends Resource
 
 
             \App\Models\TransactionsAll::create([
-                'payer_type' => get_class($companyUser),
-                'payer_id' => $companyUser->id,
-                'receiver_type' => get_class($customerUser),
-                'receiver_id' => $customerUser->id,
+                'payer_type' => get_class($company),
+                'payer_id' => $company->id,
+                'receiver_type' => get_class($record->customer),
+                'receiver_id' => $record->customer->id,
                 'source' => 'company_deduction_refund',
                 'amount' => $amount,
                 'note' => 'إرجاع مبلغ طلب كشف مرفوض',
