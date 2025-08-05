@@ -6,6 +6,7 @@ use App\Http\Responses\Response;
 use App\Models\answer;
 use App\Models\Order;
 
+use App\Services\InvoiceService;
 
 
 
@@ -242,5 +243,144 @@ class OrderController extends Controller
     }
 
 
-    //------------------------------------------------------------------------------------------------------------------------
+
+    //---------------------------------------------------------------------------------------------------------------
+
+
+
+    public function storeOrderWithWallet(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'company_id' => 'required|exists:companies,id',
+            'location' => 'required|string',
+            'budget' => 'required|numeric',
+            'answers' => 'required|array|min:1',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $user = auth()->user();
+            if (!$user) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'المستخدم غير مصادق. يرجى تسجيل الدخول.'
+                ], 401);
+            }
+
+            $customer = Customer::where('user_id', $user->id)->first();
+            if (!$customer) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'الحساب الحالي ليس مرتبطًا بعميل (Customer).'
+                ], 403);
+            }
+
+            $company = Company::findOrFail($request->company_id);
+            $amount = $company->cost_of_examination;
+
+
+            if ($user->balance < $amount) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'رصيدك غير كافٍ لإجراء هذا الطلب. الرجاء شحن رصيدك أولاً.'
+                ], 400);
+            }
+
+
+            $user->decrement('balance', $amount);
+
+
+            $company->user->increment('balance', $amount);
+
+
+            $order = Order::create([
+                'customer_id' => $customer->id,
+                'company_id' => $company->id,
+                'location' => $request->location,
+                'budget' => $request->budget,
+                'cost_of_examination' => $amount,
+            ]);
+
+
+            foreach ($request->answers as $answerData) {
+                Answer::create([
+                    'order_id' => $order->id,
+                    'question_service_id' => $answerData['question_service_id'],
+                    'answer' => $answerData['answer'],
+                ]);
+            }
+
+
+            $service = new InvoiceService();
+            $invoice = $service->generateInvoiceNumber();
+
+
+            TransactionsAll::create([
+                'payer_type' => get_class($user),
+                'payer_id' => $user->id,
+                'receiver_type' => get_class($company->user),
+                'receiver_id' => $company->user->id,
+                'source' => 'user_order_payment',
+                'amount' => $amount,
+                'status' => 'completed',
+                'note' => 'دفع قيمة طلب كشف.',
+                'related_type' => get_class($order),
+                'related_id' => $order->id,
+                'invoice_number' =>$invoice,
+
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'تم إرسال الطلب بنجاح والدفع من المحفظة.',
+                'order_id' => $order->id
+            ], 201);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => false,
+                'message' => 'حدث خطأ أثناء معالجة الطلب: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

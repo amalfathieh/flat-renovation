@@ -27,13 +27,13 @@ class TransactionsAll extends Model
 
     ];
 
-    // ✅ الطرف الذي قام بالدفع (زبون أو شركة أو أدمن)
+
     public function payer(): MorphTo
     {
         return $this->morphTo();
     }
 
-    // ✅ الطرف الذي استلم المال (شركة أو أدمن أو زبون)
+
     public function receiver(): MorphTo
     {
         return $this->morphTo();

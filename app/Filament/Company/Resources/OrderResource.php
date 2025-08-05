@@ -2,7 +2,11 @@
 
 namespace App\Filament\Company\Resources;
 use App\Filament\Company\Resources\OrderResource\Pages;
+use App\Models\Employee;
 use App\Models\Order;
+use App\Models\TransactionsAll;
+use App\Services\InvoiceService;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
@@ -12,6 +16,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class OrderResource extends Resource
 {
@@ -32,6 +37,7 @@ class OrderResource extends Resource
 
             ]);
     }
+
 
     public static function table(Table $table): Table
     {
@@ -70,21 +76,20 @@ class OrderResource extends Resource
 
             ])
             ->actions([
-               //Tables\Actions\EditAction::make(),
+                //Tables\Actions\EditAction::make(),
 
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\DeleteAction::make(),
-
 
                 Tables\Actions\Action::make('قبول')
                     ->icon('heroicon-o-check')
                     ->color('success')
                     ->visible(fn ($record) => $record->status === 'waiting')
                     ->form([
-                        \Filament\Forms\Components\Select::make('employee_id')
+                        Select::make('employee_id')
                             ->label('اختر الموظف للإشراف على المشروع')
                             ->options(function ($record) {
-                                return \App\Models\Employee::where('company_id', $record->company_id)
+                                return Employee::where('company_id', $record->company_id)
                                     ->with('user')
                                     ->get()
                                     ->pluck('user.name', 'id');
@@ -106,70 +111,76 @@ class OrderResource extends Resource
 
 
 
-
-
-
-
-                Tables\Actions\Action::make('رفض')
-                    ->icon('heroicon-o-x-circle')
-                    ->color('danger')
+                  Tables\Actions\Action::make('رفض')
+                ->icon('heroicon-o-x-circle')
+                ->color('danger')
                     ->visible(fn ($record) => $record->status === 'waiting')
                     ->requiresConfirmation()
-                    ->action(function ($record) {
+                     ->action(function ($record) {
+                         DB::beginTransaction();
 
-                        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
-
-                        try {
-
-                            $refund = \Stripe\Refund::create([
-                                'payment_intent' => $record->payment_intent_id,
-                            ]);
-
-
-                            $record->update([
-                                'status' => 'rejected',
-                                'refund_id' => $refund->id,
-                            ]);
+        try {
+            $company = $record->company;
+            $companyUser = $company->user;
+            $customerUser = $record->customer->user;
+            $amount = $record->cost_of_examination;
 
 
-                            $company = $record->company;
-                            $amount = $record->cost_of_examination;
+            if ($companyUser->balance < $amount) {
+                DB::rollBack();
+                \Filament\Notifications\Notification::make()
+                    ->title('رصيد الشركة غير كافي لرد المبلغ ❌')
+                    ->danger()
+                    ->send();
+                return;
+            }
 
 
-                            if ($company->balance >= $amount) {
-                                $company->decrement('balance', $amount);
+            $record->update([
+                'status' => 'rejected',
+            ]);
 
 
-                                \App\Models\Transaction::create([
-                                    'company_id' => $company->id,
-                                    'order_id' => $record->id,
-                                    'type' => 'debit',
-                                    'amount' => $amount,
-                                ]);
-                            } else {
-
-                                \Filament\Notifications\Notification::make()
-                                    ->title('رصيد الشركة غير كافي لخصم المبلغ')
-                                    ->warning()
-                                    ->send();
-                            }
-
-                            \Filament\Notifications\Notification::make()
-                                ->title('تم رفض الطلب واسترجاع المبلغ بنجاح ✅')
-                                ->success()
-                                ->send();
-
-                        } catch (\Exception $e) {
-                            \Filament\Notifications\Notification::make()
-                                ->title('فشل في استرجاع المبلغ ❌')
-                                ->body($e->getMessage())
-                                ->danger()
-                                ->send();
-                        }
-                    }),
+            $companyUser->decrement('balance', $amount);
 
 
+            $customerUser->increment('balance', $amount);
 
+
+            $service = new \App\Services\InvoiceService();
+            $invoice = $service->generateInvoiceNumber();
+
+
+            \App\Models\TransactionsAll::create([
+                'payer_type' => get_class($companyUser),
+                'payer_id' => $companyUser->id,
+                'receiver_type' => get_class($customerUser),
+                'receiver_id' => $customerUser->id,
+                'source' => 'company_deduction_refund',
+                'amount' => $amount,
+                'note' => 'إرجاع مبلغ طلب كشف مرفوض',
+                'related_type' => get_class($record),
+                'related_id' => $record->id,
+                'invoice_number' => $invoice,
+            ]);
+
+            DB::commit();
+
+            \Filament\Notifications\Notification::make()
+                ->title('تم رفض الطلب واسترجاع المبلغ بنجاح ✅')
+                ->success()
+                ->send();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            \Filament\Notifications\Notification::make()
+                ->title('فشل في تنفيذ العملية ❌')
+                ->body($e->getMessage())
+                ->danger()
+                ->send();
+        }
+    }),
 
 
 
@@ -182,6 +193,17 @@ class OrderResource extends Resource
                 ]),
             ]);
     }
+
+
+
+
+
+
+
+
+
+
+
 
     public static function getRelations(): array
     {

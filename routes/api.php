@@ -129,6 +129,10 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::post('/payment/create-payment-intent', [OrderController::class, 'createPaymentIntent']);
     Route::post('/Add_Order', [OrderController::class, 'storeOrder']);
 
+
+    Route::post('/CrateOrder', [OrderController::class, 'storeOrderWithWallet']);
+
+
     //  rout for test
     Route::post('/checkout-session', [OrderController::class, 'createCheckoutSession']);
 
@@ -138,6 +142,7 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::get('/project-stages/createStagePaymentIntent/{stageId}', [ProjectStageController::class, 'createStagePaymentIntent']);
     Route::post('/project-stages/confirmStagePayment/{stageId}', [ProjectStageController::class, 'confirmStagePayment']);
 
+    Route::post('/project-stages/confirmStage/{stageId}', [ProjectStageController::class, 'confirmStage']);
 
 
 

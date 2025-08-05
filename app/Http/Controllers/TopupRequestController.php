@@ -55,7 +55,8 @@ class TopupRequestController extends Controller
         $customer = Auth::user()->customerProfile;
 
 
-        $query = TopUpRequest::query()
+        $query = TopUpRequest::with('paymentMethod')
+
             ->where('requester_id', $customer->id)
             ->where('requester_type', get_class($customer));
 

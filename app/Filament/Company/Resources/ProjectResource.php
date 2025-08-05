@@ -143,7 +143,8 @@ class ProjectResource extends Resource
 
                                  Forms\Components\Select::make('status')
                                      ->label('الحالة')
-                                     ->options(ProjectStatusEnum::cases(), 'value')->required(),
+                                     ->options(ProjectStatusEnum::options())->required(),
+
 
 
                                  Forms\Components\TextInput::make('final_cost')

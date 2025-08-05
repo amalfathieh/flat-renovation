@@ -25,7 +25,8 @@ class StoreTopUpRequest extends FormRequest
             'amount' => ['required', 'numeric', 'min:1'],
             'receipt_image' => ['required', 'image', 'max:2048'],
             'payment_method_id' => ['required', 'exists:payment_methods,id'],
-            'invoices_number' => ['required', 'numeric'],
+            'invoice_number' => ['required', 'numeric'],
+
         ];
     }
 }

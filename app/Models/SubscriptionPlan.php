@@ -19,7 +19,7 @@ class SubscriptionPlan extends Model
         'updated_at' => 'datetime:Y-m-d',
     ];
 
-//    // علاقة مع CompanySubscriptions
+
     public function companySubscriptions()
     {
         return $this->hasMany(CompanySubscription::class);

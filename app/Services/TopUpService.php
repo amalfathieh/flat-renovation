@@ -21,6 +21,9 @@ class TopUpService
         $topUp = TopUpRequest::create([
             'requester_type' => get_class($request->model),
             'requester_id'   => $request->model->id,
+
+            'invoice_number' => $request->invoice_number,
+
             'amount'         => $request->amount,
             'receipt_image'  => $imagePath,
             'payment_method_id' => $request->payment_method_id,
