@@ -31,6 +31,7 @@ class TopUpRequestResource extends Resource
                         'approved' => 'Approved',
                         'rejected' => 'Rejected',
                     ])
+                    ->helperText('عند تغير حالة الطلب الى Approved سيتم اضافة رصيد لمحفظة صاحب الطلب وتسجيل معاملة بالعملية')
                     ->required(),
 
                 Forms\Components\Textarea::make('admin_note')

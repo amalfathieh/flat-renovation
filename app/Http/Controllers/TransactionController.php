@@ -2,29 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RelatedResource;
+use App\Http\Resources\TransactionResource;
 use App\Http\Responses\Response;
+use App\Models\Transaction;
 use App\Models\TransactionsAll;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Services\TransactionService;
 
 class TransactionController extends Controller
 {
-
-    public function getMyTransactions(Request $request)
+    public function getMyTransactions()
     {
-        $customer = Auth::user()->customerProfile;
+        $user = auth()->user()->customerProfile;
 
-        $transactions = TransactionsAll::with(['payer', 'receiver', 'related'])->where(function ($query) use ($customer) {
-            $query->where('payer_id', $customer->id)
-                ->where('payer_type', get_class($customer));
-        })
-            ->orWhere(function ($query) use ($customer) {
-                $query->where('receiver_id', $customer->id)
-                    ->where('receiver_type', get_class($customer));
+        $transactions = $user->sentTransactions()
+            ->orWhere(function ($query) use ($user) {
+                $query->where('receiver_id', $user->id)
+                    ->where('receiver_type', get_class($user));
             })
             ->latest()
-            ->paginate(10);
+            ->get();
 
-        return Response::Success($transactions, 'All Transactions.');
+        return Response::Success(TransactionResource::collection($transactions), 'All Transactions.');
     }
+
+    public function getRelatedSummary($id, TransactionService $transactionService)
+    {
+        $transaction = TransactionsAll::find($id);
+        if (!$transaction) {
+            return Response::Error("Transaction not found", 404);
+        }
+
+        $related = $transaction->related;
+        if (!$related) {
+            return Response::Error("Related not found", 404);
+        }
+
+        return Response::Success($transactionService->formatRelatedData($related), 'All Transactions.');
+    }
+
 }

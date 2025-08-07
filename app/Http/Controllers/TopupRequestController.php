@@ -27,7 +27,6 @@ class TopupRequestController extends Controller
             'admin_phone' => $admin->phone,
             'instructions' => 'يرجى التحويل إلى حساب الأدمن ثم رفع صورة الوصل',
         ]);
-
     }
 
     public function creatTopUp(StoreTopUpRequest $request, TopUpService $topUpService): \Illuminate\Http\JsonResponse
@@ -44,8 +43,7 @@ class TopupRequestController extends Controller
             $topUp = $topUpService->submitTopUp($request); // Pass request object
 
             return Response::Success($topUp, 'Top-up request submitted successfully.');
-
-        }catch (\Exception $ex) {
+        } catch (\Exception $ex) {
             return Response::Error($ex->getMessage(), $ex->getCode() ?: 404);
         }
     }
@@ -67,28 +65,7 @@ class TopupRequestController extends Controller
             }
         }
 
-        $requests = $query->latest()->paginate(10); // أو ->get() لو بدك بدون pagination
-
-//        $requests = $query->latest()->get(); // أو ->get() لو بدك بدون pagination
-
-        return response()->json([
-            'status' => true,
-            'requests' => $requests,
-        ]);
+        $requests = $query->latest()->get();
+        return Response::Success($requests, 'Top-up requests');
     }
-//    public function getMyTopUpRequests(Request $request)
-//    {
-//        $customer = Auth::user()->customerProfile;
-//
-////        $customer = Auth::guard('sanctum')->user();
-//
-//        $requests = TopUpRequest::with('paymentMethod')->where('requester_id', $customer->id)
-//            ->where('requester_type', get_class($customer))
-//            ->latest()
-//            ->paginate(10);
-//
-//        return Response::Success($requests, 'All Top-up request.');
-//    }
-
-
 }

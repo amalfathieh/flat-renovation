@@ -29,16 +29,16 @@ use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\CustomerProfileController;
 use App\Http\Controllers\SocialAuthController;
 
-Route::get('tests', function (){
+Route::get('tests', function () {
     return Auth::user();
 })->middleware(['auth:sanctum', VerifiedEmail::class]);
 
-Route::post('register' , function (Request $request){
+Route::post('register', function (Request $request) {
     $user = User::create([
-        'name'=> $request['name'],
+        'name' => $request['name'],
         'email' => $request['email'],
         'password' => bcrypt($request['password']),
-        'phone_number'=> $request['phone_number']?? null,
+        'phone_number' => $request['phone_number'] ?? null,
     ]);
     $user->assignRole('company');
     event(new Registered($user));
@@ -51,7 +51,7 @@ Route::post('/customer/login', [CustomerAuthController::class, 'login']);
 Route::post('/auth/google/token', [SocialAuthController::class, 'handleGoogleToken']);
 
 
-Route::controller(CodeController::class)->group(function (){
+Route::controller(CodeController::class)->group(function () {
 
     Route::post('verifyAccount',  'verifyAccount')->middleware('auth:sanctum');
     Route::post('resendCode', 'sendCodeVerification')->middleware('throttle:6,1');
@@ -60,12 +60,10 @@ Route::controller(CodeController::class)->group(function (){
     Route::post('forgetPassword', 'sendCodeVerification');
     Route::post('checkCode', 'checkCode');
     Route::post('resetPassword', 'resetPassword');
-
-
 });
 
-Route::get('/companies', [CompanyController::class,'index']);
-Route::get('/companies/{company}/projects', [CompanyController::class,'show']);
+Route::get('/companies', [CompanyController::class, 'index']);
+Route::get('/companies/{company}/projects', [CompanyController::class, 'show']);
 
 
 //    Route::get('/companies', [CompanyController::class,'index']);
@@ -74,41 +72,42 @@ Route::get('/companies/{company}/projects', [CompanyController::class,'show']);
 Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
 
 
-    Route::controller(ProjectController::class)->prefix('projects')->group(function (){
+    Route::controller(ProjectController::class)->prefix('projects')->group(function () {
 
         Route::get('myProject', 'getMyProjects');
 
         Route::get('allPublishProjects', 'getAllPublishProjects')->withoutMiddleware('role:customer');
     });
 
-    Route::controller(ProjectStageController::class)->group(function (){
-        Route::get('projectStages/{id}', 'getProjectStages');
-//        Route::get('serviceTypes/{id}', 'getServiceTypes');
-//        Route::post('editServiceType/{id}', 'editServiceType');
-    });
 
-    Route::controller(ObjectionController::class)->prefix('objections')->group(function (){
+
+    Route::controller(ObjectionController::class)->prefix('objections')->group(function () {
         Route::post('create/{id}', 'create');
         Route::get('stageObjections/{id}', 'getObjections');
     });
 
 
-    Route::post('/customer/logout', [CustomerAuthController::class,'logout']);
+    Route::post('/customer/logout', [CustomerAuthController::class, 'logout']);
 
 
     Route::get('/customer/getprofile', [CustomerProfileController::class, 'show']);
     Route::post('/customer/profile', [CustomerProfileController::class, 'update']);
     Route::post('/customer/change-password', [CustomerProfileController::class, 'changePassword']);
 
-    Route::get('/customer/transactions', [TransactionController::class, 'getMyTransactions']);
-   Route::get('/companies', [CompanyController::class,'index']);
 
-    Route::get('/companies/{company}/projects', [CompanyController::class,'show']);
-    Route::get('/companies/CompanyPublishProjects/{id}', [CompanyController::class,'getCompanyPublishProjects'])->withoutMiddleware('role:customer');
+    Route::controller(TransactionController::class)->prefix('transactions')->group(function () {
+        Route::get('/', 'getMyTransactions');
+        Route::get('/relatedSummary/{id}', 'getRelatedSummary');
+    });
+
+    Route::get('/companies', [CompanyController::class, 'index']);
+
+    Route::get('/companies/{company}/projects', [CompanyController::class, 'show']);
+    Route::get('/companies/CompanyPublishProjects/{id}', [CompanyController::class, 'getCompanyPublishProjects'])->withoutMiddleware('role:customer');
 
     Route::post('/companies/search', [SearchController::class, 'search']);
 
-    Route::get('/companies/{company}/projects', [CompanyController::class,'show']);
+    Route::get('/companies/{company}/projects', [CompanyController::class, 'show']);
 
 
 
@@ -116,7 +115,7 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
 
     //safa
 
-    Route::get('/company_services/{id}',[CompanyServiceController::class,'index']);
+    Route::get('/company_services/{id}', [CompanyServiceController::class, 'index']);
 
     Route::post('/services/questions', [CompanyServiceController::class, 'getQuestionsForServices']);
 
@@ -124,7 +123,7 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
 
 
 
-//Strip
+    //Strip
 
     Route::post('/payment/create-payment-intent', [OrderController::class, 'createPaymentIntent']);
     Route::post('/Add_Order', [OrderController::class, 'storeOrder']);
@@ -137,23 +136,25 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::post('/checkout-session', [OrderController::class, 'createCheckoutSession']);
 
 
-// stage payment
+    Route::controller(ProjectStageController::class)->group(function () {
+        Route::get('projectStages/{id}', 'getProjectStages');
 
-    Route::get('/project-stages/createStagePaymentIntent/{stageId}', [ProjectStageController::class, 'createStagePaymentIntent']);
-    Route::post('/project-stages/confirmStagePayment/{stageId}', [ProjectStageController::class, 'confirmStagePayment']);
+        // stage payment
+        Route::get('/project-stages/createStagePaymentIntent/{stageId}',  'createStagePaymentIntent');
+        Route::post('/project-stages/confirmStagePayment/{stageId}', 'confirmStagePayment');
 
-    Route::post('/project-stages/confirmStage/{stageId}', [ProjectStageController::class, 'confirmStage']);
+        Route::post('/project-stages/confirmStage/{stageId}', 'confirmStage');
+    });
 
 
-
-    Route::get('/companies/{company}/projects', [CompanyController::class,'show']);
+    Route::get('/companies/{company}/projects', [CompanyController::class, 'show']);
     Route::post('/companies/search', [SearchController::class, 'search']);
 
     Route::get('/projects/{projectId}/my-review', [ProjectController::class, 'showUserReview']);
     Route::post('/project/{projectId}/rate', [ProjectController::class, 'rate']);
     Route::post('/project/{projectId}/comment', [ProjectController::class, 'comment']);
 
-//favorite
+    //favorite
     Route::post('/companies/{company}/favorite', [FavoriteController::class, 'toggleFavorite']);
     Route::get('/favorites', [FavoriteController::class, 'listFavorites']);
     Route::get('/customer/orders', [OrderController::class, 'customerOrders']);
@@ -161,19 +162,18 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
 
 
     //StoreTopUpRequest
-    Route::controller(TopupRequestController::class)->prefix('customer')->group(function (){
+    Route::controller(TopupRequestController::class)->prefix('customer')->group(function () {
         Route::post('/submitTopUp', 'creatTopUp');
         Route::get('/top-up-requests', 'getMyTopUpRequests');
     });
 
-    Route::controller(PaymentMethodController::class)->group(function (){
+    Route::controller(PaymentMethodController::class)->group(function () {
         Route::get('getPaymentMethods', 'getActivePaymentMethods');
     });
-
 });
 
 
 
 
 
-Route::get('/test',[CompanyServiceController::class,'test']);
+Route::get('/test', [CompanyServiceController::class, 'test']);
