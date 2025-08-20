@@ -94,18 +94,22 @@ class TransactionsAllResource extends Resource
     {
         return $infolist
             ->schema([
+
                 Section::make('معلومات الأطراف')
                     ->schema([
-                        TextEntry::make('payer.name')->label('اسم الدافع'),
+                        TextEntry::make('payer.user.name')->label('اسم الدافع'),
+                        TextEntry::make('payer.name')->label('الاسم حسب البروفايل'),
                         TextEntry::make('payer_id'),
-                        TextEntry::make('receiver.name')->label('اسم المستلم'),
+                        TextEntry::make('payer_type'),
+                        TextEntry::make('receiver.user.name')->label('اسم المستلم'),
+                        TextEntry::make('receiver.name')->label('الاسم حسب الربوفايل'),
                         TextEntry::make('receiver_id'),
-                    ])->columns(2),
+                        TextEntry::make('receiver_type'),
+                    ])->columns(4),
 
                 Section::make('تفاصيل المعاملة')
                     ->schema([
-                        TextEntry::make('invoice_number')
-                            ->numeric(),
+                        TextEntry::make('invoice_number'),
                         TextEntry::make('amount')->label('المبلغ'),
                         TextEntry::make('source')->label('النوع'),
                         TextEntry::make('created_at')->label('تاريخ المعاملة'),

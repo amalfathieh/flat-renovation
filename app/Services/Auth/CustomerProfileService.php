@@ -21,6 +21,7 @@ class CustomerProfileService
             'image'=> $profile->image,
             'age' => $profile?->age,
             'gender' => $profile?->gender,
+            'balance' =>$user->balance,
             'role' => $user->getRoleNames(),
         ];
     }

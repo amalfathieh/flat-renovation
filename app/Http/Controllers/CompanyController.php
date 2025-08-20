@@ -32,6 +32,8 @@ class CompanyController extends Controller
                 'is_favorited' => $customer
                     ? $customer->favorite->contains($company->id)
                     : false,
+                'cost_of_examination' => $company->cost_of_examination,
+
             ];
         });
 
@@ -73,6 +75,7 @@ class CompanyController extends Controller
                 ? $customer->favorite->contains($company->id)
                 : false,
             'projects' => $projects,
+            'cost_of_examination' => $company->cost_of_examination,
         ];
 
         return Response::Success($companyInfo, 'تفاصيل الشركة والمشاريع');

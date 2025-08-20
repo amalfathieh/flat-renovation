@@ -77,7 +77,7 @@ class ProjectStageResource extends Resource
                                     })
                                     ->required(),
 
-                                Forms\Components\TextInput::make('stage_name')
+                                Forms\Components\TextInput::make('name')
                                     ->label('اسم المرحلة')
                                     ->required()
                                     ->maxLength(255),
@@ -172,7 +172,7 @@ class ProjectStageResource extends Resource
                 Tables\Columns\TextColumn::make('project.project_name')
                     ->label('اسم المشروع')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('stage_name')
+                Tables\Columns\TextColumn::make('name')
                     ->label('عنوان المرحلة')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')

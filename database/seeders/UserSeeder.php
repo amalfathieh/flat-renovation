@@ -106,20 +106,20 @@ class UserSeeder extends Seeder
         for ($c = 1; $c <= 5; $c++) {
             self::$owners[$c] = User::factory()->withRole('company')->create([
                 'name' => "مالك $c",
-                'email' => "owner{$c}_" . uniqid() . "@example.com",
+                'email' => "owner{$c}_@example.com",
             ]);
 
             for ($e = 1; $e <= 2; $e++) {
                 self::$employees["$c-$e"] = User::factory()->withRole('employee')->create([
                     'name' => "موظف $e في شركة $c",
-                    'email' => "employee{$c}_{$e}_" . uniqid() . "@example.com",
+                    'email' => "employee{$c}_{$e}_@example.com",
                 ]);
             }
 
             for ($z = 1; $z <= 4; $z++) {
                 self::$customers["$c-$z"] = User::factory()->withRole('customer')->create([
                     'name' => "زبون $z لشركة $c",
-                    'email' => "customer{$c}_{$z}_" . uniqid() . "@example.com",
+                    'email' => "customer{$c}_{$z}_@example.com",
                 ]);
             }
         }

@@ -21,7 +21,7 @@ class CompanyDataSeeder extends Seeder
                 'phone' => "09999$c$c$c$c",
                 'about' => 'شركة لأغراض الاختبار',
                 'logo' => "companies-logo/logo$c.png", // ← الصورة مختلفة حسب الشركة
-                'cost_of_examination' => rand(1000, 900_000),
+                'cost_of_examination' => rand(100, 9000),
             ]);
         }
     }
