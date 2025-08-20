@@ -2,6 +2,7 @@
 
 namespace App\Filament\Company\Resources;
 use App\Filament\Company\Resources\OrderResource\Pages;
+use App\Http\Controllers\PushNotificationController;
 use App\Models\Employee;
 use App\Models\Order;
 use App\Models\TransactionsAll;
@@ -103,6 +104,29 @@ class OrderResource extends Resource
                             'employee_id' => $data['employee_id'],
                         ]);
 
+
+                        $customerToken = $record->customer->user->device_token;
+                        $employeeToken = Employee::find($data['employee_id'])->user->device_token;
+
+                        $customerName = $record->customer->user->name;
+                        $employeePhone = Employee::find($data['employee_id'])->user->phone;
+                        $customerPhone = $record->customer->user->phone;
+
+                        $push = new PushNotificationController();
+
+                        // إشعار الزبون
+                        if ($customerToken) {
+                            $push->sendPushNotification(
+                                'تم قبول طلبك ✅',
+                                "تم قبول طلب الكشف. هذا رقم المشرف: {$employeePhone}",
+                                $customerToken
+                            );
+                        }
+
+
+
+
+
                         \Filament\Notifications\Notification::make()
                             ->title('تم قبول الطلب وإسناده لموظف ✅')
                             ->success()
@@ -165,6 +189,27 @@ class OrderResource extends Resource
             ]);
 
             DB::commit();
+
+
+
+
+
+            // 🔔 إرسال إشعار للزبون عند الرفض
+            $push = new PushNotificationController();
+            if ($customerUser->device_token) {
+                $push->sendPushNotification(
+                    'تم رفض طلبك ❌',
+                    'تم رفض طلبك وإعادة النقود إلى رصيدك في التطبيق.',
+                    $customerUser->device_token
+                );
+            }
+
+
+
+
+
+
+
 
             \Filament\Notifications\Notification::make()
                 ->title('تم رفض الطلب واسترجاع المبلغ بنجاح ✅')

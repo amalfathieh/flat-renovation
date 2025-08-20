@@ -22,6 +22,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use TomatoPHP\FilamentFcm\FilamentFcmPlugin;
 
 class CompanyPanelProvider extends PanelProvider
 {
@@ -38,6 +39,13 @@ class CompanyPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Orange,
             ])
+
+            ->plugins([
+                FilamentFcmPlugin::make(), // <-- أضف هنا الفايربيز
+
+            ])
+
+
             ->sidebarCollapsibleOnDesktop()
             ->favicon(asset('images/favicon.jpg'))
             ->discoverResources(in: app_path('Filament/Company/Resources'), for: 'App\\Filament\\Company\\Resources')

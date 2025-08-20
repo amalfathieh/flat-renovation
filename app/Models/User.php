@@ -15,9 +15,12 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use TomatoPHP\FilamentFcm\Traits\InteractsWithFCM;
+
 
 class User extends Authenticatable implements  HasTenants, FilamentUser, MustVerifyEmail
 {
+    use InteractsWithFCM;
     use HasFactory, Notifiable, HasRoles, HasApiTokens;
 
 
@@ -36,6 +39,7 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
         'banned_at',
          'payment_phone',
            'balance',
+        'device_token',
 
     ];
 
@@ -174,7 +178,6 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
 //    {
 //        return $this->morphMany(TopUpRequest::class, 'requester');
 //    }
-
 
 
 

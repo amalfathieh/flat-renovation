@@ -5,6 +5,7 @@ namespace App\Services;
 
 
 use App\Events\TopUpApproved;
+use App\Http\Controllers\PushNotificationController;
 use App\Models\TopUpRequest;
 use function Symfony\Component\Translation\t;
 
@@ -43,6 +44,22 @@ class TopUpService
         if ($request->status !== 'approved') {
             $request->update(['status' => 'approved']);
             TopUpApproved::dispatch($request);
+
+
+
+            // ✅ إرسال إشعار للزبون
+            $user = $request->user; // بافتراض أن TopUpRequest مرتبط بعلاقة user
+            if ($user && $user->device_token) {
+                $push = new PushNotificationController();
+                $push->sendPushNotification(
+                    'تم شحن رصيدك بنجاح 💳',
+                    'تم شحن رصيدك في تطبيقنا، يمكنك الآن الاستفادة من خدماتنا.',
+                    $user->device_token
+                );
+            }
+
+
+
         }
     }
 

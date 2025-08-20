@@ -23,6 +23,10 @@ return new class extends Migration
             $table->timestamp('banned_at')->nullable();
             $table->decimal('balance', 10, 2)->default(0);
             $table->rememberToken();
+
+            $table->string('device_token')->nullable();
+
+
             $table->timestamps();
         });
 
