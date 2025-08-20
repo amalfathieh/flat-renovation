@@ -32,35 +32,6 @@ class CompanySubscriptionResource extends Resource
         return $form
             ->schema([
 
-                Select::make('subscription_plan_id')
-                    ->options(
-                        SubscriptionPlan::where('is_active', true)
-                            ->pluck('name', 'id')
-                    )
-                    ->preload()
-                    ->required(),
-
-                Forms\Components\DatePicker::make('start_date')
-                    ->default(now())
-//                    ->disabled()
-                ,
-//                Forms\Components\Placeholder::make('start_date')
-//                    ->default(now())
-//                    ->disabled(),
-//                Forms\Components\Placeholder::make('end_date')
-//                    ->content(function ($get){
-//                        return $get('start_date');
-//                    }),
-                Forms\Components\DatePicker::make('end_date')
-//                    ->default(),
-                    ->required(),
-                Forms\Components\TextInput::make('status')
-                    ->default('active')
-                    ->required(),
-                Forms\Components\TextInput::make('used_projects')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
             ]);
     }
 
@@ -69,9 +40,6 @@ class CompanySubscriptionResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('company.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('subscriptionPlan.name')
@@ -97,9 +65,7 @@ class CompanySubscriptionResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
+                Tables\Columns\TextColumn::make('subscriptionPlan.duration_in_days')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([

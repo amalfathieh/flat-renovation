@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Responses\Response;
 use App\Models\User;
 
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Session;
-
+Route::get('rr', \App\Http\Controllers\DownloadInvoiceController::class);
 Route::get('/bb/{id}', function ($id) {
 
     $p = \App\Models\SubscriptionPlan::find($id)->first();
@@ -22,6 +23,10 @@ Route::get('/bb/{id}', function ($id) {
     ]);
     return view('test22', $p);
 })->name('payment.create');
+
+//Route::get('/payment/create/{plan}', [SubscriptionController::class, 'create'])->name('payment.create');
+Route::post('subscription/confirm/{plan}', [SubscriptionController::class, 'confirm'])->name('subscription.confirm');
+
 
 Route::get('/testWeb', function () {
     $user= Auth::user();

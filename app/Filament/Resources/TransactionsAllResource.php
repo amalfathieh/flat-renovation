@@ -41,16 +41,21 @@ class TransactionsAllResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('invoice_number'),
 
-                Tables\Columns\TextColumn::make('payer.name')
-                    ->label('اسم المرسل')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('receiver.name')
-                    ->label('اسم المستقبل')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('source')
-                    ->label('نوع العملية'),
+                Tables\Columns\TextColumn::make('payer_name')->label('اسم المرسل')
+                    ->getStateUsing(
+                        fn($record) =>
+                            optional($record->payer)->name ??
+                            optional(optional($record->payer)->user)->name ??
+                            'Unknown'
+                    ),
+
+                Tables\Columns\TextColumn::make('receiver_name')->label('اسم المستقبل')
+                    ->getStateUsing(
+                        fn($record) =>
+                            optional($record->receiver)->name ??
+                            optional(optional($record->receiver)->user)->name ??
+                            'Unknown'
+                    ),
 
                 Tables\Columns\TextColumn::make('amount')
                     ->label('المبلغ')

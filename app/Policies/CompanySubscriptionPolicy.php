@@ -29,7 +29,7 @@ class CompanySubscriptionPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasRole('company');
+        return false;
     }
 
     /**
