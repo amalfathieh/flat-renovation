@@ -23,7 +23,7 @@ class PushNotificationController extends Controller
 
         try {
             $factory = (new Factory)
-                ->withServiceAccount(base_path('config/firebase_credentials.json'));
+                ->withServiceAccount(base_path('storage/app/firebase_credentials.json'));
 
             $messaging = $factory->createMessaging();
 
