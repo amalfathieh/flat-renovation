@@ -24,6 +24,10 @@ return new class extends Migration
             $table->decimal('balance', 10, 2)->default(0);
             $table->string('device_token')->nullable();
             $table->rememberToken();
+
+            $table->string('device_token')->nullable();
+
+
             $table->timestamps();
         });
 

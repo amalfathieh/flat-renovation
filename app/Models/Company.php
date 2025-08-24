@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use TomatoPHP\FilamentFcm\Traits\InteractsWithFCM;
 
 class Company extends Model
 {
+    use InteractsWithFCM;
     use HasFactory;
 
     protected $fillable = [

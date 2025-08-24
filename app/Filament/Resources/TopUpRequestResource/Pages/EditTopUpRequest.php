@@ -3,13 +3,14 @@
 namespace App\Filament\Resources\TopUpRequestResource\Pages;
 
 use App\Filament\Resources\TopUpRequestResource;
+use App\Http\Controllers\PushNotificationController;
 use App\Services\TopUpService;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditTopUpRequest extends EditRecord
+class  EditTopUpRequest extends EditRecord
 {
-    protected static string $resource = TopUpRequestResource::class;
+    protected static string $resource = TopUpRequestResource:: class;
 
     protected function getHeaderActions(): array
     {
@@ -30,6 +31,22 @@ class EditTopUpRequest extends EditRecord
             // منع حفظ الحالة مرتين (لأنها تغيرت بالخدمة)
             unset($data['status']);
         }
+
+
+        // ✅ إذا تغيّر من أي حالة إلى مرفوض
+        if ($originalStatus !== 'rejected' && $newStatus === 'rejected') {
+            $user = $this->record->user; // بافتراض أن طلب الشحن مرتبط بمستخدم
+
+            if ($user && $user->device_token) {
+                $push = new PushNotificationController();
+                $push->sendPushNotification(
+                    'طلب الشحن مرفوض ❌',
+                    'معلومات الدفع غير صحيحة، لم يتم شحن رصيدك في التطبيق. يرجى المحاولة مرة أخرى.',
+                    $user->device_token
+                );
+            }
+        }
+
 
         return $data;
     }

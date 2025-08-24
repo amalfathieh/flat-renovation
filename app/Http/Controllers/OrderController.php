@@ -13,6 +13,7 @@ use App\Services\InvoiceService;
 use App\Models\Transaction;
 
 use App\Models\TransactionsAll;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
@@ -74,8 +75,8 @@ class OrderController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'company_id' => 'required|exists:companies,id',
-            'location' => 'required|string',
-            'budget' => 'required|numeric',
+           // 'location' => 'required|string',
+          //  'budget' => 'required|numeric',
             'answers' => 'required|array|min:1',
             'payment_intent_id' => 'required|string',
         ]);
@@ -125,8 +126,8 @@ class OrderController extends Controller
             $order = Order::create([
                 'customer_id' => $customer->id,
                 'company_id' => $request->company_id,
-                'location' => $request->location,
-                'budget' => $request->budget,
+                'location' => "test1",
+                'budget' => "test2",
                 'cost_of_examination' => $company->cost_of_examination,
                 'payment_intent_id' => $paymentIntent->id,
             ]);
@@ -358,13 +359,37 @@ class OrderController extends Controller
 
 
 
+//-----------------------------------------------------------------------------------------------------
 
 
 
 
+    // تابع لإرجاع كل الطلبات الخاصة بالمستخدم الحالي
+    public function getCustomerOrders()
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        // الحصول على customer_id المرتبط بالمستخدم
+        $customer = Customer::where('user_id', $user['id'])->first();
+        if (!$customer) {
+            return response()->json(['message' => 'Customer profile not found'], 404);
+        }
+
+        // جلب كل الطلبات الخاصة بهذا الـ customer
+        $orders = Order::where('customer_id', $customer->id)->get();
+
+        return response()->json([
+            //'user' => $user,
+            //'customer' => $customer,
+            'orders' => $orders
+        ]);
+    }
 
 
-
+//----------------------------------------------------------------------------------
 
 
 

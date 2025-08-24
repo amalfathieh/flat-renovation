@@ -10,6 +10,7 @@ use App\Http\Controllers\ObjectionController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectStageController;
+use App\Http\Controllers\PushNotificationController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TopupRequestController;
 use App\Http\Controllers\TransactionController;
@@ -175,6 +176,16 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::controller(PaymentMethodController::class)->group(function () {
         Route::get('getPaymentMethods', 'getActivePaymentMethods');
     });
+
+
+
+    //create_device_token
+    Route::post('/create_device_token', [PushNotificationController::class, 'create_device_token']);
+
+    Route::get('/my-orders', [OrderController::class, 'getCustomerOrders']);
+
+
+
 });
 
 
