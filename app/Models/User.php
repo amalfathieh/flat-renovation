@@ -36,6 +36,7 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
         'banned_at',
          'payment_phone',
            'balance',
+        'device_token'
 
     ];
 
@@ -72,6 +73,10 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function routeNotificationForFcm()
+    {
+        return $this->device_token;
     }
 
     public function employee()

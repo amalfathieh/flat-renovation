@@ -37,7 +37,7 @@ class TopupRequestResource extends Resource
                     ->directory('topups')
                     ->required(),
 
-                Forms\Components\Textarea::make('invoice_number')
+                Forms\Components\TextInput::make('invoice_number')
                     ->columnSpanFull()
                     ->helperText("ادخل رقم وصل التحويل (الفاتورة)")
                     ->required(),

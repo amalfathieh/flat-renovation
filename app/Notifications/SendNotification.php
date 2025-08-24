@@ -3,9 +3,10 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Fcm\FcmChannel;
+use NotificationChannels\Fcm\FcmMessage;
+use NotificationChannels\Fcm\Resources\Notification as FcmNotification;
 
 class SendNotification extends Notification
 {
@@ -14,48 +15,49 @@ class SendNotification extends Notification
     private $title;
     private $body;
 
-    /**
-     * Create a new notification instance.
-     */
     public function __construct($data)
     {
         $this->obj_id = $data['obj_id'];
-        $this->title = $data['title'];
-        $this->body = $data['body'];
+        $this->title  = $data['title'];
+        $this->body   = $data['body'];
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
-    public function via(object $notifiable): array
+    public function via($notifiable)
     {
-        return ['database'];
+        return [FcmChannel::class, 'database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     */
-//    public function toMail(object $notifiable): MailMessage
-//    {
-//        return (new MailMessage)
-//                    ->line('The introduction to the notification.')
-//                    ->action('Notification Action', url('/'))
-//                    ->line('Thank you for using our application!');
-//    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
+    public function toFcm($notifiable): FcmMessage
     {
-        return [
-            'obj_id'=>$this->obj_id,
-            'title'=>$this->title,
-            'body' => $this->body,
-        ];
+        return (new FcmMessage(notification: new FcmNotification(
+            title: $this->title,
+            body: $this->body,
+            image: 'http://example.com/url-to-image-here.png'
+        )))
+            ->data(['obj_id' => (string)$this->obj_id])
+            ->custom([
+                'android' => [
+                    'notification' => [
+                        'sound' => 'default', // أو ملف صوتي مخصص موجود في res/raw
+                    ],
+                ],
+                'apns' => [
+                    'payload' => [
+                        'aps' => [
+                            'sound' => 'default', // أو اسم ملف صوتي مضاف لمشروع iOS
+                        ],
+                    ],
+                ],
+            ])
+        ;
+    }
+
+    public function toDatabase()
+    {
+        return \Filament\Notifications\Notification::make()
+            ->title($this->title)
+            ->body($this->body)
+            ->viewData(['obj_id' => $this->obj_id])
+            ->getDatabaseMessage();
     }
 }

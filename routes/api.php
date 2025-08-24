@@ -3,7 +3,9 @@
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\CompanyController;
 
+use App\Http\Controllers\DeviceTokenController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ObjectionController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProjectController;
@@ -45,6 +47,7 @@ Route::post('register', function (Request $request) {
     return $user;
 });
 
+Route::get('notifications', [NotificationController::class, 'getNotifications']);
 
 Route::post('/customer/register', [CustomerAuthController::class, 'register']);
 Route::post('/customer/login', [CustomerAuthController::class, 'login']);
@@ -71,6 +74,8 @@ Route::get('/companies/{company}/projects', [CompanyController::class, 'show']);
 
 Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
 
+    // Store Device Token
+    Route::post('device-token', [DeviceTokenController::class,'store'])->middleware('auth');
 
     Route::controller(ProjectController::class)->prefix('projects')->group(function () {
 

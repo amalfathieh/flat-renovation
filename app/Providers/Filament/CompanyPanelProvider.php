@@ -66,7 +66,8 @@ class CompanyPanelProvider extends PanelProvider
             ])
             ->tenant(Company::class, 'slug', 'company')
             ->tenantRegistration(RegisterCompany::class)
-            ->tenantProfile(EditCompanyProfile::class);
+            ->tenantProfile(EditCompanyProfile::class)
+            ->databaseNotifications();
 
     }
 }
