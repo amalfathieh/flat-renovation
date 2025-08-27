@@ -2,13 +2,13 @@ import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDqZ3_UT_r2G1jqJYulhtkldQFtWftXOD0",
-    authDomain: "flat-b7d59.firebaseapp.com",
-    projectId: "flat-b7d59",
-    storageBucket: "flat-b7d59.firebasestorage.app",
-    messagingSenderId: "252025170203",
-    appId: "1:252025170203:web:45da416f5887be1b6a8bbe",
-    measurementId: "G-LNPKN3HMWS",
+    apiKey: "AIzaSyDRedkjDwAuGzfrh0Rdmxqcukp06MYu2qA",
+    authDomain: "rebuildapp-f8417.firebaseapp.com",
+    projectId: "rebuildapp-f8417",
+    storageBucket: "rebuildapp-f8417.firebasestorage.app",
+    messagingSenderId: "514294949355",
+    appId: "1:514294949355:web:5dd33c00b6404033c1a5ae"
+
 };
 // تهيئة Firebase
 const app = initializeApp(firebaseConfig);
@@ -26,8 +26,7 @@ if (Notification.permission === "default") {
 
 // Get Device Token
 getToken(messaging, {
-    vapidKey:
-    "BOQidQulnh1wvgayguZX-rMeizKBJZNpJwi77TNGSEVdnRjHa1r2X_kt3KorN0MAu8p0J4g9KBZHdq9IV8KcN_8",
+    vapidKey: "BOQidQulnh1wvgayguZX-rMeizKBJZNpJwi77TNGSEVdnRjHa1r2X_kt3KorN0MAu8p0J4g9KBZHdq9IV8KcN_8",
 })
     .then((currentToken) => {
         if (currentToken) {

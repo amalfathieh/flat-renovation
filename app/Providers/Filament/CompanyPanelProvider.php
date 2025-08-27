@@ -39,13 +39,6 @@ class CompanyPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Orange,
             ])
-
-            ->plugins([
-                FilamentFcmPlugin::make(), // <-- أضف هنا الفايربيز
-
-            ])
-
-
             ->sidebarCollapsibleOnDesktop()
             ->favicon(asset('images/favicon.jpg'))
             ->discoverResources(in: app_path('Filament/Company/Resources'), for: 'App\\Filament\\Company\\Resources')

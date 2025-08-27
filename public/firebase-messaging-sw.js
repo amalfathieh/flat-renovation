@@ -4,12 +4,13 @@ importScripts(
 );
 
 firebase.initializeApp({
-    apiKey: "AIzaSyDqZ3_UT_r2G1jqJYulhtkldQFtWftXOD0",
-    authDomain: "flat-b7d59.firebaseapp.com",
-    projectId: "flat-b7d59",
-    storageBucket: "flat-b7d59.firebasestorage.app",
-    messagingSenderId: "252025170203",
-    appId: "1:252025170203:web:45da416f5887be1b6a8bbe",
+    apiKey: "AIzaSyDRedkjDwAuGzfrh0Rdmxqcukp06MYu2qA",
+    authDomain: "rebuildapp-f8417.firebaseapp.com",
+    projectId: "rebuildapp-f8417",
+    storageBucket: "rebuildapp-f8417.firebasestorage.app",
+    messagingSenderId: "514294949355",
+    appId: "1:514294949355:web:5dd33c00b6404033c1a5ae"
+
 });
 
 const messaging = firebase.messaging();

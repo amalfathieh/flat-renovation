@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use Filament\Actions\Action;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Fcm\FcmChannel;
@@ -14,12 +15,17 @@ class SendNotification extends Notification
     private $obj_id;
     private $title;
     private $body;
+    private $type;
 
-    public function __construct($data)
+    /**
+     * Create a new notification instance.
+     */
+    public function __construct($obj_id, $title, $body, $type)
     {
-        $this->obj_id = $data['obj_id'];
-        $this->title  = $data['title'];
-        $this->body   = $data['body'];
+        $this->obj_id = $obj_id;
+        $this->title = $title;
+        $this->body = $body;
+        $this->type = $type;
     }
 
     public function via($notifiable)
@@ -34,7 +40,7 @@ class SendNotification extends Notification
             body: $this->body,
             image: 'http://example.com/url-to-image-here.png'
         )))
-            ->data(['obj_id' => (string)$this->obj_id])
+            ->data(['obj_id' => (string)$this->obj_id, 'type' => $this->type])
             ->custom([
                 'android' => [
                     'notification' => [
@@ -57,7 +63,7 @@ class SendNotification extends Notification
         return \Filament\Notifications\Notification::make()
             ->title($this->title)
             ->body($this->body)
-            ->viewData(['obj_id' => $this->obj_id])
+            ->viewData(['obj_id' => $this->obj_id, 'type' => $this->type])
             ->getDatabaseMessage();
     }
 }

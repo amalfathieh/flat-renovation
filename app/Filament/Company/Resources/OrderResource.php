@@ -1,11 +1,16 @@
 <?php
 
 namespace App\Filament\Company\Resources;
+
 use App\Filament\Company\Resources\OrderResource\Pages;
 use App\Http\Controllers\PushNotificationController;
+use App\Models\Company;
+use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Order;
 use App\Models\TransactionsAll;
+use App\Notifications\SendNotification;
+use App\Notifications\StoreNotification;
 use App\Services\InvoiceService;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
@@ -18,6 +23,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class OrderResource extends Resource
 {
@@ -85,7 +91,7 @@ class OrderResource extends Resource
                 Tables\Actions\Action::make('قبول')
                     ->icon('heroicon-o-check')
                     ->color('success')
-                    ->visible(fn ($record) => $record->status === 'waiting')
+                    ->visible(fn($record) => $record->status === 'waiting')
                     ->form([
                         Select::make('employee_id')
                             ->label('اختر الموظف للإشراف على المشروع')
@@ -103,129 +109,131 @@ class OrderResource extends Resource
                             'status' => 'accepted',
                             'employee_id' => $data['employee_id'],
                         ]);
+//                        dd($record);
 
+                        $employee = Employee::find($data['employee_id'])->user;
 
-                        $customerToken = $record->customer->user->device_token;
-                        $employeeToken = Employee::find($data['employee_id'])->user->device_token;
-
-                        $customerName = $record->customer->user->name;
                         $employeePhone = Employee::find($data['employee_id'])->user->phone;
-                        $customerPhone = $record->customer->user->phone;
+
+                        $customer = Customer::find($record->customer_id);
+
+                        $user = $customer->user;
+                        $customerPhone = $user->payment_phone;
 
                         $push = new PushNotificationController();
-
                         // إشعار الزبون
-                        if ($customerToken) {
+                        if ($user->device_token) {
                             $push->sendPushNotification(
                                 'تم قبول طلبك ✅',
-                                "تم قبول طلب الكشف. هذا رقم المشرف: {$employeePhone}",
-                                $customerToken
+                                "تم قبول طلب الكشف. هذا رقم المشرف: {$employeePhone} تواص معه للاتفاق على موعد",
+                                $user->device_token
                             );
+                            //store notification on database
+                            Notification::send($user, new StoreNotification($record->id, 'تم قبول طلبك ✅', "تم قبول طلب الكشف. هذا رقم المشرف: {$employeePhone}", "Order"));
+
                         }
-
-
-
-
 
                         \Filament\Notifications\Notification::make()
                             ->title('تم قبول الطلب وإسناده لموظف ✅')
                             ->success()
                             ->send();
+
+                        //Send Accept Notification to Employee
+                        $employee->notify(new SendNotification(
+                            $record->id,
+                            'تم اشرافك على طلب كشف جديد',
+                            "تم تعيينك مشرف على طلب جديد رقم الزبون: {$customerPhone}  معرف الطلب {$record->id}",
+                            "Order"));
+
                     }),
 
 
 
-                  Tables\Actions\Action::make('رفض')
-                ->icon('heroicon-o-x-circle')
-                ->color('danger')
-                    ->visible(fn ($record) => $record->status === 'waiting')
+                Tables\Actions\Action::make('رفض')
+                    ->icon('heroicon-o-x-circle')
+                    ->color('danger')
+                    ->visible(fn($record) => $record->status === 'waiting')
                     ->requiresConfirmation()
-                     ->action(function ($record) {
-                         DB::beginTransaction();
+                    ->action(function ($record) {
+                        DB::beginTransaction();
 
-        try {
-            $company = $record->company;
-            $companyUser = $company->user;
-            $customerUser = $record->customer->user;
-            $amount = $record->cost_of_examination;
-
-
-            if ($companyUser->balance < $amount) {
-                DB::rollBack();
-                \Filament\Notifications\Notification::make()
-                    ->title('رصيد الشركة غير كافي لرد المبلغ ❌')
-                    ->danger()
-                    ->send();
-                return;
-            }
+                        try {
+                            $company = $record->company;
+                            $companyUser = $company->user;
+                            $customerUser = $record->customer->user;
+                            $amount = $record->cost_of_examination;
 
 
-            $record->update([
-                'status' => 'rejected',
-            ]);
+                            if ($companyUser->balance < $amount) {
+                                DB::rollBack();
+                                \Filament\Notifications\Notification::make()
+                                    ->title('رصيد الشركة غير كافي لرد المبلغ ❌')
+                                    ->danger()
+                                    ->send();
+                                return;
+                            }
 
 
-            $companyUser->decrement('balance', $amount);
+                            $record->update([
+                                'status' => 'rejected',
+                            ]);
 
 
-            $customerUser->increment('balance', $amount);
+                            $companyUser->decrement('balance', $amount);
 
 
-            $service = new \App\Services\InvoiceService();
-            $invoice = $service->generateInvoiceNumber();
+                            $customerUser->increment('balance', $amount);
 
 
-            \App\Models\TransactionsAll::create([
-                'payer_type' => get_class($company),
-                'payer_id' => $company->id,
-                'receiver_type' => get_class($record->customer),
-                'receiver_id' => $record->customer->id,
-                'source' => 'company_deduction_refund',
-                'amount' => $amount,
-                'note' => 'إرجاع مبلغ طلب كشف مرفوض',
-                'related_type' => get_class($record),
-                'related_id' => $record->id,
-                'invoice_number' => $invoice,
-            ]);
-
-            DB::commit();
+                            $service = new \App\Services\InvoiceService();
+                            $invoice = $service->generateInvoiceNumber();
 
 
+                            \App\Models\TransactionsAll::create([
+                                'payer_type' => get_class($company),
+                                'payer_id' => $company->id,
+                                'receiver_type' => get_class($record->customer),
+                                'receiver_id' => $record->customer->id,
+                                'source' => 'company_deduction_refund',
+                                'amount' => $amount,
+                                'note' => 'إرجاع مبلغ طلب كشف مرفوض',
+                                'related_type' => get_class($record),
+                                'related_id' => $record->id,
+                                'invoice_number' => $invoice,
+                            ]);
+
+                            DB::commit();
 
 
+                            // 🔔 إرسال إشعار للزبون عند الرفض
+                            $push = new PushNotificationController();
+                            if ($customerUser->device_token) {
+                                $push->sendPushNotification(
+                                    'تم رفض طلبك ❌',
+                                    'تم رفض طلبك وإعادة النقود إلى رصيدك في التطبيق.',
+                                    $customerUser->device_token
+                                );
 
-            // 🔔 إرسال إشعار للزبون عند الرفض
-            $push = new PushNotificationController();
-            if ($customerUser->device_token) {
-                $push->sendPushNotification(
-                    'تم رفض طلبك ❌',
-                    'تم رفض طلبك وإعادة النقود إلى رصيدك في التطبيق.',
-                    $customerUser->device_token
-                );
-            }
+                                //store notification on database
+                                Notification::send($customerUser, new StoreNotification($record->id, 'تم رفض طلبك ❌', 'تم رفض طلبك وإعادة النقود إلى رصيدك في التطبيق.', "Order"));
 
-
-
-
-
+                            }
 
 
+                            \Filament\Notifications\Notification::make()
+                                ->title('تم رفض الطلب واعادة المبلغ للزبون بنجاح ✅')
+                                ->success()
+                                ->send();
+                        } catch (\Exception $e) {
+                            DB::rollBack();
 
-            \Filament\Notifications\Notification::make()
-                ->title('تم رفض الطلب واسترجاع المبلغ بنجاح ✅')
-                ->success()
-                ->send();
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            \Filament\Notifications\Notification::make()
-                ->title('فشل في تنفيذ العملية ❌')
-                ->body($e->getMessage())
-                ->danger()
-                ->send();
-        }
-    }),
+                            \Filament\Notifications\Notification::make()
+                                ->title('فشل في تنفيذ العملية ❌')
+                                ->body($e->getMessage())
+                                ->danger()
+                                ->send();
+                        }
+                    }),
 
 
 
@@ -275,7 +283,7 @@ class OrderResource extends Resource
                         TextEntry::make('status')
                             ->label('الحالة')
                             ->badge()
-                            ->color(fn (string $state): string => match ($state) {
+                            ->color(fn(string $state): string => match ($state) {
                                 'waiting' => 'info',     // 🔵 أزرق
                                 'accepted' => 'success', // ✅ أخضر
                                 'rejected' => 'danger',  // ❌ أحمر
@@ -319,6 +327,4 @@ class OrderResource extends Resource
     {
         return $record->status === 'rejected';
     }
-
-
 }

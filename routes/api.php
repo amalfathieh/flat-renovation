@@ -48,7 +48,6 @@ Route::post('register', function (Request $request) {
     return $user;
 });
 
-Route::get('notifications', [NotificationController::class, 'getNotifications']);
 
 Route::post('/customer/register', [CustomerAuthController::class, 'register']);
 Route::post('/customer/login', [CustomerAuthController::class, 'login']);
@@ -74,6 +73,14 @@ Route::get('/companies/{company}/projects', [CompanyController::class, 'show']);
 //    Route::get('/companies/{company}/projects', [CompanyController::class,'show']);
 
 Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
+
+    Route::controller(NotificationController::class)->group(function (){
+        Route::get('notifications', 'getNotifications');
+        Route::get('checkout', 'checkoutApi');
+        Route::get('destroy', 'destroy');
+        Route::get('markAsRead', 'markAsRead');
+
+    });
 
     // Store Device Token
     Route::post('device-token', [DeviceTokenController::class,'store'])->middleware('auth');
