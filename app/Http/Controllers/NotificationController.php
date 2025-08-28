@@ -40,8 +40,8 @@ class NotificationController extends Controller
         try {
             User::find(2)->notify(new SendNotification(1, 'Test Notification',  'Test Notification Test', "Test"));
             return Response::Success(null, "success");
-        } catch (\Throwable $th) {
-            dd($th->getMessage());
+        } catch (\Exception $ex) {
+            return Response::Error($ex->getMessage());
         }
     }
     public function checkoutApi()
@@ -59,8 +59,8 @@ class NotificationController extends Controller
             //store notification on database
             Notification::send($user, new StoreNotification(1, 'Test Mobile Notification',  'Test Notification for mobile Test', "Test"));
             return Response::Success(null, "success");
-        } catch (\Throwable $th) {
-            dd($th->getMessage());
+        } catch (\Exception $ex) {
+            return Response::Error($ex->getMessage());
         }
     }
 
