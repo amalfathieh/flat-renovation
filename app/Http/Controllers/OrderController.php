@@ -77,6 +77,19 @@ class OrderController extends Controller
             'company_id' => 'required|exists:companies,id',
            // 'location' => 'required|string',
           //  'budget' => 'required|numeric',
+            'latitude' => [
+                'required',
+                'numeric',
+                'between:-90,90',
+                'regex:/^-?\d{1,2}(\.\d{1,6})?$/'
+            ],
+            'longitude' => [
+                'required',
+                'numeric',
+                'between:-180,180',
+                'regex:/^-?\d{1,3}(\.\d{1,6})?$/'
+            ],
+
             'answers' => 'required|array|min:1',
             'payment_intent_id' => 'required|string',
         ]);
@@ -126,7 +139,9 @@ class OrderController extends Controller
             $order = Order::create([
                 'customer_id' => $customer->id,
                 'company_id' => $request->company_id,
-                'location' => "test1",
+                //'location' => "test1",
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
                 'budget' => "test2",
                 'cost_of_examination' => $company->cost_of_examination,
                 'payment_intent_id' => $paymentIntent->id,
@@ -223,7 +238,7 @@ class OrderController extends Controller
                 'status' => $order->status,
                 'cost_of_examination' => $order->cost_of_examination,
                 'location' => $order->location,
-                'budget' => $order->budget,
+                //'budget' => $order->budget,
                 'created_at' => $order->created_at,
 
                 'company' => [
@@ -253,8 +268,22 @@ class OrderController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'company_id' => 'required|exists:companies,id',
-            'location' => 'required|string',
-            'budget' => 'required|numeric',
+            //'location' => 'required|string',
+            //'budget' => 'required|numeric',
+
+            'latitude' => [
+                'required',
+                'numeric',
+                'between:-90,90',
+                'regex:/^-?\d{1,2}(\.\d{1,6})?$/'
+            ],
+            'longitude' => [
+                'required',
+                'numeric',
+                'between:-180,180',
+                'regex:/^-?\d{1,3}(\.\d{1,6})?$/'
+            ],
+
             'answers' => 'required|array|min:1',
         ]);
 
@@ -305,8 +334,10 @@ class OrderController extends Controller
             $order = Order::create([
                 'customer_id' => $customer->id,
                 'company_id' => $company->id,
-                'location' => $request->location,
-                'budget' => $request->budget,
+                //'location' => $request->location,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+                'budget' => "test2",
                 'cost_of_examination' => $amount,
             ]);
 

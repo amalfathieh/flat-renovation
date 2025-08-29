@@ -23,7 +23,7 @@ class OrderSeeder extends Seeder
                     'company_id' => $company->id,
                     'status' => 'waiting',
                     'cost_of_examination' => rand(50, 200),
-                    'location' => 'دمشق',
+                   // 'location' => 'دمشق',
                     'budget' => rand(1000, 5000),
                 ]);
             }

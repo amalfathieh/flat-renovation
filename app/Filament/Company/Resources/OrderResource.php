@@ -60,7 +60,8 @@ class OrderResource extends Resource
                     ]),
 
                 TextColumn::make('budget')->label('الميزانية'),
-                TextColumn::make('location')->label('الموقع'),
+                //TextColumn::make('location')->label('الموقع'),
+
                 TextColumn::make('created_at')->label('تاريخ الإنشاء')->date(),
                 TextColumn::make('cost_of_examination')->label('كلفة الكشف بالدولار'),
 
@@ -81,6 +82,14 @@ class OrderResource extends Resource
 
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\DeleteAction::make(),
+
+                Tables\Actions\Action::make('عرض الموقع ')
+                    ->url(fn ($record) => "https://www.google.com/maps?q={$record->latitude},{$record->longitude}")
+                    ->openUrlInNewTab(),
+
+
+
+
 
                 Tables\Actions\Action::make('قبول')
                     ->icon('heroicon-o-check')

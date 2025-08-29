@@ -177,9 +177,7 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     //create_device_token
     Route::post('/create_device_token', [PushNotificationController::class, 'create_device_token']);
 
-    Route::get('/my-orders', [OrderController::class, 'getCustomerOrders']);
-
-
+    Route::get('/my-orders', [OrderController::class, 'customerOrders']);
 
 });
 
