@@ -11,6 +11,8 @@
         "blade-ui-kit/blade-icons": "*",
         "filament/filament": "3.3",
         "illuminate/cache": "*",
+        "kreait/laravel-firebase": "^6.1",
+        "laravel-notification-channels/fcm": "^5.1",
         "kreait/firebase-php": "^7.21",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
@@ -21,9 +23,7 @@
         "stripe/stripe-php": "^17.3",
         "tomatophp/filament-fcm": "^1.0",
 
-        "spatie/laravel-pdf": "^1.6",
-        "spatie/laravel-permission": "^6.18",
-        "stripe/stripe-php": "^17.3"
+        "spatie/laravel-pdf": "^1.6"
 
     },
     "require-dev": {

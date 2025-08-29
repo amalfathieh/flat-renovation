@@ -90,9 +90,14 @@ class Company extends Model
         return $this->hasMany(Order::class);
     }
 
+//    public function transactions()
+//    {
+//        return $this->hasMany(Transaction::class);
+//    }
     public function transactions()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(TransactionsAll::class, 'receiver_id')
+            ->where('receiver_type', self::class);
     }
 
     public function stageTransactions()

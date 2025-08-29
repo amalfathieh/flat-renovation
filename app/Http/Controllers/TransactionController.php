@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\RelatedResource;
 use App\Http\Resources\TransactionResource;
 use App\Http\Responses\Response;
-use App\Models\Transaction;
 use App\Models\TransactionsAll;
 use App\Services\TransactionService;
 

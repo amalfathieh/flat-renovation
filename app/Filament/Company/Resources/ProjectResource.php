@@ -80,9 +80,11 @@ class ProjectResource extends Resource
                                         $companyId = Filament::getTenant()?->id;
 
                                         return Order::where('company_id', $companyId)
+                                            ->where('status', 'completed')
                                             ->get()
                                             ->pluck('id', 'id');
                                     })
+                                    ->helperText('ستظهر ارقام الطلبات التي فقط حالتها مكتملة')
                                     ->searchable()
                                     ->required()
                                     ->reactive()

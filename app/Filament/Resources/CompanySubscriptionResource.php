@@ -83,9 +83,7 @@ class CompanySubscriptionResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
+                Tables\Columns\TextColumn::make('subscriptionPlan.duration_in_days')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([

@@ -3,7 +3,9 @@
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\CompanyController;
 
+use App\Http\Controllers\DeviceTokenController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ObjectionController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProjectController;
@@ -72,6 +74,16 @@ Route::get('/companies/{company}/projects', [CompanyController::class, 'show']);
 
 Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
 
+    Route::controller(NotificationController::class)->group(function (){
+        Route::get('notifications', 'getNotifications');
+        Route::get('checkout', 'checkoutApi');
+        Route::get('destroy', 'destroy');
+        Route::get('markAsRead', 'markAsRead');
+
+    });
+
+    // Store Device Token
+    Route::post('device-token', [DeviceTokenController::class,'store'])->middleware('auth');
 
     Route::controller(ProjectController::class)->prefix('projects')->group(function () {
 

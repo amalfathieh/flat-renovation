@@ -107,7 +107,7 @@
                 </div>
 
                 @if($this->getPlans()["comSub"])
-                    @if ($plan->id == $this->getPlans()["comSub"]['id'] )
+                    @if ($plan->id == $this->getPlans()["comSub"]['subscription_plan_id']  )
                         <button class="subscribe-btn bg-gray-400 cursor-not-allowed" disabled>
                             أنت مشترك بالفعل
                         </button>

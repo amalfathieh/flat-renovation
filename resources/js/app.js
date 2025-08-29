@@ -1,4 +1,5 @@
 import './bootstrap';
+import './firebase-notifications';
 
 import Alpine from 'alpinejs';
 

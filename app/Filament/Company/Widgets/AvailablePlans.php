@@ -31,6 +31,7 @@ class AvailablePlans extends Widget
         $data = [
             "plans" => $plans,
             "comSub" => $comSub,
+            "tenant" => $company,
 
         ];
         return $data;

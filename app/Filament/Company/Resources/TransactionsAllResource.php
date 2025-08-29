@@ -49,15 +49,22 @@ class TransactionsAllResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('invoice_number'),
 
-                Tables\Columns\TextColumn::make('payer.name')
-                    ->label('المرسل')
-                    ->sortable()
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('payer_name')->label('اسم الدافع')
+                    ->getStateUsing(
+                        fn($record) =>
+                            optional($record->payer)->name ??
+                            optional(optional($record->payer)->user)->name ??
+                            'Unknown'
+                    ),
 
-                Tables\Columns\TextColumn::make('receiver.name')
-                    ->label('المستلم')
-                    ->sortable()
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('receiver_name')->label('اسم المستلم')
+                    ->getStateUsing(
+                        fn($record) =>
+                            optional($record->receiver)->name ??
+                            optional(optional($record->receiver)->user)->name ??
+                            'Unknown'
+                    ),
+
                 Tables\Columns\TextColumn::make('source')
                     ->label('نوع العملية'),
 
@@ -105,10 +112,24 @@ class TransactionsAllResource extends Resource
             ->schema([
                 Section::make('معلومات الأطراف')
                     ->schema([
-                        TextEntry::make('payer.name')->label('اسم الدافع'),
+                        TextEntry::make('payer_name')->label('اسم الدافع')
+                            ->getStateUsing(
+                                fn($record) =>
+                                optional($record->payer)->name ??
+                                optional(optional($record->payer)->user)->name ??
+                                'Unknown'
+                            ),
                         TextEntry::make('payer_id'),
-                        TextEntry::make('receiver.name')->label('اسم المستلم'),
+
+                        TextEntry::make('receiver_name')->label('اسم المستلم')
+                            ->getStateUsing(
+                                fn($record) =>
+                                    optional($record->receiver)->name ??
+                                    optional(optional($record->receiver)->user)->name ??
+                                    'Unknown'
+                            ),
                         TextEntry::make('receiver_id'),
+
                     ])->columns(2),
 
                 Section::make('تفاصيل المعاملة')

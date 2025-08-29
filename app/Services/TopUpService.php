@@ -6,7 +6,13 @@ namespace App\Services;
 
 use App\Events\TopUpApproved;
 use App\Http\Controllers\PushNotificationController;
+use App\Models\Company;
+use App\Models\Customer;
 use App\Models\TopUpRequest;
+use App\Notifications\SendNotification;
+use App\Notifications\StoreNotification;
+use http\Env\Request;
+use Illuminate\Support\Facades\Notification;
 use function Symfony\Component\Translation\t;
 
 class TopUpService
@@ -37,7 +43,8 @@ class TopUpService
 
     /** UPDATE STATUS TO APPROVED,
      * INCREMENT USER BALANCE,
-     * AND CREATE TRANSACTION
+     * AND CREATE TRANSACTION,
+     * SEND NOTIFICATION
      */
     public function approveTopUp( $request): void
     {
@@ -45,22 +52,64 @@ class TopUpService
             $request->update(['status' => 'approved']);
             TopUpApproved::dispatch($request);
 
+            $title = 'تم شحن رصيدك بنجاح 💳';
+            $body = 'تم شحن رصيدك في تطبيقنا، يمكنك الآن الاستفادة من خدماتنا.' ;
 
-
-            // ✅ إرسال إشعار للزبون
-            $user = $request->user; // بافتراض أن TopUpRequest مرتبط بعلاقة user
-            if ($user && $user->device_token) {
+            if ($request->requester_type == "App\Models\Customer" ) {
+                // ✅ إرسال إشعار للزبون
+                $customer = Customer::find($request->requester_id);
+                $user = $customer->user;
                 $push = new PushNotificationController();
                 $push->sendPushNotification(
-                    'تم شحن رصيدك بنجاح 💳',
-                    'تم شحن رصيدك في تطبيقنا، يمكنك الآن الاستفادة من خدماتنا.',
+                    $title,
+                    $body,
                     $user->device_token
                 );
+                //store notification on database
+                Notification::send($user, new StoreNotification($request->id, $title, $body, "TopUp"));
+            }
+            else{
+                $company = Company::find($request->requester_id);
+                $user = $company->user;
+                //Send Accept Notification to Company
+                $user->notify(new SendNotification($request->id, $title, $body, "TopUp"));
             }
 
 
 
         }
+    }
+
+    /** UPDATE STATUS TO REJECTED,
+     * SEND NOTIFICATION
+     */
+    public function rejectTopUp( $record)
+    {
+        $record->update(['status' => 'rejected']);
+
+        $title = 'طلب الشحن مرفوض ❌';
+        $body = 'معلومات الدفع غير صحيحة، لم يتم شحن رصيدك في التطبيق. يرجى المحاولة مرة أخرى.';
+
+        if ($record->requester_type == "App\Models\Customer" ) {
+            $customer = Customer::find($record->requester_id);
+            $user = $customer->user;
+            $push = new PushNotificationController();
+            $push->sendPushNotification(
+                $title,
+                $body,
+                $user->device_token
+            );
+            //store notification on database
+            Notification::send($user, new StoreNotification($record->id, $title, $body, "TopUp"));
+        }
+        else{
+            $company = Company::find($record->requester_id);
+            $user = $company->user;
+            //Send Accept Notification to Company
+            $user->notify(new SendNotification($record->id, $title, $body, "TopUp"));
+
+        }
+
     }
 
 }
