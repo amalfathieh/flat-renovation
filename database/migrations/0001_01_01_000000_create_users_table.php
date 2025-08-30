@@ -25,7 +25,6 @@ return new class extends Migration
             $table->string('device_token')->nullable();
             $table->rememberToken();
 
-            $table->string('device_token')->nullable();
 
 
             $table->timestamps();

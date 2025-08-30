@@ -14,8 +14,10 @@ class Order extends Model
         'employee_id',
         'status',
         'cost_of_examination',
-        'location',
-        'budget',
+        // 'location',
+         'latitude',
+         'longitude',
+         'budget',
          'payment_intent_id',
          'refund_id',
     ];
