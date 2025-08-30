@@ -46,22 +46,9 @@ class TransactionsAll extends Model
         return $this->morphTo();
     }
 
-
-//    public function company(){
-//        return $this->belongsTo(Company::class,  'receiver_id', '', 'receivedTransactions');
-//    }
-
     public function company(){
         return $this->receiver()->merge($this->payer());
     }
-//    public function company(){
-//        return $this->payer()->merge($this->receiver());
-//    }
-//    public function company(){
-//        return $this->belongsTo(Company::class,  'payer_id', '', 'transactions');
-//    }
-
-
 
     # أرباح الاشتراكات (الإدمن يستلم من الشركات)
     public function scopeAdminSubscriptions($query)

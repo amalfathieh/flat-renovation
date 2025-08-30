@@ -2,10 +2,10 @@
 
 namespace App\Filament\Company\Widgets;
 
-use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Order;
 use App\Models\Project;
+use App\Models\TransactionsAll;
 use Filament\Facades\Filament;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -26,30 +26,58 @@ class StatsOverview extends BaseWidget
     {
         $companyId = Filament::getTenant()?->id;
         return [
-            Stat::make('Total Employees', Employee::where('company_id', $companyId)->count())
-                ->description('Employees')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
+            Stat::make('الموظفون', Employee::where('company_id', $companyId)->count())
+                ->description('عدد الموظفين')
+                ->descriptionIcon('heroicon-o-user-group')
                 ->color('info')
-                ->chart([7,3,4,2,1,6,0]),
+                ->chart([7, 3, 4, 2, 1, 6, 4]),
 
-            Stat::make('Total Projects', Project::where('company_id', $companyId)->count())
-                ->description('Projects')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
+            Stat::make('العملاء', Project::where('company_id', $companyId)->count())
+                ->description('عدد العملاء')
+                ->descriptionIcon('heroicon-o-users')
                 ->color('primary')
-                ->chart([7,3,4,7,8,9,6,0,9]),
+                ->chart([1, 10, 4, 7, 8, 6, 5, 2]),
+            Stat::make('المشاريع', Project::where('company_id', $companyId)->count())
+                ->description('إجمالي المشاريع')
+                ->descriptionIcon('heroicon-o-briefcase')
+                ->color('warning')
+                ->chart([7, 3, 4, 7, 8, 9, 6, 5, 9]),
 
-            Stat::make('Finished Projects', Project::where('company_id', $companyId)->where('status', ProjectStatusEnum::FINISHED->value)->count())
-                ->description('Finished Projects')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
+            Stat::make('المشاريع المنجزة', Project::where('company_id', $companyId)
+                ->where('status', ProjectStatusEnum::FINISHED->value)->count())
+                ->description('مشاريع مكتملة')
+                ->descriptionIcon('heroicon-o-check-circle')
                 ->color('success')
-                ->chart([7,8,10,7,8,3,6,0]),
+                ->chart([7, 8, 10, 7, 8, 3, 6, 4]),
 
-            Stat::make('Waiting Orders', Order::where('status', OrderStatusEnum::WAITING->value)->where('company_id', $companyId)->count())
-                ->description('Waiting Orders in app')
-                ->descriptionIcon('heroicon-m-arrow-trending-down')
+            Stat::make('الطلبات', Order::where('company_id', $companyId)->count())
+                ->description('إجمالي الطلبات')
+                ->descriptionIcon('heroicon-o-clipboard-document-list')
+                ->color('warning')
+                ->chart([2, 5, 3, 6, 8, 4, 7, 5]),
+
+            Stat::make('إجمالي الأرباح (كشف شقة أو مرحلة)', TransactionsAll::companyEarnings($companyId)->sum('amount'))
+                ->description('الأرباح من العملاء')
+                ->descriptionIcon('heroicon-o-banknotes')
+                ->color('success')
+                ->chart([3, 6, 9, 8, 10, 7, 12, 15]),
+
+            Stat::make('المبالغ المرجعة (رد فلوس للزبون)', TransactionsAll::companyRefunds($companyId)->sum('amount'))
+                ->description('المبالغ المسترجعة')
+                ->descriptionIcon('heroicon-o-arrow-uturn-left')
                 ->color('danger')
-                ->chart([7,3,4,7,8,9,6,0,9])
+                ->chart([1, 4, 2, 6, 3, 7, 5, 2]),
 
+
+            Stat::make(
+                'الأرباح الصافية',
+                TransactionsAll::companyEarnings($companyId)->sum('amount')
+                    - TransactionsAll::companyRefunds($companyId)->sum('amount')
+            )
+                ->description('إجمالي الأرباح بعد الحسم')
+                ->descriptionIcon('heroicon-o-currency-dollar')
+                ->color('success')
+                ->chart([5, 8, 6, 7, 9, 10, 8, 6]),
         ];
     }
 }
