@@ -15,6 +15,8 @@ class ProjectResource extends JsonResource
             'company_id' => $this->company->id,
             'company_name' => $this->company->name,
             'customer_name' => $this->customer_name,
+            'employee_id' => $this->employee->id,
+            'employee_user_id' => $this->employee->user->id,
             'employee_name' => $this->employee->first_name. ' ' . $this->employee->last_name,
             'project_name' => $this->project_name,
             'start_date' => $this->start_date,
