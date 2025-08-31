@@ -1,14 +1,17 @@
 <?php
 
+use App\Events\MessageSent;
+use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\CompanyController;
-
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ObjectionController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectStageController;
 use App\Http\Controllers\SearchController;
 use App\Http\Middleware\VerifiedEmail;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use App\Http\Controllers\CompanyServiceController;
@@ -134,30 +137,27 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::get('/project-stages/createStagePaymentIntent/{stageId}', [ProjectStageController::class, 'createStagePaymentIntent']);
     Route::post('/project-stages/confirmStagePayment/{stageId}', [ProjectStageController::class, 'confirmStagePayment']);
 
-
-
-
     Route::get('/companies/{company}/projects', [CompanyController::class,'show']);
     Route::post('/companies/search', [SearchController::class, 'search']);
 
     Route::get('/projects/{projectId}/my-review', [ProjectController::class, 'showUserReview']);
-    Route::post('/project/{projectId}/rate', [ProjectController::class, 'rate']);
-    Route::post('/project/{projectId}/comment', [ProjectController::class, 'comment']);
+    Route::post('/project/{projectId}/rate', [ProjectController::class,'rate']);
+    Route::post('/project/{projectId}/comment', [ProjectController::class,'comment']);
 
 //favorite
     Route::post('/companies/{company}/favorite', [FavoriteController::class, 'toggleFavorite']);
     Route::get('/favorites', [FavoriteController::class, 'listFavorites']);
     Route::get('/customer/orders', [OrderController::class, 'customerOrders']);
     Route::get('/projects/{projectId}/stages', [ProjectController::class, 'getProjectTimeline']);
+//chat
 
+        Route::get('/conversations', [ConversationController::class, 'index']);
+        Route::post('/conversations', [ConversationController::class, 'store']);
+        Route::get('/conversations/{conversation}', [ConversationController::class, 'show']);
 
-
-
+        Route::get('/conversations/{conversation}/messages', [MessageController::class, 'index']);
+        Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store']);
 
 });
-
-
-
-
 
 Route::get('/test',[CompanyServiceController::class,'test']);

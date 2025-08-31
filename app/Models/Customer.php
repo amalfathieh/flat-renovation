@@ -80,6 +80,9 @@ class Customer extends Model
     {
         return $this->belongsToMany(Company::class, 'favorites')->withTimestamps();
     }
-
+    public function conversation()
+    {
+        return $this->hasMany(Conversation::class);
+    }
 
 }

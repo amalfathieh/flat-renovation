@@ -30,6 +30,7 @@ class CompanyPanelProvider extends PanelProvider
         return $panel
             ->id('company')
             ->path('company')
+            ->font('Almarai')
             ->login()
             ->registration(Register::class)
             ->passwordReset()
