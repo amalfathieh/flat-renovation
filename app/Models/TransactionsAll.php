@@ -50,14 +50,14 @@ class TransactionsAll extends Model
         return $this->receiver()->merge($this->payer());
     }
 
-    # أرباح الاشتراكات (الإدمن يستلم من الشركات)
+
     public function scopeAdminSubscriptions($query)
     {
         return $query->where('source', 'company_subscription')
             ->where('receiver_type', User::class);
     }
 
-    # أرباح الشركة من الزبائن (كشف شقة أو مرحلة)
+
     public function scopeCompanyEarnings($query, $companyId)
     {
         return $query->where('receiver_type', Company::class)
@@ -65,7 +65,7 @@ class TransactionsAll extends Model
             ->whereIn('source', ['user_order_payment', 'user_stage_payment']);
     }
 
-    # المبالغ المستردة للشركة (رد فلوس للزبون)
+
     public function scopeCompanyRefunds($query, $companyId)
     {
         return $query->where('payer_type', Company::class)
@@ -73,7 +73,22 @@ class TransactionsAll extends Model
             ->where('source', 'company_deduction_refund');
     }
 
-    # مبالغ السحب المعلقة (الشركة لسا ما استلمتها خارجياً)
+
+
+
+
+
+    public function scopeCompanyExterinal($query, $companyId)
+    {
+        return $query->where('receiver_type', Company::class)
+            ->where('receiver_id', $companyId)
+            ->where('source', 'admin_monthly_clearance');
+    }
+
+
+
+
+
     public function scopeCompanyWithdrawalsPending($query)
     {
         return $this->scopeCompanyEarnings() - $this->scopeCompanyRefunds();

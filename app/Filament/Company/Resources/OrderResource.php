@@ -118,7 +118,7 @@ class OrderResource extends Resource
                             'status' => 'accepted',
                             'employee_id' => $data['employee_id'],
                         ]);
-//                        dd($record);
+
 
                         $employee = Employee::find($data['employee_id'])->user;
 
@@ -130,7 +130,7 @@ class OrderResource extends Resource
                         $customerPhone = $user->payment_phone;
 
                         $push = new PushNotificationController();
-                        // إشعار الزبون
+
                         if ($user->device_token) {
                             $push->sendPushNotification(
                                 'تم قبول طلبك ✅',
@@ -214,7 +214,7 @@ class OrderResource extends Resource
                             DB::commit();
 
 
-                            // 🔔 إرسال إشعار للزبون عند الرفض
+
                             $push = new PushNotificationController();
                             if ($customerUser->device_token) {
                                 $push->sendPushNotification(

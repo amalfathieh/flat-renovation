@@ -21,8 +21,6 @@ return new class extends Migration
             $table->string('receipt_image')->nullable();
             $table->string('invoice_number')->nullable();
 
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
-            $table->text('note')->nullable();
 
 
             $table->timestamps();
