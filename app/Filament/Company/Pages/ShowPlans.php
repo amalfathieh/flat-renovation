@@ -9,6 +9,7 @@ use Filament\Pages\Page;
 class ShowPlans extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $title = "خطط الاشتراك";
 
     protected static string $view = 'filament.company.pages.show-plans';
 
@@ -16,13 +17,13 @@ class ShowPlans extends Page
     public static function canView(): bool
     {
         return false;
-//        return auth()->user()?->hasRole('company');
     }
+
     public static function shouldRegisterNavigation(): bool
     {
-//        return false;
         return auth()->user()?->hasRole('company');
     }
+
     public function getPlans()
     {
         $plans = SubscriptionPlan::where('is_active', true)->get();

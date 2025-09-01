@@ -25,7 +25,7 @@ class TransactionsAllResource extends Resource
 
 
     protected static ?string $navigationGroup = 'Payments';
-    protected static ?string $navigationLabel = 'معاملات المحفظة';
+    protected static ?string $navigationLabel = 'معاملات المحفظة (فواتير)';
 
     public static function getEloquentQuery(): Builder
     {

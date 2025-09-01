@@ -23,6 +23,10 @@ class ObjectionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationLabel = 'الأعتراضات';
+    protected static ?string $pluralLabel = 'الأعتراضات';
+    protected static ?string $modelLabel = 'أعتراض';
+
     public static function form(Form $form): Form
     {
         return $form
