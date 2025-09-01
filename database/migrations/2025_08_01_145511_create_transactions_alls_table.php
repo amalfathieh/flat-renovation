@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->text('invoice_number')->nullable();
 
-            // الطرف الذي قام بالدفع (قد يكون زبون أو شركة)
+
             $table->nullableMorphs('payer'); // payer_type, payer_id
 
-            // الطرف الذي استلم (قد يكون شركة أو أدمن)
+
             $table->nullableMorphs('receiver'); // receiver_type, receiver_id
             $table->enum('source', array_column(TransactionSource::cases(),'value'));
 //            $table->enum('source', [

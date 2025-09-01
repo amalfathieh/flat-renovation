@@ -10,7 +10,7 @@ class CustomerFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(), // إنشاء مستخدم تلقائي وربطه بالزبون
+            'user_id' => User::factory(),
         ];
     }
 }

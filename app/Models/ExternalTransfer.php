@@ -14,8 +14,6 @@ class ExternalTransfer extends Model
         'amount',
         'receipt_image',
         'invoice_number',
-        'status',
-        'note',
 
     ];
 

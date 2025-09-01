@@ -395,7 +395,7 @@ class OrderController extends Controller
 
 
 
-    // تابع لإرجاع كل الطلبات الخاصة بالمستخدم الحالي
+
     public function getCustomerOrders()
     {
         $user = Auth::user();
@@ -403,13 +403,13 @@ class OrderController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        // الحصول على customer_id المرتبط بالمستخدم
+
         $customer = Customer::where('user_id', $user['id'])->first();
         if (!$customer) {
             return response()->json(['message' => 'Customer profile not found'], 404);
         }
 
-        // جلب كل الطلبات الخاصة بهذا الـ customer
+
         $orders = Order::where('customer_id', $customer->id)->get();
 
         return response()->json([
