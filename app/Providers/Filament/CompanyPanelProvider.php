@@ -40,7 +40,7 @@ class CompanyPanelProvider extends PanelProvider
                 'primary' => Color::Orange,
             ])
             ->sidebarCollapsibleOnDesktop()
-            ->favicon(asset('images/favicon.jpg'))
+            ->favicon(asset('images/aa2.png'))
             ->discoverResources(in: app_path('Filament/Company/Resources'), for: 'App\\Filament\\Company\\Resources')
             ->discoverPages(in: app_path('Filament/Company/Pages'), for: 'App\\Filament\\Company\\Pages')
             ->pages([

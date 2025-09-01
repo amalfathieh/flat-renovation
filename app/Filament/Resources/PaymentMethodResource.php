@@ -1,17 +1,15 @@
 <?php
-/*
+
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PaymentMethodResource\Pages;
-use App\Filament\Resources\PaymentMethodResource\RelationManagers;
 use App\Models\PaymentMethod;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PaymentMethodResource extends Resource
 {
@@ -20,86 +18,6 @@ class PaymentMethodResource extends Resource
     protected static ?string $modelLabel = 'طريقة تحويل';
     protected static ?string $pluralModelLabel = 'طرق التحويل';
     protected static ?string $navigationGroup = 'Payments';
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Toggle::make('is_active')
-                    ->required(),
-                Forms\Components\TextInput::make('instructions'),
-            ]);
-    }
-
-    public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\IconColumn::make('is_active')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListPaymentMethods::route('/'),
-            'create' => Pages\CreatePaymentMethod::route('/create'),
-            'edit' => Pages\EditPaymentMethod::route('/{record}/edit'),
-        ];
-    }
-}*/
-
-
-namespace App\Filament\Resources;
-
-use App\Filament\Resources\PaymentMethodResource\Pages;
-use App\Models\PaymentMethod;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-
-class PaymentMethodResource extends Resource
-{
-    protected static ?string $model = PaymentMethod::class;
-
-    protected static ?string $modelLabel = 'طريقة تحويل';
-    protected static ?string $pluralModelLabel = 'طرق التحويل';
-    protected static ?string $navigationGroup = 'المدفوعات';
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
     public static function form(Form $form): Form
@@ -137,7 +55,7 @@ class PaymentMethodResource extends Resource
 
                 Tables\Columns\BadgeColumn::make('is_active')
                     ->label('الحالة')
-                    ->formatStateUsing(fn ($state) => $state ? 'مفعل' : 'مقفل')
+                    ->formatStateUsing(fn($state) => $state ? 'مفعل' : 'مقفل')
                     ->colors([
                         'success' => true,
                         'danger' => false,
@@ -159,7 +77,7 @@ class PaymentMethodResource extends Resource
 
                         // رجّع البيانات بشكل مرتب
                         return collect($data)
-                            ->map(fn ($value, $key) => "$key: $value")
+                            ->map(fn($value, $key) => "$key: $value")
                             ->implode("\n"); // فصل بأسطر
                     })
                     ->wrap()
@@ -252,4 +170,3 @@ class PaymentMethodResource extends Resource
         ];
     }
 }
-

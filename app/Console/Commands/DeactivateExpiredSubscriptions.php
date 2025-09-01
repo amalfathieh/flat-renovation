@@ -27,8 +27,8 @@ class DeactivateExpiredSubscriptions extends Command
 
     }
 
-    public function schedule(Schedule $schedule): void
-    {
-        $schedule->command(static::class)->daily(); // ← هنا الجدولة
-    }
+//    public function schedule(Schedule $schedule): void
+//    {
+//        $schedule->command(static::class)->daily(); // ← هنا الجدولة
+//    }
 }

@@ -6,6 +6,7 @@ use App\Http\Responses\Response;
 use App\Models\User;
 use App\Notifications\SendNotification;
 use App\Notifications\StoreNotification;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
@@ -15,7 +16,7 @@ class NotificationController extends Controller
     {
         try {
             $data = [];
-            $notifications = DB::table('notifications')->where('notifiable_id', 12)->latest()->get();
+            $notifications = DB::table('notifications')->where('notifiable_id', Auth::user()->id)->latest()->get();
 
             foreach ($notifications as $notification) {
                 $notificationData = json_decode($notification->data);
