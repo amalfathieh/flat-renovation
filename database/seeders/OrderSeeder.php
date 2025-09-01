@@ -15,21 +15,32 @@ class OrderSeeder extends Seeder
     public function run(): void
     {
 
+
+
+
         foreach (CompanyDataSeeder::$companies as $c => $company) {
-            for ($z = 1; $z <= 4; $z++) {
-                $customer = CustomerSeeder::$customers["$c-$z"];
-                self::$orders["$c-$z"] = Order::create([
+            for ($z = 0; $z < 4; $z++) { // ز = 0,1,2,3
+                $key = "$c-$z";
+                $customer = CustomerSeeder::$customers[$key] ?? null;
+                if (!$customer) continue;
+
+                self::$orders[$key] = Order::create([
                     'customer_id' => $customer->id,
                     'company_id' => $company->id,
                     'status' => 'waiting',
                     'cost_of_examination' => rand(50, 200),
-                   // 'location' => 'دمشق',
                     'budget' => rand(1000, 5000),
                 ]);
             }
+        }
 
 
-      }
+
+
+
+
+
+
 
     }
 }
