@@ -9,6 +9,9 @@ use App\Models\Order;
 use App\Models\Project;
 use Filament\Facades\Filament;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\Section;
@@ -80,7 +83,8 @@ class ProjectResource extends Resource
                                         $companyId = Filament::getTenant()?->id;
 
                                         return Order::where('company_id', $companyId)
-                                            ->where('status', 'completed')
+//                                            ->where('status', 'completed')
+                                            ->where('status', 'accepted')
                                             ->get()
                                             ->pluck('id', 'id');
                                     })
@@ -171,7 +175,38 @@ class ProjectResource extends Resource
                                  ->preserveFilenames()
                          ])->collapsible(),
 
+                    ]),
 
+                Forms\Components\Section::make('صور المشروع')
+                    ->visible(fn (callable $get) => $get('is_publish') === true) // يظهر فقط إذا المشروع منشور
+                    ->schema([
+                        Repeater::make('projectImages')
+                            ->relationship('projectImages')
+                            ->schema([
+                                FileUpload::make('before_image')
+                                    ->label('📷 صورة قبل')
+                                    ->directory('project-images/before')
+                                    ->image()
+                                    ->imagePreviewHeight('100')
+                                    ->preserveFilenames()
+                                    ->required(),
+
+                                FileUpload::make('after_image')
+                                    ->label('📷 صورة بعد')
+                                    ->directory('project-images/after')
+                                    ->image()
+                                    ->imagePreviewHeight('100')
+                                    ->preserveFilenames()
+                                    ->required(),
+
+                                TextInput::make('caption')
+                                    ->label('الوصف / الكابشن')
+                                    ->maxLength(255)
+                                    ->columnSpanFull(),
+                            ])->columns(2)
+                            ->defaultItems(1) // يبدأ بصف واحد فارغ
+                            ->collapsible()
+                            ->reorderable(),
                     ]),
 
              ]);
