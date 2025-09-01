@@ -26,6 +26,8 @@ class TransactionsAllResource extends Resource
     protected static ?string $navigationGroup = 'Payments';
     protected static ?string $navigationLabel = 'معاملات المحفظة';
 
+    protected static ?string $modelLabel = 'المعاملة';
+    protected static ?string $pluralModelLabel = 'معاملات المحفظة';
 
     public static function form(Form $form): Form
     {

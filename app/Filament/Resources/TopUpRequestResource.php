@@ -15,9 +15,13 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TopUpRequestResource extends Resource
 {
-    protected static ?string $navigationLabel = 'Top-Up Requests';
+//    protected static ?string $navigationLabel = 'Top-Up Requests';
     protected static ?string $navigationGroup = 'Payments';
     protected static ?string $model = TopUpRequest::class;
+
+
+    protected static ?string $modelLabel = 'طلب الشحن';
+    protected static ?string $pluralModelLabel = 'طلبات الشحن';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
