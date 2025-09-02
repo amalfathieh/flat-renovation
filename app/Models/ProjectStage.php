@@ -9,7 +9,7 @@ class ProjectStage extends Model
     use HasFactory;
     protected $fillable = [
         'project_id',
-        'stage_name',
+        'name',
         'service_id',
         'service_type_id',
         'description',

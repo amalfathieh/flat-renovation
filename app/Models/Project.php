@@ -89,7 +89,7 @@ class Project extends Model
 
 
 
-    protected $appends = ['duration_in_days']; // لإضافته تلقائيًا في JSON
+    protected $appends = ['duration_in_days'];
 
     public function getDurationInDaysAttribute()
     {

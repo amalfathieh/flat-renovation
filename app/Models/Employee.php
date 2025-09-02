@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use TomatoPHP\FilamentFcm\Traits\InteractsWithFCM;
 
 class Employee extends Model
 {
+    use InteractsWithFCM;
     use HasFactory;
     protected $fillable = [
         'user_id', 'company_id','first_name','last_name','gender','phone','starting_date','birth_day','description'

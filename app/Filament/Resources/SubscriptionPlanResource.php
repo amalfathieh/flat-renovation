@@ -17,6 +17,8 @@ class SubscriptionPlanResource extends Resource
 {
     protected static ?string $model = SubscriptionPlan::class;
 
+    protected static ?string $modelLabel = 'خطة الاشتراك';
+    protected static ?string $pluralModelLabel = 'خطط الاشتراك';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -39,7 +41,7 @@ class SubscriptionPlanResource extends Resource
                 Forms\Components\MarkdownEditor::make('description')
                     ->maxLength(255),
                 Forms\Components\Toggle::make('is_active')
-                    ->helperText('تظهر هذه الباقة للشركات فقط بحال كانت قيمتة هذا الحل (نشط True), ولن تظهر بحال كانت (غير نشطة False) ضمن الباقات المتوفرة للاشتراك. ')
+                    ->helperText('تظهر هذه الباقة للشركات فقط بحال كانت قيمتة هذا الحقل (نشط True), ولن تظهر بحال كانت (غير نشطة False) ضمن الباقات المتوفرة للاشتراك. ')
                     ->required(),
             ]);
     }

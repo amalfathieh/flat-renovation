@@ -12,7 +12,7 @@ class ConversationResource extends JsonResource
             'id'       => $this->id,
             'customer' => [
                 'id'    => $this->customer->id,
-                'name'  => $this->customer->user->full_name,
+                'name'  => $this->customer->user->name,
                 'email' => $this->customer->user->email,
                 'image' => $this->customer->image,
             ],

@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTopUpRequest;
+use App\Http\Responses\Response;
+use App\Models\TopUpRequest;
 use App\Models\User;
+use App\Services\TopUpService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TopupRequestController extends Controller
 {
@@ -22,26 +27,45 @@ class TopupRequestController extends Controller
             'admin_phone' => $admin->phone,
             'instructions' => 'يرجى التحويل إلى حساب الأدمن ثم رفع صورة الوصل',
         ]);
-
-
-
-
-
-
-
-
-
-
-
     }
 
+    public function creatTopUp(StoreTopUpRequest $request, TopUpService $topUpService): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $user = auth()->user();
+
+            $model = $user->customerProfile;
+
+            if (!$model) {
+                return Response::Error('Unauthorized requester', 403);
+            }
+            $request->merge(['model' => $model]); // Add model to request
+            $topUp = $topUpService->submitTopUp($request); // Pass request object
+
+            return Response::Success($topUp, 'Top-up request submitted successfully.');
+        } catch (\Exception $ex) {
+            return Response::Error($ex->getMessage(), $ex->getCode() ?: 404);
+        }
+    }
+
+    public function getMyTopUpRequests(Request $request)
+    {
+        $customer = Auth::user()->customerProfile;
 
 
+        $query = TopUpRequest::with('paymentMethod')
 
+            ->where('requester_id', $customer->id)
+            ->where('requester_type', get_class($customer));
 
+        if ($request->has('status')) {
+            $status = $request->input('status');
+            if (in_array($status, ['pending', 'approved', 'rejected'])) {
+                $query->where('status', $status);
+            }
+        }
 
-
-
-
-
+        $requests = $query->latest()->get();
+        return Response::Success($requests, 'Top-up requests');
+    }
 }

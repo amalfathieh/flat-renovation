@@ -15,9 +15,12 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use TomatoPHP\FilamentFcm\Traits\InteractsWithFCM;
+
 
 class User extends Authenticatable implements  HasTenants, FilamentUser, MustVerifyEmail
 {
+    use InteractsWithFCM;
     use HasFactory, Notifiable, HasRoles, HasApiTokens;
 
 
@@ -28,7 +31,7 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
      */
 
     protected $fillable = [
-        'full_name',
+        'name',
         'email',
         'password',
         'google_id',
@@ -36,6 +39,7 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
         'banned_at',
          'payment_phone',
            'balance',
+        'device_token'
 
     ];
 
@@ -62,6 +66,7 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
     protected $casts = [
         'created_at' => 'datetime:Y-m-d\TH:i:s',
         'updated_at' => 'datetime:Y-m-d\TH:i:s',
+
     ];
 
 
@@ -71,6 +76,10 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function routeNotificationForFcm()
+    {
+        return $this->device_token;
     }
 
     public function employee()
@@ -169,7 +178,10 @@ class User extends Authenticatable implements  HasTenants, FilamentUser, MustVer
         return $this->hasMany(ExternalTransfer::class, 'admin_id');
     }
 
-
+//    public function topUpRequests()
+//    {
+//        return $this->morphMany(TopUpRequest::class, 'requester');
+//    }
 
 
 

@@ -6,11 +6,15 @@ use App\Http\Responses\Response;
 use App\Models\answer;
 use App\Models\Order;
 
+use App\Services\InvoiceService;
 
 
 
 use App\Models\Transaction;
 
+use App\Models\TransactionsAll;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
@@ -52,7 +56,7 @@ class OrderController extends Controller
 
             return response()->json([
                 'status' => true,
-                'payment_intent_id'=>$paymentIntent->id,
+                'payment_intent_id' => $paymentIntent->id,
                 'client_secret' => $paymentIntent->client_secret,
                 'amount' => $amount,
             ]);
@@ -71,8 +75,21 @@ class OrderController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'company_id' => 'required|exists:companies,id',
-            'location' => 'required|string',
-            'budget' => 'required|numeric',
+           // 'location' => 'required|string',
+          //  'budget' => 'required|numeric',
+            'latitude' => [
+                'required',
+                'numeric',
+                'between:-90,90',
+                'regex:/^-?\d{1,2}(\.\d{1,6})?$/'
+            ],
+            'longitude' => [
+                'required',
+                'numeric',
+                'between:-180,180',
+                'regex:/^-?\d{1,3}(\.\d{1,6})?$/'
+            ],
+
             'answers' => 'required|array|min:1',
             'payment_intent_id' => 'required|string',
         ]);
@@ -122,8 +139,10 @@ class OrderController extends Controller
             $order = Order::create([
                 'customer_id' => $customer->id,
                 'company_id' => $request->company_id,
-                'location' => $request->location,
-                'budget' => $request->budget,
+                //'location' => "test1",
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+                'budget' => "test2",
                 'cost_of_examination' => $company->cost_of_examination,
                 'payment_intent_id' => $paymentIntent->id,
             ]);
@@ -137,8 +156,6 @@ class OrderController extends Controller
             }
 
 
-
-
             $company->increment('balance', $amount);
 
 
@@ -149,7 +166,6 @@ class OrderController extends Controller
                 'order_id' => $order->id,
 
             ]);
-
 
 
             return response()->json([
@@ -169,7 +185,7 @@ class OrderController extends Controller
 
     //---------------------------------------------------------------------------------
 
- // for testing payment ...
+    // for testing payment ...
     public function createCheckoutSession(Request $request)
     {
         Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
@@ -203,7 +219,6 @@ class OrderController extends Controller
     //------------------------------------------------------------------------------------------------------------------
 
 
-
     public function customerOrders(Request $request)
     {
         $customer = $request->user()->customerprofile;
@@ -223,7 +238,7 @@ class OrderController extends Controller
                 'status' => $order->status,
                 'cost_of_examination' => $order->cost_of_examination,
                 'location' => $order->location,
-                'budget' => $order->budget,
+                //'budget' => $order->budget,
                 'created_at' => $order->created_at,
 
                 'company' => [
@@ -242,6 +257,185 @@ class OrderController extends Controller
             'تم جلب الطلبات بنجاح'
         );
     }
+
+
+
+    //---------------------------------------------------------------------------------------------------------------
+
+
+
+    public function storeOrderWithWallet(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'company_id' => 'required|exists:companies,id',
+            //'location' => 'required|string',
+            //'budget' => 'required|numeric',
+
+            'latitude' => [
+                'required',
+                'numeric',
+                'between:-90,90',
+                'regex:/^-?\d{1,2}(\.\d{1,6})?$/'
+            ],
+            'longitude' => [
+                'required',
+                'numeric',
+                'between:-180,180',
+                'regex:/^-?\d{1,3}(\.\d{1,6})?$/'
+            ],
+
+            'answers' => 'required|array|min:1',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $user = auth()->user();
+            if (!$user) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'المستخدم غير مصادق. يرجى تسجيل الدخول.'
+                ], 401);
+            }
+
+            $customer = Customer::where('user_id', $user->id)->first();
+            if (!$customer) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'الحساب الحالي ليس مرتبطًا بعميل (Customer).'
+                ], 403);
+            }
+
+            $company = Company::findOrFail($request->company_id);
+            $amount = $company->cost_of_examination;
+
+
+            if ($user->balance < $amount) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'رصيدك غير كافٍ لإجراء هذا الطلب. الرجاء شحن رصيدك أولاً.'
+                ], 400);
+            }
+
+
+            $user->decrement('balance', $amount);
+
+
+            $company->user->increment('balance', $amount);
+
+
+            $order = Order::create([
+                'customer_id' => $customer->id,
+                'company_id' => $company->id,
+                //'location' => $request->location,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+                'budget' => "test2",
+                'cost_of_examination' => $amount,
+            ]);
+
+
+            foreach ($request->answers as $answerData) {
+                Answer::create([
+                    'order_id' => $order->id,
+                    'question_service_id' => $answerData['question_service_id'],
+                    'answer' => $answerData['answer'],
+                ]);
+            }
+
+
+            $service = new InvoiceService();
+            $invoice = $service->generateInvoiceNumber();
+
+
+            TransactionsAll::create([
+                'payer_type' => get_class($customer),
+                'payer_id' => $customer->id,
+                'receiver_type' => get_class($company),
+                'receiver_id' => $company->id,
+                'source' => 'user_order_payment',
+                'amount' => $amount,
+                'status' => 'completed',
+                'note' => 'دفع قيمة طلب كشف.',
+                'related_type' => get_class($order),
+                'related_id' => $order->id,
+                'invoice_number' =>$invoice,
+
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'تم إرسال الطلب بنجاح والدفع من المحفظة.',
+                'order_id' => $order->id
+            ], 201);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => false,
+                'message' => 'حدث خطأ أثناء معالجة الطلب: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+
+//-----------------------------------------------------------------------------------------------------
+
+
+
+
+    // تابع لإرجاع كل الطلبات الخاصة بالمستخدم الحالي
+    public function getCustomerOrders()
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        // الحصول على customer_id المرتبط بالمستخدم
+        $customer = Customer::where('user_id', $user['id'])->first();
+        if (!$customer) {
+            return response()->json(['message' => 'Customer profile not found'], 404);
+        }
+
+        // جلب كل الطلبات الخاصة بهذا الـ customer
+        $orders = Order::where('customer_id', $customer->id)->get();
+
+        return response()->json([
+            //'user' => $user,
+            //'customer' => $customer,
+            'orders' => $orders
+        ]);
+    }
+
+
+//----------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

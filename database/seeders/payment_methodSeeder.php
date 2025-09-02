@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\payment_method;
+use App\Models\PaymentMethod;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Stripe\PaymentMethod;
 
 class payment_methodSeeder extends Seeder
 {
@@ -15,7 +14,7 @@ class payment_methodSeeder extends Seeder
     public function run(): void
     {
 
-        payment_method::create([
+        PaymentMethod::create([
             'name' => 'MTN Cash',
             'is_active' => true,
             'instructions' => [
@@ -24,7 +23,7 @@ class payment_methodSeeder extends Seeder
             ],
         ]);
 
-        payment_method::create([
+        PaymentMethod::create([
             'name' => 'Syriatel Cash',
             'is_active' => true,
             'instructions' => [
@@ -33,7 +32,7 @@ class payment_methodSeeder extends Seeder
             ],
         ]);
 
-        payment_method::create([
+        PaymentMethod::create([
             'name' => 'Transfer via Haram branch',
             'is_active' => true,
             'instructions' => [

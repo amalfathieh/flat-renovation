@@ -9,8 +9,11 @@ use App\Models\Service;
 use App\Models\ServiceType;
 use App\Models\stage_transactions;
 use App\Models\Transaction;
+use App\Models\TransactionsAll;
+use App\Services\InvoiceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProjectStageController extends Controller
 {
@@ -170,6 +173,85 @@ class ProjectStageController extends Controller
     }
 
 
+
+//-------------------------------------------------------------------------
+
+
+
+    public function confirmStage($stageId)
+    {
+        try {
+            DB::beginTransaction();
+
+            $stage = ProjectStage::find($stageId);
+
+            if (!$stage) {
+                return response()->json(['status' => false, 'message' => 'المرحلة غير موجودة.'], 404);
+            }
+
+            if ($stage->is_confirmed) {
+                return response()->json(['status' => false, 'message' => 'تم تأكيد المرحلة سابقًا.'], 400);
+            }
+
+            $project = $stage->project;
+            $company = $project->company;
+            $companyUser = $company->user;
+            $customer = $project->order->customer()->with('user')->first();
+            $customerUser = $customer->user;
+
+            $amount = $stage->cost;
+
+
+            if ($customerUser->balance < $amount) {
+                DB::rollBack();
+                return response()->json([
+                    'status' => false,
+                    'message' => 'رصيدك غير كافٍ لدفع هذه المرحلة. الرجاء الشحن ثم المحاولة مجددًا.',
+                ], 400);
+            }
+
+
+            $customerUser->decrement('balance', $amount);
+
+
+            $companyUser->increment('balance', $amount);
+
+
+            $stage->update([
+                'is_confirmed' => true,
+            ]);
+            $service = new InvoiceService();
+            $invoice = $service->generateInvoiceNumber();
+
+
+
+            TransactionsAll::create([
+                'payer_type' => get_class($customer),
+                'payer_id' => $customer->id,
+                'receiver_type' => get_class($company),
+                'receiver_id' => $company->id,
+                'source' => 'user_stage_payment',
+                'amount' => $amount,
+                'note' => 'دفع مرحلة من مشروع',
+               'related_type' => get_class($stage),
+               'related_id' => $stage->id,
+                'invoice_number' => $invoice,
+        ]);
+
+        DB::commit();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'تم تأكيد ودفع المرحلة بنجاح.',
+        ]);
+    } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => false,
+                'message' => 'فشل في إتمام الدفع: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
 
 
 

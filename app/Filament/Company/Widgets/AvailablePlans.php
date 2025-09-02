@@ -13,23 +13,27 @@ class AvailablePlans extends Widget
     protected int | string | array $columnSpan = 'full'; // حتى ياخذ عرض كامل
 
     protected static ?string $pollingInterval = '15s';
-    protected static bool $isLazy = true;
+    protected static bool $isLazy = false;
 
     protected static ?int $sort = 2;
 
+    public static function canView(): bool
+    {
+        return auth()->user()?->hasRole('company');
+    }
 
     public function getPlans()
     {
         $plans = SubscriptionPlan::where('is_active', true)->get();
         $company = Filament::getTenant();
-        $comSub = CompanySubscription::where('company_id', $company->id)->get();
+        $comSub = $company->activeSubscription;
 
         $data = [
             "plans" => $plans,
             "comSub" => $comSub,
+            "tenant" => $company,
 
         ];
         return $data;
-        return SubscriptionPlan::where('is_active', true)->get();
     }
 }

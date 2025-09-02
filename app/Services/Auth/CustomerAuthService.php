@@ -24,7 +24,7 @@ class CustomerAuthService implements CustomerAuthServiceInterface
 
 
         $user = User::create([
-            'full_name'     => $request['full_name'],
+            'name'     => $request['name'],
             'email'    => $request['email'],
             'password' => bcrypt($request['password']),
         ]);
@@ -86,7 +86,7 @@ class CustomerAuthService implements CustomerAuthServiceInterface
 
         return [
             'id'                => $user->id,
-            'full_name'              => $user->full_name,
+            'name'              => $user->name,
             'email'             => $user->email,
             'phone'             => $profile->phone ?? null,
             'image'             => $profile->image  ?? null,

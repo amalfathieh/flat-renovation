@@ -21,10 +21,7 @@ class ConversationController extends Controller
         if ($user->employee) {
            $employee = $user->employee;
             $conversations = Conversation::where('employee_id', $employee->id)
-                ->with(['customer.user', 'messages' => function($q){ $q->latest()->limit(1); }])
-                ->latest()
-                ->paginate(20);
-
+                ->with(['customer.user', 'messages'])->get();
             return response()->json($conversations);
         }
 
@@ -32,9 +29,7 @@ class ConversationController extends Controller
         if ($user->customerProfile) {
             $customer = $user->customerProfile;
             $conversations = Conversation::where('customer_id', $customer->id)
-                ->with(['employee', 'messages' => function($q){ $q->latest()->limit(1); }])
-                ->latest()
-                ->paginate(20);
+                ->with(['employee', 'messages' ])->get();
 
             return response()->json($conversations);
         }
@@ -70,7 +65,7 @@ class ConversationController extends Controller
 
 
 
-    // جلب المحادثة مع كل الرسائل (صفحة)
+
     public function show(Request $request, Conversation $conversation)
     {
         $user = Auth::user();
@@ -82,15 +77,15 @@ class ConversationController extends Controller
         $messages = $conversation->messages()->with('sender')->latest()->paginate(50);
 
         return response()->json([
-            'conversation' => $conversation->load('customer.user', 'company'),
+            'conversation' => $conversation->load('customer.user', 'employee'),
             'messages' => $messages,
         ]);
     }
 
     protected function userCanAccess($user, Conversation $conversation): bool
     {
-        if ($user->hasRole('company')) {
-            return $user->company && $user->company->id == $conversation->company_id;
+        if ($user->hasRole('employee')) {
+            return $user->employee && $user->employee->id == $conversation->employee_id;
         }
 
         if ($user->customerProfile) {

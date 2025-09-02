@@ -47,10 +47,10 @@ class Customer extends Model
 
 
 
-    public function stageTransactions()
-    {
-        return $this->hasMany(stage_transactions::class);
-    }
+//    public function stageTransactions()
+//    {
+//        return $this->hasMany(stage_transactions::class);
+//    }
 
 
 
@@ -71,7 +71,7 @@ class Customer extends Model
 
     public function topUpRequests()
     {
-        return $this->morphMany(Top_up_request::class, 'requester');
+        return $this->morphMany(TopUpRequest::class, 'requester');
     }
 
 
@@ -84,5 +84,9 @@ class Customer extends Model
     {
         return $this->hasMany(Conversation::class);
     }
+    public function getTypeAttribute() {
+        return $this instanceof \App\Models\Employee ? 'employee' : 'customer';
+    }
+
 
 }

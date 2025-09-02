@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use TomatoPHP\FilamentFcm\Traits\InteractsWithFCM;
 
 class Company extends Model
 {
+    use InteractsWithFCM;
     use HasFactory;
 
     protected $fillable = [
@@ -88,9 +90,14 @@ class Company extends Model
         return $this->hasMany(Order::class);
     }
 
+//    public function transactions()
+//    {
+//        return $this->hasMany(Transaction::class);
+//    }
     public function transactions()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(TransactionsAll::class, 'receiver_id')
+            ->where('receiver_type', self::class);
     }
 
     public function stageTransactions()
@@ -157,11 +164,23 @@ class Company extends Model
         return $this->morphMany(TransactionsAll::class, 'receiver');
     }
 
+    public function allTransactions()
+    {
+        return TransactionsAll::query()
+            ->where(function ($q) {
+                $q->where('payer_type', self::class)
+                    ->where('payer_id', $this->id);
+            })->orWhere(function ($q) {
+                $q->where('receiver_type', self::class)
+                    ->where('receiver_id', $this->id);
+            });
+    }
+
 
 
     public function topUpRequests()
     {
-        return $this->morphMany(Top_up_request::class, 'requester');
+        return $this->morphMany(TopUpRequest::class, 'requester');
     }
 
 

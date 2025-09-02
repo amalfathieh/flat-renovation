@@ -19,13 +19,13 @@ class CompanySubscription extends Model
         'updated_at' => 'datetime:Y-m-d',
     ];
 
-    // علاقة مع SubscriptionPlan
+
     public function subscriptionPlan()
     {
         return $this->belongsTo(SubscriptionPlan::class);
     }
 
-    // علاقة مع Company
+
     public function company()
     {
         return $this->belongsTo(Company::class);

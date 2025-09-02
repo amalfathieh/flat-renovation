@@ -17,7 +17,7 @@ class StageResource extends JsonResource
         return [
             'id' => $this->id,
             'project_id' => $this->project_id,
-            'stage_name' => $this->stage_name,
+            'stage_name' => $this->name,
             'service_id' => $this->service_id,
             'service_name' => $this->service->name,
             'service_type_id' => $this->serviceType->id,

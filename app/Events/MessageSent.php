@@ -49,7 +49,7 @@ class MessageSent implements ShouldBroadcast
     public $senderType;
     public $senderId;
     public $receiverId; // تأكد من إضافة الخصائص المطلوبة
-
+    public $senderImage;
     public function __construct($message, $senderName, $senderType, $senderId, $receiverId,$senderImage)
     {
         $this->message = $message;

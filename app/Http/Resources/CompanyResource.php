@@ -19,6 +19,7 @@ class CompanyResource extends JsonResource
             'logo' => $this->logo,
             'services' => ServiceResource::collection($this->whenLoaded('services')),
             'projects' => ProjectResource::collection($this->whenLoaded('projects')),
+            'cost_of_examination' => $this->cost_of_examination,
         ];
     }
 }

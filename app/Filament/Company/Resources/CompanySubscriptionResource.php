@@ -10,6 +10,9 @@ use App\Models\SubscriptionPlan;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -20,7 +23,8 @@ use Illuminate\Support\Facades\Date;
 class CompanySubscriptionResource extends Resource
 {
     protected static ?string $model = CompanySubscription::class;
-
+    protected static ?string $modelLabel = 'الاشتراك';
+    protected static ?string $pluralModelLabel = 'اشتراكاتي';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -28,35 +32,6 @@ class CompanySubscriptionResource extends Resource
         return $form
             ->schema([
 
-                Select::make('subscription_plan_id')
-                    ->options(
-                        SubscriptionPlan::where('is_active', true)
-                            ->pluck('name', 'id')
-                    )
-                    ->preload()
-                    ->required(),
-
-                Forms\Components\DatePicker::make('start_date')
-                    ->default(now())
-//                    ->disabled()
-                ,
-//                Forms\Components\Placeholder::make('start_date')
-//                    ->default(now())
-//                    ->disabled(),
-//                Forms\Components\Placeholder::make('end_date')
-//                    ->content(function ($get){
-//                        return $get('start_date');
-//                    }),
-                Forms\Components\DatePicker::make('end_date')
-//                    ->default(),
-                    ->required(),
-                Forms\Components\TextInput::make('status')
-                    ->default('active')
-                    ->required(),
-                Forms\Components\TextInput::make('used_projects')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
             ]);
     }
 
@@ -65,9 +40,6 @@ class CompanySubscriptionResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('company.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('subscriptionPlan.name')
@@ -79,20 +51,29 @@ class CompanySubscriptionResource extends Resource
                 Tables\Columns\TextColumn::make('end_date')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->colors([
+                        'info' => 'cancelled',
+                        'success' => 'active',
+                        'danger' => 'expired',
+                    ]),
+                Tables\Columns\TextColumn::make('used_projects')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
+                Tables\Columns\TextColumn::make('subscriptionPlan.duration_in_days')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
+
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -101,6 +82,58 @@ class CompanySubscriptionResource extends Resource
                 ]),
             ]);
     }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make('معلومات الباقة')
+                    ->schema([
+                        TextEntry::make('subscription_plan_id')->label('معرف الباقة'),
+                        TextEntry::make('subscriptionPlan.name')->label('اسم الباقة'),
+                        TextEntry::make('subscriptionPlan.duration_in_days')->label('مدة الباقة'),
+                        TextEntry::make('subscriptionPlan.description')->label('وصف الباقة'),
+                    ])->columns(3),
+
+                Section::make('الاشتراك')
+                    ->schema([
+                        TextEntry::make('id')->label('معرف الاشتراك'),
+                        TextEntry::make('created_at')
+                            ->label('تاريخ إنشاء الاشتراك')
+                            ->date(),
+                        TextEntry::make('company.name')->label('اسم الشركة'),
+
+                        TextEntry::make('start_date')
+                            ->label('تاريخ البداية')
+                            ->date(),
+                        TextEntry::make('end_date')
+                            ->label('تاريخ النهاية')
+                            ->date(),
+                    ])->columns(2),
+                Section::make('')
+                    ->schema([
+                        TextEntry::make('subscriptionPlan.project_limit')->label('عدد المشاريع المتاحة بالباقة')
+                            ->numeric(),
+
+                        TextEntry::make('used_projects')->label('عدد المشاريع المستهلكة'),
+
+                        TextEntry::make('المتبقي')->getStateUsing(function ($record){
+//                            dd($record->subscriptionPlan);
+                            return $record->subscriptionPlan->project_limit - $record->used_projects;
+                        }),
+                        TextEntry::make('status')
+                            ->label('الحالة')
+                            ->badge()
+                            ->colors([
+                                'info' => 'cancelled',
+                                'success' => 'active',
+                                'danger' => 'expired',
+                            ]),
+                    ])->columns(4),
+            ]);
+    }
+
+
 
     public static function getRelations(): array
     {

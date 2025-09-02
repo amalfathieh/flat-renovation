@@ -23,10 +23,10 @@ class StageSeeder extends Seeder
 
                 self::$stages[$key] = ProjectStage::create([
                     'project_id' => $project->id,
-                    'stage_name' => "Stage Name",
+                    'name' => "مرحلة: ". $service->name,
                     "service_id" => $service->id,
                     "service_type_id" => $serviceType->id,
-                    "description" => "description mnjyidus",
+                    "description" => "بالنسبة ". $service->name . " سيتم " .$serviceType->description,
                     'cost' => 200,
                 ]);
             }

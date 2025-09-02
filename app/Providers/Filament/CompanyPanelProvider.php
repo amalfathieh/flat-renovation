@@ -22,6 +22,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use TomatoPHP\FilamentFcm\FilamentFcmPlugin;
 
 class CompanyPanelProvider extends PanelProvider
 {
@@ -48,8 +49,8 @@ class CompanyPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Company/Widgets'), for: 'App\\Filament\\Company\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+//                Widgets\AccountWidget::class,
+//                Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -67,7 +68,8 @@ class CompanyPanelProvider extends PanelProvider
             ])
             ->tenant(Company::class, 'slug', 'company')
             ->tenantRegistration(RegisterCompany::class)
-            ->tenantProfile(EditCompanyProfile::class);
+            ->tenantProfile(EditCompanyProfile::class)
+            ->databaseNotifications();
 
     }
 }

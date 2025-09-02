@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // مثال: "MTN Cash", "SyriaTel"
+            $table->string('name');
             $table->boolean('is_active')->default(true);
-            $table->json('instructions')->nullable(); // تعليمات التحويل: رقم الحساب، الملاحظات...
+            $table->json('instructions')->nullable();
             $table->timestamps();
         });
     }

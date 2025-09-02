@@ -18,7 +18,12 @@ return new class extends Migration
             $table->foreignId('employee_id')->nullable()->constrained()->onDelete('set null');
             $table->enum('status', ['accepted', 'completed','waiting', 'rejected'])->default('waiting');
             $table->double('cost_of_examination')->nullable();
-            $table->text('location');
+           // $table->text('location');
+
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
+
+
             $table->text('budget');
             $table->string('payment_intent_id')->nullable();
             $table->string('refund_id')->nullable();

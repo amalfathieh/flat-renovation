@@ -9,33 +9,32 @@ use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use function Beste\Cache\get;
 
 class MessageController extends Controller
 {
-    // جلب الرسائل في محادثة (قدّم pagination)
+
     public function index(Request $request, Conversation $conversation)
     {
         $user = Auth::user();
 
-        if (! $this->userCanAccess($user, $conversation)) {
+        if (! $this->userCanAccess($user, $conversation))
             return response()->json(['message' => 'Forbidden'], 403);
-        }
 
-        $messages = $conversation->messages()->with('sender')->latest()->paginate(50);
+
+        $messages = $conversation->messages()->get();
 
         return response()->json($messages);
-    }
 
+    }
 
     public function store(Request $request, Conversation $conversation)
     {
         $user = Auth::user();
 
-
         if (! $user->customerProfile) {
             return response()->json(['message' => 'Only customers can send messages'], 403);
         }
-
 
         if ($conversation->customer_id !== $user->customerProfile->id) {
             return response()->json(['message' => 'Forbidden'], 403);
@@ -49,30 +48,39 @@ class MessageController extends Controller
             $m = Message::create([
                 'conversation_id' => $conversation->id,
                 'sender_id'       => $user->customerProfile->id,
-                'sender_type'     => get_class($user->customerProfile),
+                'sender_type'     => $user->customerProfile->type,
+                'sender_name'     => $user->name,
                 'message'         => $data['message'],
+                'sender_image'    => $user->customerProfile->image,
             ]);
 
-         //   $m->load('sender');
-            event(new \App\Events\Message($data['message'], $sender->name,$sender->admin_id ? 'user' : 'admin' , $sender->id, $receiver->id,$sender->image));
-//            broadcast(new
-// \App\Events\MessageSent($m))->toOthers();
-            event(new \App\Events\MessageSent($m->message,));
+            event(new \App\Events\Messagesent(
+                $m->message,
+                $user->customerProfile->id,
+                $user->name,
+                $user->customerProfile->type,
+                $conversation->employee_id,
+                $user->customerProfile->image
+            ));
 
             return $m;
         });
 
-        return response()->json($message, 201);
+
+        return response()->json([
+            'message' => 'Message sent successfully',
+            'data'    => $message,
+        ], 201);
     }
 
 
-    protected function userCanAccess($user, Conversation $conversation): bool
+        protected function userCanAccess($user, Conversation $conversation): bool
     {
-        if ($user->hasRole('company')) {
+        if ($user->company) {
             return $user->company && $user->company->id == $conversation->company_id;
         }
 
-        if ($user->customerprofile) {
+        if ($user->customerProfile) {
             return $user->customerProfile->id == $conversation->customer_id;
         }
 

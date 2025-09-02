@@ -94,6 +94,17 @@
       0 => 'Kirschbaum\\PowerJoins\\PowerJoinsServiceProvider',
     ),
   ),
+  'kreait/laravel-firebase' => 
+  array (
+    'aliases' => 
+    array (
+      'Firebase' => 'Kreait\\Laravel\\Firebase\\Facades\\Firebase',
+    ),
+    'providers' => 
+    array (
+      0 => 'Kreait\\Laravel\\Firebase\\ServiceProvider',
+    ),
+  ),
   'laravel/breeze' => 
   array (
     'providers' => 
@@ -183,11 +194,47 @@
       0 => 'RyanChandler\\BladeCaptureDirective\\BladeCaptureDirectiveServiceProvider',
     ),
   ),
+  'spatie/laravel-pdf' => 
+  array (
+    'aliases' => 
+    array (
+      'LaravelPdf' => 'Pdf',
+    ),
+    'providers' => 
+    array (
+      0 => 'Spatie\\LaravelPdf\\PdfServiceProvider',
+    ),
+  ),
   'spatie/laravel-permission' => 
   array (
     'providers' => 
     array (
       0 => 'Spatie\\Permission\\PermissionServiceProvider',
+    ),
+  ),
+  'tomatophp/console-helpers' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'TomatoPHP\\ConsoleHelpers\\ConsoleHelpersServiceProvider',
+    ),
+  ),
+  'tomatophp/filament-fcm' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'TomatoPHP\\FilamentFcm\\FilamentFcmServiceProvider',
+    ),
+  ),
+  'tomatophp/laravel-firebase' => 
+  array (
+    'aliases' => 
+    array (
+      'Firebase' => 'Kreait\\Laravel\\Firebase\\Facades\\Firebase',
+    ),
+    'providers' => 
+    array (
+      0 => 'Kreait\\Laravel\\Firebase\\ServiceProvider',
     ),
   ),
 );
