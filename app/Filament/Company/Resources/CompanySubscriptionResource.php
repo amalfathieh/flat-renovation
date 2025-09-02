@@ -5,10 +5,6 @@ namespace App\Filament\Company\Resources;
 use App\Filament\Company\Resources\CompanySubscriptionResource\Pages;
 use App\Filament\Company\Resources\CompanySubscriptionResource\RelationManagers;
 use App\Models\CompanySubscription;
-//use Carbon\Traits\Date;
-use App\Models\SubscriptionPlan;
-use Filament\Forms;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
@@ -16,9 +12,6 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Date;
 
 class CompanySubscriptionResource extends Resource
 {
@@ -30,9 +23,7 @@ class CompanySubscriptionResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-
-            ]);
+            ->schema([]);
     }
 
     public static function table(Table $table): Table
@@ -43,15 +34,19 @@ class CompanySubscriptionResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('subscriptionPlan.name')
+                    ->label('اسم الباقة')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('start_date')
+                    ->label('تاريخ البداية')
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('end_date')
+                    ->label('تاريخ النهاية')
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
+                    ->label('الحالة')
                     ->badge()
                     ->colors([
                         'info' => 'cancelled',
@@ -59,13 +54,16 @@ class CompanySubscriptionResource extends Resource
                         'danger' => 'expired',
                     ]),
                 Tables\Columns\TextColumn::make('used_projects')
+                    ->label('عدد المشاريع المستهلكة')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('تاريخ الاشتراك')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('subscriptionPlan.duration_in_days')
+                    ->label('مدة الباقة')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
@@ -117,8 +115,8 @@ class CompanySubscriptionResource extends Resource
 
                         TextEntry::make('used_projects')->label('عدد المشاريع المستهلكة'),
 
-                        TextEntry::make('المتبقي')->getStateUsing(function ($record){
-//                            dd($record->subscriptionPlan);
+                        TextEntry::make('المتبقي')->getStateUsing(function ($record) {
+                            //                            dd($record->subscriptionPlan);
                             return $record->subscriptionPlan->project_limit - $record->used_projects;
                         }),
                         TextEntry::make('status')
@@ -150,5 +148,4 @@ class CompanySubscriptionResource extends Resource
             'edit' => Pages\EditCompanySubscription::route('/{record}/edit'),
         ];
     }
-
 }

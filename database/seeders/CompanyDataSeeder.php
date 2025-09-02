@@ -23,7 +23,11 @@ class CompanyDataSeeder extends Seeder
                 'location' => 'دمشق - أبو رمانة',
                 'phone' => '011-3344556',
                 'about' => 'متخصصة في خدمات الدهان، الكهرباء، التمديدات الصحية، والأرضيات بجودة عالية ومعايير أمان صارمة.',
+
                 'logo' => 'companies-logo/logo1.png',
+
+                'logo' => 'companies-logo/emaar.png',
+
                 'cost_of_examination' => 5000,
             ],
             [
@@ -32,7 +36,11 @@ class CompanyDataSeeder extends Seeder
                 'location' => 'دمشق - المزة',
                 'phone' => '011-2233445',
                 'about' => 'تقدم حلول شاملة لأعمال الدهان والكهرباء والتمديدات الصحية وتركيب الأرضيات.',
+
                 'logo' => 'companies-logo/logo2.png',
+
+                'logo' => 'companies-logo/modern_build.png',
+
                 'cost_of_examination' => 3000,
             ],
             [
@@ -41,7 +49,11 @@ class CompanyDataSeeder extends Seeder
                 'location' => 'دمشق - جرمانا',
                 'phone' => '0999554433',
                 'about' => 'تتخصص في إعادة تأهيل الشقق عبر خدمات الدهان والكهرباء والتمديدات الصحية والأرضيات.',
+
                 'logo' => 'companies-logo/logo3.png',
+
+                'logo' => 'companies-logo/sham_decor.png',
+
                 'cost_of_examination' => 2000,
             ],
             [
@@ -50,7 +62,11 @@ class CompanyDataSeeder extends Seeder
                 'location' => 'حلب - العزيزية',
                 'phone' => '021-5544332',
                 'about' => 'خبراء في أعمال الكهرباء، الدهان، التمديدات الصحية، والأرضيات مع ضمان الجودة.',
+
                 'logo' => 'companies-logo/logo4.png',
+
+                'logo' => 'companies-logo/aman_services.png',
+
                 'cost_of_examination' => 2500,
             ],
             [
@@ -60,6 +76,9 @@ class CompanyDataSeeder extends Seeder
                 'phone' => '0933445566',
                 'about' => 'فريق متخصص في جميع أعمال الدهان والكهرباء والتمديدات الصحية والأرضيات.',
                 'logo' => 'companies-logo/logo5.png',
+
+                'logo' => 'companies-logo/art_touch.png',
+
                 'cost_of_examination' => 4000,
             ],
         ];

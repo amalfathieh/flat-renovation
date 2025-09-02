@@ -8,7 +8,6 @@ use App\Models\Company;
 use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Order;
-use App\Models\TransactionsAll;
 use App\Notifications\SendNotification;
 use App\Notifications\StoreNotification;
 use App\Services\InvoiceService;
@@ -32,6 +31,7 @@ class OrderResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $pluralModelLabel = 'الطلبات';
 
+    protected static ?string $modelLabel = 'الطلب';
     public static function getNavigationBadge(): ?string
     {
         return parent::getEloquentQuery()->where('status', 'waiting')->count();
@@ -118,7 +118,7 @@ class OrderResource extends Resource
                             'status' => 'accepted',
                             'employee_id' => $data['employee_id'],
                         ]);
-//                        dd($record);
+
 
                         $employee = Employee::find($data['employee_id'])->user;
 
@@ -130,7 +130,7 @@ class OrderResource extends Resource
                         $customerPhone = $user->payment_phone;
 
                         $push = new PushNotificationController();
-                        // إشعار الزبون
+
                         if ($user->device_token) {
                             $push->sendPushNotification(
                                 'تم قبول طلبك ✅',
@@ -214,7 +214,7 @@ class OrderResource extends Resource
                             DB::commit();
 
 
-                            // 🔔 إرسال إشعار للزبون عند الرفض
+
                             $push = new PushNotificationController();
                             if ($customerUser->device_token) {
                                 $push->sendPushNotification(
@@ -302,7 +302,7 @@ class OrderResource extends Resource
 
                         TextEntry::make('budget')->label('الميزانية'),
                         TextEntry::make('location')->label('الموقع'),
-                        TextEntry::make('cost_of_examination')->label('كلفة الكشف بالدولار'),
+                        TextEntry::make('cost_of_examination')->label('كلفة الكشف'),
                         TextEntry::make('created_at')
                             ->label('تاريخ الإنشاء')
                             ->date(),

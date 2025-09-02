@@ -27,6 +27,11 @@ class ObjectionResource extends Resource
     protected static ?string $pluralLabel = 'الأعتراضات';
     protected static ?string $modelLabel = 'أعتراض';
 
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -71,36 +76,34 @@ class ObjectionResource extends Resource
     {
         return [
             'index' => Pages\ListObjections::route('/'),
-            'create' => Pages\CreateObjection::route('/create'),
-            'edit' => Pages\EditObjection::route('/{record}/edit'),
         ];
     }
 
 
-//    public static function getEloquentQuery(): Builder
-//    {
-//        $user = Filament::auth()->user();
-//
-//
-//        if ($user->hasRole('admin')) {
-//            return parent::getEloquentQuery();
-//        }
-//
-//
-//        if ($user->hasRole('company')) {
-//            return parent::getEloquentQuery()
-//                ->whereHas('projectStage.project', function ($q) use ($user) {
-//                    $q->where('company_id', $user->company_id);
-//                });
-//        }
-//
-//
-//        if ($user->hasRole('employee')) {
-//            return parent::getEloquentQuery()
-//                ->whereHas('projectStage.project', function ($q) use ($user) {
-//                    $q->where('employee_id', $user->id);
-//                });
-//        }
+    //    public static function getEloquentQuery(): Builder
+    //    {
+    //        $user = Filament::auth()->user();
+    //
+    //
+    //        if ($user->hasRole('admin')) {
+    //            return parent::getEloquentQuery();
+    //        }
+    //
+    //
+    //        if ($user->hasRole('company')) {
+    //            return parent::getEloquentQuery()
+    //                ->whereHas('projectStage.project', function ($q) use ($user) {
+    //                    $q->where('company_id', $user->company_id);
+    //                });
+    //        }
+    //
+    //
+    //        if ($user->hasRole('employee')) {
+    //            return parent::getEloquentQuery()
+    //                ->whereHas('projectStage.project', function ($q) use ($user) {
+    //                    $q->where('employee_id', $user->id);
+    //                });
+    //        }
 
 
     public static function getEloquentQuery(): Builder
@@ -117,7 +120,7 @@ class ObjectionResource extends Resource
         if ($user->hasRole('company')) {
             return parent::getEloquentQuery()
                 ->whereHas('projectStage.project', function ($q) use ($user) {
-                    $q->where('company_id', $user->company_id);
+                    $q->where('company_id', $user->company->id);
                 })
                 ->with(['projectStage.project']); // ضروري
         }
@@ -133,6 +136,5 @@ class ObjectionResource extends Resource
 
         // افتراضيًا ما يعرض شي
         return parent::getEloquentQuery()->whereRaw('0 = 1');
-
     }
 }
