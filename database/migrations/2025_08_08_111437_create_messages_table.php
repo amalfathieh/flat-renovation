@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('sender_id');
             $table->string('sender_type');
             $table->string('sender_name');
-            $table->string('sender_image');
+            $table->string('sender_image')->nullable();
             $table->text('message');
             $table->timestamps();
         });

@@ -87,6 +87,17 @@
       0 => 'Filament\\Widgets\\WidgetsServiceProvider',
     ),
   ),
+  'jaocero/filachat' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'JaOcero\\FilaChat\\FilaChatServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'FilaChat' => 'JaOcero\\FilaChat\\Facades\\FilaChat',
+    ),
+  ),
   'kirschbaum-development/eloquent-power-joins' => 
   array (
     'providers' => 
@@ -117,6 +128,18 @@
     'providers' => 
     array (
       0 => 'Laravel\\Pail\\PailServiceProvider',
+    ),
+  ),
+  'laravel/reverb' => 
+  array (
+    'aliases' => 
+    array (
+      'Output' => 'Laravel\\Reverb\\Output',
+    ),
+    'providers' => 
+    array (
+      0 => 'Laravel\\Reverb\\ApplicationManagerServiceProvider',
+      1 => 'Laravel\\Reverb\\ReverbServiceProvider',
     ),
   ),
   'laravel/sail' => 
@@ -160,6 +183,24 @@
     'providers' => 
     array (
       0 => 'Livewire\\LivewireServiceProvider',
+    ),
+  ),
+  'monzer/filament-chatify-integration' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Monzer\\FilamentChatifyIntegration\\ChatifyServiceProvider',
+    ),
+  ),
+  'munafio/chatify' => 
+  array (
+    'aliases' => 
+    array (
+      'Chatify' => 'Chatify\\Facades\\ChatifyMessenger',
+    ),
+    'providers' => 
+    array (
+      0 => 'Chatify\\ChatifyServiceProvider',
     ),
   ),
   'nesbot/carbon' => 

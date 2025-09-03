@@ -26,7 +26,7 @@ class CompanyDataSeeder extends Seeder
 
                 'logo' => 'companies-logo/logo1.png',
 
-                'logo' => 'companies-logo/emaar.png',
+
 
                 'cost_of_examination' => 5000,
             ],
@@ -39,7 +39,7 @@ class CompanyDataSeeder extends Seeder
 
                 'logo' => 'companies-logo/logo2.png',
 
-                'logo' => 'companies-logo/modern_build.png',
+
 
                 'cost_of_examination' => 3000,
             ],
@@ -52,7 +52,7 @@ class CompanyDataSeeder extends Seeder
 
                 'logo' => 'companies-logo/logo3.png',
 
-                'logo' => 'companies-logo/sham_decor.png',
+
 
                 'cost_of_examination' => 2000,
             ],
@@ -65,7 +65,7 @@ class CompanyDataSeeder extends Seeder
 
                 'logo' => 'companies-logo/logo4.png',
 
-                'logo' => 'companies-logo/aman_services.png',
+
 
                 'cost_of_examination' => 2500,
             ],
@@ -77,7 +77,7 @@ class CompanyDataSeeder extends Seeder
                 'about' => 'فريق متخصص في جميع أعمال الدهان والكهرباء والتمديدات الصحية والأرضيات.',
                 'logo' => 'companies-logo/logo5.png',
 
-                'logo' => 'companies-logo/art_touch.png',
+
 
                 'cost_of_examination' => 4000,
             ],
