@@ -95,6 +95,14 @@ class TransactionsAll extends Model
         return $query->where('source', 'admin_monthly_clearance');
     }
 
+    public function scopeAdminEarnings($query, $adminId)
+    {
+        return $query->where('payer_type', Company::class)
+            ->where('receiver_id', $adminId)
+            ->where('receiver_type', User::class)
+            ->where('source', 'company_subscription');
+    }
+
 
 
 
