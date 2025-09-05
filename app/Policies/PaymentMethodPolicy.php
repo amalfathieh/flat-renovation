@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\PaymentMethod;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Illuminate\Auth\Access\Response;
 
 class PaymentMethodPolicy
@@ -13,7 +14,7 @@ class PaymentMethodPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasRole('company') || $user->hasRole('admin');
+            return $user->can('view_any_paymentmethod');
     }
 
     /**
@@ -21,7 +22,7 @@ class PaymentMethodPolicy
      */
     public function view(User $user, PaymentMethod $paymentMethod): bool
     {
-        return $user->hasRole('company') || $user->hasRole('admin');
+        return $user->can('view_paymentmethod');
     }
 
     /**
@@ -29,7 +30,7 @@ class PaymentMethodPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasRole('admin');
+        return $user->hasRole('admin') && $user->can('create_paymentmethod');
     }
 
     /**
@@ -37,7 +38,7 @@ class PaymentMethodPolicy
      */
     public function update(User $user, PaymentMethod $paymentMethod): bool
     {
-        return $user->hasRole('admin');
+        return $user->hasRole('admin') && $user->can('update_paymentmethod');
     }
 
     /**
@@ -45,7 +46,7 @@ class PaymentMethodPolicy
      */
     public function delete(User $user, PaymentMethod $paymentMethod): bool
     {
-        return $user->hasRole('admin');
+        return $user->hasRole('admin') && $user->can('delete_paymentmethod');
     }
 
 }

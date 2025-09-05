@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\TopUpRequest;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Illuminate\Auth\Access\Response;
 
 class TopUpRequestPolicy
@@ -13,7 +14,7 @@ class TopUpRequestPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasRole('company') || $user->hasRole('admin');
+        return $user->can('view_any_topuprequest');
     }
 
     /**
@@ -21,7 +22,8 @@ class TopUpRequestPolicy
      */
     public function view(User $user, TopUpRequest $topUpRequest): bool
     {
-        return $user->hasRole('company') || $user->hasRole('admin');
+        return $user->can('view_topuprequest');
+
     }
 
     /**
@@ -29,7 +31,8 @@ class TopUpRequestPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasRole('company');
+        return $user->can('create_topuprequest');
+
     }
 
     /**
@@ -37,7 +40,7 @@ class TopUpRequestPolicy
      */
     public function update(User $user, TopUpRequest $topUpRequest): bool
     {
-        return $user->hasRole('admin');
+        return $user->can('update_topuprequest');
     }
 
 }

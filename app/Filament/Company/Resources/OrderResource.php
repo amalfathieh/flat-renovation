@@ -23,12 +23,13 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-down-on-square';
     protected static ?string $pluralModelLabel = 'الطلبات';
 
     protected static ?string $modelLabel = 'الطلب';
@@ -250,9 +251,7 @@ class OrderResource extends Resource
 
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                    ExportBulkAction::make(),
             ]);
     }
 

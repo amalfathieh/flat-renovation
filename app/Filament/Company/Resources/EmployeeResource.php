@@ -24,7 +24,7 @@ class EmployeeResource extends Resource
 {
     protected static ?string $model = Employee::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $modelLabel = 'موظف';
     protected static ?string $pluralModelLabel = 'الموظفيين';
 
@@ -237,7 +237,7 @@ class EmployeeResource extends Resource
 
     public static function getRoles()
     {
-        return Role::whereNotIn('name', ['employee', 'admin', 'company', 'customer'])
+        return Role::whereNotIn('name', ['employee', 'admin', 'company', 'customer', 'base_permissions'])
             ->pluck('name', 'name')->toArray();
     }
 

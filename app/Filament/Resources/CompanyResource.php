@@ -15,6 +15,7 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 class CompanyResource extends Resource
 {
@@ -75,6 +76,7 @@ class CompanyResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->label('رابط')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('email')
@@ -85,10 +87,12 @@ class CompanyResource extends Resource
 
                 Tables\Columns\TextColumn::make('employees_count')
                     ->label('عدد الموظفين')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->counts('employees'),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('تاريخ الإنشاء')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->date(),
 
             ])
@@ -101,9 +105,7 @@ class CompanyResource extends Resource
 
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                ExportBulkAction::make(),
             ]);
     }
 

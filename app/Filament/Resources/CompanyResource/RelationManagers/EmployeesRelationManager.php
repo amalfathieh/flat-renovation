@@ -14,6 +14,10 @@ class EmployeesRelationManager extends RelationManager
 {
     protected static string $relationship = 'employees';
 
+    protected static ?string $modelLabel = 'الموظف';
+
+    protected static ?string $pluralModelLabel = 'الموظفيين';
+
     public function form(Form $form): Form
     {
         return $form

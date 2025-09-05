@@ -135,7 +135,7 @@ class UserSeeder extends Seeder
                         'payment_phone' => '09' . rand(100000000, 999999999),
                         'balance' => 0,
                     ]);
-                    self::$employees["$c-$e"]->syncRoles('employee');
+                    self::$employees["$c-$e"]->syncRoles(['supervisor', 'employee']);
                 }
             }
 
