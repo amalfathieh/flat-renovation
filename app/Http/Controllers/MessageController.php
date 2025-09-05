@@ -74,22 +74,22 @@ class MessageController extends Controller
                 ]);
 //            }
 
-//            event(new \App\Events\Messagesent(
-//                $m->message,
-//                $user->customerProfile->id,
-//                $user->name,
-//                $user->customerProfile->type,
-//                $conversation->employee_id,
-//                $user->customerProfile->image
-//            ));
-            event(new \App\Events\MessageSent(
-                $m->message,                  // نص الرسالة
-                $user->name,                   // senderNameط,  // senderType
-                'user',
-                $user->customerProfile->id,    // senderId
-                $conversation->employee->user_id,    // receiverId
-                $user->customerProfile->image  // senderImage
+            event(new \App\Events\Messagesent(
+                $m->message,
+                $user->customerProfile->id,
+                $user->name,
+                $user->customerProfile->type,
+                $conversation->employee_id,
+                $user->customerProfile->image
             ));
+//            event(new \App\Events\MessageSent(
+//                $m->message,                  // نص الرسالة
+//                $user->name,                   // senderNameط,  // senderType
+//                'user',
+//                $user->customerProfile->id,    // senderId
+//                $conversation->employee->user_id,    // receiverId
+//                $user->customerProfile->image  // senderImage
+//            ));
 
 
             return $m;

@@ -18,10 +18,10 @@ class UserSeeder extends Seeder
     {
 
 
-        // 🟢 مستخدمين أساسيين للتجربة
+
         $user1 = User::create([
-            'name' => 'مستخدم عادي',
-            'email' => 'user@ex.com',
+            'name' => 'safa Alshnouan',
+            'email' => 'safaalshnouan24636@gmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('12345678'),
             'payment_phone' => '0912345678',
@@ -65,7 +65,7 @@ class UserSeeder extends Seeder
         ]);
         $user4->syncRoles(['control_panel_employee', 'employee']);
 
-        // 🟢 ملاك الشركات + موظفين + زبائن
+
         $ownersData = [
             ['name' => 'خالد درويش', 'email' => 'khaled.owner@example.com', 'phone' => '0988111222'],
             ['name' => 'مروان السيد', 'email' => 'marwan.owner@example.com', 'phone' => '0977665544'],
@@ -110,7 +110,7 @@ class UserSeeder extends Seeder
             ['نادر رستم', 'nader.rustom@example.com'],
         ];
 
-        // إنشاء الملاك + موظفين + زبائن
+
         foreach ($ownersData as $c => $owner) {
             self::$owners[$c] = User::create([
                 'name' => $owner['name'],
