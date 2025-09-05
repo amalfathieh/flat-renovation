@@ -27,7 +27,6 @@ class CompanyDataSeeder extends Seeder
                 'logo' => 'companies-logo/logo1.png',
 
 
-
                 'cost_of_examination' => 5000,
             ],
             [
@@ -41,6 +40,8 @@ class CompanyDataSeeder extends Seeder
 
 
 
+
+
                 'cost_of_examination' => 3000,
             ],
             [
@@ -51,7 +52,6 @@ class CompanyDataSeeder extends Seeder
                 'about' => 'تتخصص في إعادة تأهيل الشقق عبر خدمات الدهان والكهرباء والتمديدات الصحية والأرضيات.',
 
                 'logo' => 'companies-logo/logo3.png',
-
 
 
                 'cost_of_examination' => 2000,
@@ -76,7 +76,6 @@ class CompanyDataSeeder extends Seeder
                 'phone' => '0933445566',
                 'about' => 'فريق متخصص في جميع أعمال الدهان والكهرباء والتمديدات الصحية والأرضيات.',
                 'logo' => 'companies-logo/logo5.png',
-
 
 
                 'cost_of_examination' => 4000,

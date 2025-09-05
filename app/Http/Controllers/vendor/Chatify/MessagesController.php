@@ -169,6 +169,14 @@ class MessagesController extends Controller
                 ]);
             });
 
+            event(new \App\Events\Messagesent(
+                'message' ,
+                $user->employee->id,
+                $user->name,
+              'employee',
+                $customer_id,
+                $user->employee->image
+            ));
             $messageData = Chatify::parseMessage($message);
             if (Auth::user()->id != $request['id']) {
                 Chatify::push("private-chatify.".$request['id'], 'messaging', [

@@ -45,7 +45,7 @@ class MessageController extends Controller
             'message' => 'required|string',
         ]);
 
-        $message = DB::transaction(function () use ($conversation, $user, $data) {
+        $message = DB::transaction(function () use ($conversation, $user, $data,$request) {
             $m = Message::create([
                 'conversation_id' => $conversation->id,
                 'sender_id'       => $user->customerProfile->id,
@@ -66,31 +66,23 @@ class MessageController extends Controller
             $messageData = Chatify::parseMessage($mess);
 
             // send to user using pusher
-//            if (Auth::user()->id != $request['id']) {
+            if (Auth::user()->id != $request['id']) {
                 Chatify::push("private-chatify.".$conversation->employee->user->id, 'messaging', [
                     'from_id' => Auth::user()->id,
                     'to_id' =>$conversation->employee->user->id,
                     'message' => $messageData
                 ]);
-//            }
+            }
 
-            event(new \App\Events\Messagesent(
-                $m->message,
-                $user->customerProfile->id,
-                $user->name,
-                $user->customerProfile->type,
-                $conversation->employee_id,
-                $user->customerProfile->image
+
+            event(new \App\Events\MessageSent(
+                $m->message,                  // نص الرسالة
+                $user->name,                   // senderName
+                $user->customerProfile->type,  // senderType
+                $user->customerProfile->id,    // senderId
+                $conversation->employee_id,    // receiverId
+                $user->customerProfile->image  // senderImage
             ));
-//            event(new \App\Events\MessageSent(
-//                $m->message,                  // نص الرسالة
-//                $user->name,                   // senderNameط,  // senderType
-//                'user',
-//                $user->customerProfile->id,    // senderId
-//                $conversation->employee->user_id,    // receiverId
-//                $user->customerProfile->image  // senderImage
-//            ));
-
 
             return $m;
         });
