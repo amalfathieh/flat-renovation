@@ -17,9 +17,9 @@
 //        || ($user->customerProfile && $user->customerProfile->id == $conversation->customer_id);
 //});
 //
-use Illuminate\Support\Facades\Broadcast;
-
-Broadcast::channel('conversation.{sender}.{receiver}', function ($user, $sender, $receiver) {
-    // لازم تحدد الشرط اللي يسمح للمستخدم يسمع بهالقناة
-    return true; // جرب مبدئياً
-});
+//use Illuminate\Support\Facades\Broadcast;
+//
+//Broadcast::channel('conversation.{sender}.{receiver}', function ($user, $sender, $receiver) {
+//    // لازم تحدد الشرط اللي يسمح للمستخدم يسمع بهالقناة
+//    return true; // جرب مبدئياً
+//});
