@@ -19,6 +19,14 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Notification;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
+Route::get('/test-pdf', function () {
+    $pdf = Pdf::loadView('pdf.pdf');
+    return $pdf->download();
+//    $pdf = Pdf::loadHTML('<h1>مرحبا 👋</h1><p>تجربة PDF</p>');
+//    return $pdf->download('test.pdf');
+});
 
 Route::post('device-token', [DeviceTokenController::class,'store'])->middleware('auth');
 

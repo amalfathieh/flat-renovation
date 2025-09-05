@@ -33,7 +33,7 @@ class ExternalTransferDashboardResource extends Resource
 
     protected static ?string $model = \App\Models\Company::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
 
     protected static ?string $navigationLabel = 'قائمة أرباح الشركات';
     protected static ?string $navigationGroup = 'الإدارة المالية';

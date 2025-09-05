@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\CompanySubscription;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Illuminate\Auth\Access\Response;
 
 class CompanySubscriptionPolicy
@@ -13,7 +14,8 @@ class CompanySubscriptionPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasRole('company') || $user->hasRole('admin');
+        return $user->can('view_any_companysubscription');
+
     }
 
     /**
@@ -21,7 +23,7 @@ class CompanySubscriptionPolicy
      */
     public function view(User $user, CompanySubscription $companySubscription): bool
     {
-        return $user->hasRole('company') || $user->hasRole('admin');
+        return $user->can('view_companysubscription');
     }
 
     /**
@@ -29,6 +31,12 @@ class CompanySubscriptionPolicy
      */
     public function create(User $user): bool
     {
+        if (Filament::getCurrentPanel()->getId() == 'admin'){
+            return false;
+        }
+        if (Filament::getCurrentPanel()->getId() == 'company') {
+            return $user->can('create_companysubscription');
+        }
         return false;
     }
 

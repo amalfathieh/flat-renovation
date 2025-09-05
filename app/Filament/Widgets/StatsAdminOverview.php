@@ -60,7 +60,11 @@ class StatsAdminOverview extends BaseWidget
                 ->color('success')
                 ->chart([3, 6, 9, 8, 10, 7, 12, 15]),
 
-            Stat::make('المتبقي للتحويل', TransactionsAll::adminEarnings(auth()->user()->id)->sum('amount') -  ExternalTransfer::sum('amount'))
+            Stat::make('المتبقي للتحويل',
+                TransactionsAll::allCompanyEarnings()->sum('amount')
+                - TransactionsAll::allCompanyRefunds()->sum('amount')
+                - ExternalTransfer::sum('amount')
+            )
                 ->description('المبلغ المتبقي الواجب تحويله')
                 ->descriptionIcon('heroicon-o-arrow-uturn-left')
                 ->color('danger')

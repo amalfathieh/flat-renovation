@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Filament\Resources;
-
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use App\Filament\Resources\TopUpRequestResource\Pages;
 use App\Filament\Resources\TopUpRequestResource\RelationManagers;
 use App\Models\TopUpRequest;
@@ -68,11 +68,18 @@ class TopUpRequestResource extends Resource
 //                    ->label('Requester Type')
                     ->label('نوع الطالب')
                     ->formatStateUsing(fn ($state) => class_basename($state)),
-                Tables\Columns\TextColumn::make('requester.name')
-                    ->label('Name')
+
+                Tables\Columns\TextColumn::make('requester')
+                    ->getStateUsing(
+                        fn($record) =>
+                            optional($record->requester)->name ??
+                            optional(optional($record->requester)->user)->name ??
+                            'Unknown'
+                    )
                     ->label('الاسم'),
 
                 Tables\Columns\TextColumn::make('amount')
+                    ->label('المبلغ')
                     ->money('SYP', true)
                     ->sortable(),
 
@@ -111,9 +118,7 @@ class TopUpRequestResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                ExportBulkAction::make(),
             ]);
     }
 
