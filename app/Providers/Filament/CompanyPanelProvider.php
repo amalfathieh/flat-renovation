@@ -22,6 +22,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Monzer\FilamentChatifyIntegration\ChatifyPlugin;
 use TomatoPHP\FilamentFcm\FilamentFcmPlugin;
 
 class CompanyPanelProvider extends PanelProvider
@@ -69,8 +70,8 @@ class CompanyPanelProvider extends PanelProvider
             ->tenant(Company::class, 'slug', 'company')
             ->tenantRegistration(RegisterCompany::class)
             ->tenantProfile(EditCompanyProfile::class)
-            ->databaseNotifications();
-
+            ->databaseNotifications()
+        ->plugin(ChatifyPlugin::make());
     }
 }
 

@@ -6,6 +6,7 @@ use App\Events\MessageSent;
 use App\Http\Controllers\Controller;
 use App\Models\Conversation;
 use App\Models\Message;
+use Chatify\Facades\ChatifyMessenger as Chatify;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -53,6 +54,25 @@ class MessageController extends Controller
                 'message'         => $data['message'],
                 'sender_image'    => $user->customerProfile->image,
             ]);
+            $mess = Chatify::newMessage([
+                'type' => 'user',
+                'from_id' => Auth::user()->id,
+
+                'to_id' => $conversation->employee->user->id,
+                'body' => $data['message'],
+                'attachment' =>   null,
+            ]);
+
+            $messageData = Chatify::parseMessage($mess);
+
+            // send to user using pusher
+//            if (Auth::user()->id != $request['id']) {
+                Chatify::push("private-chatify.".$conversation->employee->user->id, 'messaging', [
+                    'from_id' => Auth::user()->id,
+                    'to_id' =>$conversation->employee->user->id,
+                    'message' => $messageData
+                ]);
+//            }
 
 //            event(new \App\Events\Messagesent(
 //                $m->message,
@@ -64,10 +84,10 @@ class MessageController extends Controller
 //            ));
             event(new \App\Events\MessageSent(
                 $m->message,                  // نص الرسالة
-                $user->name,                   // senderName
-                $user->customerProfile->type,  // senderType
+                $user->name,                   // senderNameط,  // senderType
+                'user',
                 $user->customerProfile->id,    // senderId
-                $conversation->employee_id,    // receiverId
+                $conversation->employee->user_id,    // receiverId
                 $user->customerProfile->image  // senderImage
             ));
 

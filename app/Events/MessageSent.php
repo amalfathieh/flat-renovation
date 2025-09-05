@@ -2,8 +2,9 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel; // ملاحظة: الآن عام
+// ملاحظة: الآن عام
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -30,11 +31,12 @@ class MessageSent implements ShouldBroadcast
     }
 
     // هنا غيّرنا PrivateChannel إلى Channel
-    public function broadcastOn(): array
-    {
-        $channelName = 'conversation.' . min($this->senderId, $this->receiverId) . '.' . max($this->senderId, $this->receiverId);
-        return [new Channel($channelName)];
-    }
+//    public function broadcastOn(): array
+//    {
+//        $channelName ="private-chatify.".$this->receiverId;
+//        return [new PrivateChannel($channelName)];
+//    }
+
 
     public function broadcastAs()
     {

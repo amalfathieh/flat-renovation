@@ -16,9 +16,9 @@ class BroadcastServiceProvider extends ServiceProvider
 
         // لكن إذا بدك مستقبلاً تضيف Private/Presence Channels،
         // بس رجّع السطر الجاي:
-        // Broadcast::routes();
+//         Broadcast::routes();
 
         // ما في داعي تجيب ملف routes/channels.php حالياً
-        // require base_path('routes/channels.php');
+         require base_path('routes/channels.php');
     }
 }
