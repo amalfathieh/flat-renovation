@@ -4,31 +4,42 @@ namespace Database\Seeders;
 
 use App\Models\ProjectStage;
 use App\Models\Service;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class StageSeeder extends Seeder
 {
     public static array $stages = [];
 
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $service = Service::first();
-        $serviceTypes = $service->serviceTypes;
-        foreach ($serviceTypes as $serviceType){
-            foreach (ProjectSeeder::$projects as $key => $project) {
+        $services = Service::all();
 
-                self::$stages[$key] = ProjectStage::create([
+
+        $projects = array_slice(ProjectSeeder::$projects, 0, 10, true);
+
+        foreach ($projects as $projectKey => $project) {
+
+
+            $projectServices = $services->take(4);
+
+            foreach ($projectServices as $index => $service) {
+
+
+                $serviceType = $service->serviceTypes->first();
+
+                if (!$serviceType) continue;
+
+                $stage = ProjectStage::create([
                     'project_id' => $project->id,
-                    'name' => "مرحلة: ". $service->name,
-                    "service_id" => $service->id,
-                    "service_type_id" => $serviceType->id,
-                    "description" => "بالنسبة ". $service->name . " سيتم " .$serviceType->description,
-                    'cost' => 200,
+                    'name' => "مرحلة " . ($index + 1) . ": {$service->name}",
+                    'service_id' => $service->id,
+                    'service_type_id' => $serviceType->id,
+                    'description' => "هذه المرحلة تتعلق بخدمة {$service->name} ونوعها {$serviceType->description}",
+                    'cost' => rand(100, 500),
                 ]);
+
+
+                self::$stages["{$projectKey}-{$index}"] = $stage;
             }
         }
     }

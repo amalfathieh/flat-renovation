@@ -9,12 +9,22 @@ class ProjectStageImageSeeder extends Seeder
 {
     public function run(): void
     {
-        foreach (StageSeeder::$stages as $key => $stage) {
-            for ($img = 1; $img <= 4; $img++) {
+
+        $imageIndex = 1;
+
+
+        $stages = array_slice(StageSeeder::$stages, 0, 2 * 4);
+
+
+        foreach ($stages as $stage) {
+
+            for ($i = 1; $i <= 4; $i++) {
                 Image_stage::create([
                     'project_stage_id' => $stage->id,
-                    'image' => "project-stage-images/{$key}_{$img}.jpg", // ← اسم صورة فريد
+                    'image' => "storage/project-stage-images/{$imageIndex}.jpg",
                 ]);
+
+                $imageIndex++;
             }
         }
     }
