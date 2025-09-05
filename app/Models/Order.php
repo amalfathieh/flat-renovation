@@ -14,7 +14,6 @@ class Order extends Model
         'employee_id',
         'status',
         'cost_of_examination',
-        // 'location',
          'latitude',
          'longitude',
          'budget',

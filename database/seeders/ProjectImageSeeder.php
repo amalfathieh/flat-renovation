@@ -10,14 +10,22 @@ class ProjectImageSeeder extends Seeder
 {
     public function run(): void
     {
-        foreach (ProjectSeeder::$projects as $projectIndex => $project) {
-            for ($img = 1; $img <= 4; $img++) {
+
+        $projects = Project::take(5)->get();
+
+        $imageIndex = 1;
+
+        foreach ($projects as $projectIndex => $project) {
+
+            for ($i = 1; $i <= 4; $i++) {
                 ProjectImage::create([
                     'project_id' => $project->id,
-                    'before_image' => "project-images/before_{$projectIndex}_{$img}.jpg",
-                    'after_image' => "project-images/after_{$projectIndex}_{$img}.jpg",
-                    'caption' => "صورة $img قبل وبعد (مشروع رقم $projectIndex)",
+                    'before_image' => "storage/project-images/before_{$imageIndex}.jpg",
+                    'after_image'  => "storage/project-images/after_{$imageIndex}.jpg",
+                    'caption' => "صورة $i قبل وبعد (مشروع رقم " . ($projectIndex + 1) . ")",
                 ]);
+
+                $imageIndex++;
             }
         }
     }

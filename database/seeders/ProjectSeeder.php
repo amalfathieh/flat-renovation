@@ -17,10 +17,6 @@ class ProjectSeeder extends Seeder
     {
 
 
-
-
-
-
         $projectTypes = [
             'دهان داخلي للشقق',
             'دهان خارجي للواجهات',
@@ -34,19 +30,6 @@ class ProjectSeeder extends Seeder
 
         foreach (OrderSeeder::$orders as $key => $order) {
             $userName = $order->customer->user->name;
-
-            [$c, $z] = explode('-', $key);
-
-            // اختيار الموظف عشوائيًا من الموظفين المتاحين للشركة
-            $companyEmployees = array_filter(
-                EmployeeSeeder::$employees,
-                fn($index) => str_starts_with($index, "$c-"),
-                ARRAY_FILTER_USE_KEY
-            );
-
-            // تحويل القيم لمصفوفة وترتيب عشوائي
-            $companyEmployeesArray = array_values($companyEmployees);
-            $employee = $companyEmployeesArray[array_rand($companyEmployeesArray)];
 
             $projectType = $projectTypes[array_rand($projectTypes)];
 
@@ -71,7 +54,7 @@ class ProjectSeeder extends Seeder
                 'company_id' => $order->company_id,
                 'customer_name' => $userName,
                 'order_id' => $order->id,
-                'employee_id' => $employee->id,
+                'employee_id' => $order->employee_id,
                 'project_name' => $projectType . " - $userName",
                 'start_date' => $startDate,
                 'end_date' => $endDate,
@@ -80,16 +63,11 @@ class ProjectSeeder extends Seeder
                 'final_cost' => rand($range[0], $range[1]),
                 'is_publish' => (bool) rand(0, 1),
             ]);
+
+
+
+
         }
-
-
-
-
-
-
-
-
-
 
 
 
