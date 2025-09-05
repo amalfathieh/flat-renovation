@@ -50,4 +50,8 @@ class Employee extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function conversation()
+    {
+        return $this->hasMany(Conversation::class);
+    }
 }
