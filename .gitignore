@@ -26,4 +26,4 @@ bootstrap/cache/services.php
 #storage/framework/cache/*
 #storage/framework/sessions/*
 #storage/framework/views/*
-
+storage/firebase_credentials.json
