@@ -16,37 +16,88 @@ class RolesAndPermissionsSeeder extends Seeder
 
     public function run(): void
     {
-
         $permissions = [
-            //Admin employee
-//            'role_control',
+            // CompanySubscriptionResource
+            'view_companysubscription', 'view_any_companysubscription', 'create_companysubscription', 'update_companysubscription', 'delete_companysubscription',
 
-            'view_company_dashboard',
+            // EmployeeResource
+            'view_employee', 'view_any_employee', 'create_employee', 'update_employee', 'delete_employee',
 
-            'employee_control', 'employee_view',
+            // ObjectionResource
+            'view_objection', 'view_any_objection', 'delete_objection',
 
-            'block_user',
+            // OrderResource
+            'view_order', 'view_any_order', 'update_order', 'delete_order',
 
-            'company_create',  'company_view', 'company_edit',
+            // PaymentMethodResource
+            'view_paymentmethod', 'view_any_paymentmethod', 'create_paymentmethod', 'update_paymentmethod', 'delete_paymentmethod',
 
-            'user_create', 'user_view','user_edit', 'user_delete',
 
-            //لادارة المشرفين والموظفيين
-            'manage_users',
-            //الشكاوي
-            'complaint_create', 'complaint_view','complaint_edit', 'complaint_delete',
+            // ProjectResource
+            'view_project', 'view_any_project', 'create_project', 'update_project', 'delete_project',
 
-            'order_create', 'order_status_edit', 'order_view', 'order_delete',
+            // ProjectStageResource
+            'view_projectstage', 'view_any_projectstage', 'create_projectstage', 'update_projectstage', 'delete_projectstage',
 
-            'appointment_create', 'appointment_view', 'appointment_delete',
+            // ServiceResource
+            'view_service', 'view_any_service', 'create_service', 'update_service', 'delete_service',
 
-            'project_create', 'project_view',  'project_edit', 'project_delete', 'update_project_stage',
+            // ServiceTypeResource
+            'view_servicetype', 'view_any_servicetype', 'create_servicetype', 'update_servicetype', 'delete_servicetype',
 
-            'service_create', 'service_view','service_edit', 'service_delete',
-            //الاعتراضات
-            'objection_create', 'objection_view', 'objection_delete',
+            // TopupRequestResource
+            'view_topuprequest', 'view_any_topuprequest', 'create_topuprequest', 'update_topuprequest', 'delete_topuprequest',
 
+            // TransactionsAllResource
+            'view_transactionsall', 'view_any_transactionsall', 'delete_transactionsall',
+
+            //ADMAIN
+            // CompanyResource.php
+            'view_company',
+            'admin_view_any_company',
+            'admin_create_company',
+            'admin_update_company',
+            'admin_delete_company',
+
+// External TransferDashboardResource.php
+            'admin_view_externaltransferdashboard',
+            'admin_view_any_externaltransferdashboard',
+            'admin_create_externaltransferdashboard',
+            'admin_update_externaltransferdashboard',
+            'admin_delete_externaltransferdashboard',
+
+// External TransferResource.php
+            'admin_view_externaltransfer',
+            'admin_view_any_externaltransfer',
+            'admin_create_externaltransfer',
+            'admin_update_externaltransfer',
+            'admin_delete_externaltransfer',
+
+// RoleResource.php
+            'view_role',
+            'view_any_role',
+            'create_role',
+            'update_role',
+            'delete_role',
+
+// SubscriptionPlanResource.php
+            'view_subscriptionplan',
+            'view_any_subscriptionplan',
+            'admin_create_subscriptionplan',
+            'admin_update_subscriptionplan',
+            'admin_delete_subscriptionplan',
+
+// UserResource.php
+            'admin_view_user',
+            'admin_view_any_user',
+//            'admin_create_user',
+            'admin_update_user',
+            'admin_delete_user',
+
+            /////////////
+            'create_objection',
         ];
+
         foreach ($permissions as $permission) {
             Permission::firstOrCreate(['name' => $permission]);
         }
@@ -54,51 +105,97 @@ class RolesAndPermissionsSeeder extends Seeder
         $owner = Role::firstOrCreate(['name' => 'admin'])->givePermissionTo($permissions);
 
         $userRole = Role::firstOrCreate(['name' => 'customer'])->givePermissionTo([
-            'complaint_create', 'user_create', 'user_view','user_edit', 'user_delete', 'project_view',
-            'service_view', 'objection_create', 'objection_view', 'objection_delete',
-            'order_create', 'order_view', 'order_delete',
+            'view_objection', 'create_objection', 'delete_objection',
+            'view_order', 'delete_order',
+            'view_paymentmethod',
+            'view_project', 'view_projectstage',
+            'view_service', 'view_servicetype',
+            'view_topuprequest', 'create_topuprequest',
+            'view_transactionsall',
+            'view_company',
         ]);
 
-        $companyRole = Role::firstOrCreate(['name' => 'company'])->givePermissionTo([
-//            'role_control',
-            'employee_control', 'employee_view',
-            'company_create',  'company_view', 'company_edit',
-            'order_view', 'order_delete','order_status_edit',
-            'appointment_create', 'appointment_view', 'appointment_delete',
+        $companyRole = Role::firstOrCreate([
+            'name' => 'company',
+            'to_company' => true,
+            ])->givePermissionTo([
+            'view_any_role',
 
-            'project_create', 'project_view',  'project_edit', 'project_delete',
+            'view_companysubscription', 'create_companysubscription', 'update_companysubscription', 'delete_companysubscription',
 
-            'service_create', 'service_view','service_edit', 'service_delete',
-            'objection_create', 'objection_view',
+            'view_employee', 'view_any_employee', 'create_employee', 'update_employee', 'delete_employee',
+
+            'view_objection', 'view_any_objection', 'delete_objection',
+
+            'view_order', 'view_any_order', 'update_order', 'delete_order',
+
+            'view_paymentmethod', 'view_any_paymentmethod',
+
+            'view_project', 'view_any_project', 'create_project', 'update_project', 'delete_project',
+
+            'view_projectstage', 'view_any_projectstage', 'create_projectstage', 'update_projectstage', 'delete_projectstage',
+
+            'view_service', 'view_any_service', 'create_service', 'update_service', 'delete_service',
+
+            'view_servicetype', 'view_any_servicetype', 'create_servicetype', 'update_servicetype', 'delete_servicetype',
+
+            'view_topuprequest', 'view_any_topuprequest', 'create_topuprequest', 'update_topuprequest', 'delete_topuprequest',
+
+            'view_transactionsall', 'view_any_transactionsall', 'delete_transactionsall',
         ]);
 
-        Role::firstOrCreate(['name' => 'control_panel_employee'])->givePermissionTo([
-            'company_view',
-            'user_view','user_edit', 'user_delete',
-            'block_user',
-            //الشكاوي
-            'complaint_create', 'complaint_view','complaint_edit', 'complaint_delete',
-
-            'service_view',
+        Role::firstOrCreate([
+            'name' => 'control_panel_employee',
+            'to_company' => true,
+        ])->givePermissionTo([
+            'view_employee', 'view_any_employee', 'create_employee', 'update_employee', 'delete_employee',
         ]);
 
 
-        Role::firstOrCreate(['name' => 'supervisor'])->givePermissionTo([
-            'view_company_dashboard',
-            //الشكاوي
-            'complaint_view',
+        Role::firstOrCreate(['name' =>
+            'supervisor',
+            'to_company' => true,
 
-             'complaint_view',
+        ])->givePermissionTo([
 
-            'order_view','order_status_edit',
+            'view_objection', 'view_any_objection',
 
-            //الاعتراضات
-            'objection_create', 'objection_view',
-            'project_view', 'project_edit', 'update_project_stage',
+            'view_order', 'view_any_order',
 
-            'service_view',
+            'view_project', 'view_any_project', 'create_project', 'update_project',
+
+            'view_projectstage', 'view_any_projectstage', 'create_projectstage', 'update_projectstage', 'delete_projectstage',
+
+            'view_service', 'view_any_service', 'create_service', 'update_service',
+
+            'view_servicetype', 'view_any_servicetype', 'create_servicetype', 'update_servicetype',
         ]);
+
 
         Role::firstOrCreate(['name' => 'employee']);
+
+
+        Role::firstOrCreate(['name' => 'base_permissions'])->givePermissionTo([
+
+            'view_employee', 'view_any_employee', 'create_employee', 'update_employee', 'delete_employee',
+
+            'view_objection', 'view_any_objection', 'delete_objection',
+
+            'view_order', 'view_any_order', 'update_order', 'delete_order',
+
+            'view_project', 'view_any_project', 'create_project', 'update_project', 'delete_project',
+
+            'view_projectstage', 'view_any_projectstage', 'create_projectstage', 'update_projectstage', 'delete_projectstage',
+
+            'view_service', 'view_any_service', 'create_service', 'update_service', 'delete_service',
+
+            'view_servicetype', 'view_any_servicetype', 'create_servicetype', 'update_servicetype', 'delete_servicetype',
+
+            'view_topuprequest', 'view_any_topuprequest',
+
+            'view_transactionsall', 'view_any_transactionsall', 'delete_transactionsall',
+        ]);
+
     }
+
 }

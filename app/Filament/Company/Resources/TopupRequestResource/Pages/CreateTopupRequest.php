@@ -11,11 +11,11 @@ class CreateTopupRequest extends CreateRecord
 {
     protected static string $resource = TopupRequestResource::class;
 
-    protected function afterCreate(){
+    protected function afterCreate(){//**New Top {$top->amount} created!**
         $top = $this->record;
         $admin  = User::role('admin')->first();
 
-        $admin->notify(new SendNotification($top->id,'New Top Up Request', "**New Top {$top->amount} created!**", "TopUp"));
+        $admin->notify(new SendNotification($top->id,'طلب شحن محفظة', "لديك طلب شحن محفظة جديد بقيمة {$top->amount}!", "TopUp"));
     }
 
 }

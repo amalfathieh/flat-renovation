@@ -74,7 +74,18 @@ class TransactionsAll extends Model
     }
 
 
+    public function scopeAllCompanyEarnings($query)
+    {
+        return $query->where('receiver_type', Company::class)
+            ->whereIn('source', ['user_order_payment', 'user_stage_payment']);
+    }
 
+
+    public function scopeAllCompanyRefunds($query)
+    {
+        return $query->where('payer_type', Company::class)
+            ->where('source', 'company_deduction_refund');
+    }
 
 
 
@@ -93,6 +104,14 @@ class TransactionsAll extends Model
     {
         return $this->scopeCompanyEarnings() - $this->scopeCompanyRefunds();
         return $query->where('source', 'admin_monthly_clearance');
+    }
+
+    public function scopeAdminEarnings($query, $adminId)
+    {
+        return $query->where('payer_type', Company::class)
+            ->where('receiver_id', $adminId)
+            ->where('receiver_type', User::class)
+            ->where('source', 'company_subscription');
     }
 
 

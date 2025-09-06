@@ -21,7 +21,7 @@ class ProjectStageImageSeeder extends Seeder
             for ($i = 1; $i <= 4; $i++) {
                 Image_stage::create([
                     'project_stage_id' => $stage->id,
-                    'image' => "storage/project-stage-images/{$imageIndex}.jpg",
+                    'image' => "project-stage-images/{$imageIndex}.jpg",
                 ]);
 
                 $imageIndex++;

@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Service;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Illuminate\Auth\Access\Response;
 
 class ServicePolicy
@@ -13,7 +14,10 @@ class ServicePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasRole('supervisor') || $user->hasRole('company');
+        if (Filament::getCurrentPanel()->getId() == 'company'){
+            return $user->can('view_any_service');
+        }
+        return false;
     }
 
     /**
@@ -21,7 +25,10 @@ class ServicePolicy
      */
     public function view(User $user, Service $service): bool
     {
-        return $user->hasRole('supervisor') || $user->hasRole('company');
+        if (Filament::getCurrentPanel()->getId() == 'company'){
+            return $user->can('view_service');
+        }
+        return false;
     }
 
     /**
@@ -29,7 +36,10 @@ class ServicePolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasRole('supervisor') || $user->hasRole('company');
+        if (Filament::getCurrentPanel()->getId() == 'company'){
+            return $user->can('create_service');
+        }
+        return false;
     }
 
     /**
@@ -37,7 +47,10 @@ class ServicePolicy
      */
     public function update(User $user, Service $service): bool
     {
-        return $user->hasRole('supervisor') || $user->hasRole('company');
+        if (Filament::getCurrentPanel()->getId() == 'company'){
+            return $user->can('update_service');
+        }
+        return false;
     }
 
     /**
@@ -45,7 +58,10 @@ class ServicePolicy
      */
     public function delete(User $user, Service $service): bool
     {
-        return $user->hasRole('company');
+        if (Filament::getCurrentPanel()->getId() == 'company'){
+            return $user->can('delete_service');
+        }
+        return false;
     }
 
 }

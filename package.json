@@ -22,6 +22,12 @@
     },
     "dependencies": {
         "@tailwindcss/vite": "^4.1.11",
+<<<<<<< HEAD
         "firebase": "^12.2.1"
+=======
+        "firebase": "^12.1.0",
+        "laravel-echo": "^2.2.0",
+        "pusher-js": "^8.4.0"
+>>>>>>> 8c95d0e03843433885f02f5fa49fc15da8135ac8
     }
 }

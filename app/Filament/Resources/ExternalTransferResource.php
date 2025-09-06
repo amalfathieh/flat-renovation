@@ -13,12 +13,13 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 class ExternalTransferResource extends Resource
 {
     protected static ?string $model = ExternalTransfer::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-uturn-left';
 
     protected static ?string $navigationLabel = 'التحويلات الخارجية';
     protected static ?string $navigationGroup = 'الإدارة المالية';
@@ -92,9 +93,7 @@ class ExternalTransferResource extends Resource
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                ExportBulkAction::make(),
             ]);
     }
 

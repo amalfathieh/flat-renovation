@@ -2,20 +2,19 @@
 
 namespace App\Policies;
 
-use App\Models\Project;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Illuminate\Auth\Access\Response;
 
-class ProjectPolicy
+class UserPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        if (Filament::getCurrentPanel()->getId() == 'company'){
-            return $user->can('view_any_project');
+        if (Filament::getCurrentPanel()->getId() == 'admin'){
+            return $user->can('admin_view_any_user');
         }
         return false;
     }
@@ -23,10 +22,10 @@ class ProjectPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Project $project): bool
+    public function view(User $user, User $model): bool
     {
-        if (Filament::getCurrentPanel()->getId() == 'company'){
-            return $user->can('view_project');
+        if (Filament::getCurrentPanel()->getId() == 'admin'){
+            return $user->can('admin_view_user');
         }
         return false;
     }
@@ -36,19 +35,16 @@ class ProjectPolicy
      */
     public function create(User $user): bool
     {
-        if (Filament::getCurrentPanel()->getId() == 'create_project'){
-            return $user->can('view_project');
-        }
         return false;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Project $project): bool
+    public function update(User $user, User $model): bool
     {
-        if (Filament::getCurrentPanel()->getId() == 'company'){
-            return $user->can('update_project');
+        if (Filament::getCurrentPanel()->getId() == 'admin'){
+            return $user->can('admin_update_user');
         }
         return false;
     }
@@ -56,18 +52,26 @@ class ProjectPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Project $project): bool
+    public function delete(User $user, User $model): bool
     {
-        if (Filament::getCurrentPanel()->getId() == 'company'){
-            return $user->can('delete_project');
+        if (Filament::getCurrentPanel()->getId() == 'admin'){
+            return $user->can('admin_delete_user');
         }
+        return false;
+    }
+
+    /**
+     * Determine whether the user can restore the model.
+     */
+    public function restore(User $user, User $model): bool
+    {
         return false;
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Project $project): bool
+    public function forceDelete(User $user, User $model): bool
     {
         return false;
     }

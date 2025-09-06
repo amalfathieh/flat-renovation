@@ -16,12 +16,15 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use App\Enums\TransactionSource;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class TransactionsAllResource extends Resource
 {
     protected static ?string $model = TransactionsAll::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
 
     protected static ?string $navigationGroup = 'Payments';
@@ -100,9 +103,21 @@ class TransactionsAllResource extends Resource
                 Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                ExportBulkAction::make()->exports([
+                    ExcelExport::make()
+                        ->fromTable()
+                        ->withColumns([
+                            Column::make('payer.user.name'),
+                            Column::make('payer.name'),
+                            Column::make('receiver.user.name'),
+                            Column::make('receiver.name'),
+                            Column::make('related_type'),
+                            Column::make('related_id'),
+                            Column::make('related.name'),
+                            Column::make('note'),
+                            Column::make('source'),
+                        ])
+                ])
             ]);
     }
 
