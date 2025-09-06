@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -45,25 +46,25 @@ class UserSeeder extends Seeder
         ]);
         $user2->syncRoles('admin');
 
-        $user3 = User::create([
-            'name' => 'المشرف العام',
-            'email' => 'supervisor@ex.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('12345678'),
-            'payment_phone' => '0944444444',
-            'balance' => 0,
-        ]);
-        $user3->syncRoles(['supervisor', 'employee']);
-
-        $user4 = User::create([
-            'name' => 'موظف لوحة التحكم',
-            'email' => 'panel@ex.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('12345678'),
-            'payment_phone' => '0933333333',
-            'balance' => 0,
-        ]);
-        $user4->syncRoles(['control_panel_employee', 'employee']);
+//        $user3 = User::create([
+//            'name' => 'المشرف العام',
+//            'email' => 'supervisor@ex.com',
+//            'email_verified_at' => now(),
+//            'password' => Hash::make('12345678'),
+//            'payment_phone' => '0944444444',
+//            'balance' => 0,
+//        ]);
+//        $user3->syncRoles(['supervisor', 'employee']);
+//
+//        $user4 = User::create([
+//            'name' => 'موظف لوحة التحكم',
+//            'email' => 'panel@ex.com',
+//            'email_verified_at' => now(),
+//            'password' => Hash::make('12345678'),
+//            'payment_phone' => '0933333333',
+//            'balance' => 0,
+//        ]);
+//        $user4->syncRoles(['control_panel_employee', 'employee']);
 
 
         $ownersData = [

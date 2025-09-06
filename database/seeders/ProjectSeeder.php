@@ -52,7 +52,7 @@ class ProjectSeeder extends Seeder
 
             self::$projects[$key] = Project::create([
                 'company_id' => $order->company_id,
-                'customer_name' => $userName,
+                'customer_id' => $order->customer_id,
                 'order_id' => $order->id,
                 'employee_id' => $order->employee_id,
                 'project_name' => $projectType . " - $userName",

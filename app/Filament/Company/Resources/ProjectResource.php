@@ -77,7 +77,7 @@ class ProjectResource extends Resource
                     ->schema([
                         Forms\Components\Section::make('Order Info')
                             ->schema([
-                                Forms\Components\Select::make('order_id')
+                                /*Forms\Components\Select::make('order_id')
                                     ->label('رقم الطلب')
                                     ->options(function () {
                                         $companyId = Filament::getTenant()?->id;
@@ -86,7 +86,7 @@ class ProjectResource extends Resource
 //                                            ->where('status', 'completed')
                                             ->where('status', 'accepted')
                                             ->get()
-                                            ->pluck('id', 'id');
+                                            ->pluck('id', 'name');
                                     })
                                     ->helperText('ستظهر ارقام الطلبات التي فقط حالتها مكتملة')
                                     ->searchable()
@@ -95,18 +95,54 @@ class ProjectResource extends Resource
                                     ->afterStateUpdated(function ($state, callable $set) {
                                         $order = \App\Models\Order::with('customer.user')->find($state);
 
-                                        if ($order && $order->customer && $order->customer->user) {
-                                            $set('customer_name', $order->customer->user->name);
+                                        if ($order && $order->customer) {
+                                            $set('customer_id', $order->customer->id);
                                         } else {
+                                            $set('customer_id', 'غير معروف');
+                                        }
+                                    }),
+
+                                Forms\Components\TextInput::make('customer_id')
+                                    ->label('اسم الزبون')
+                                    ->disabled()
+                                    ->dehydrated()
+                                    ->required(),*/
+
+                                Forms\Components\Select::make('order_id')
+                                    ->label('رقم الطلب')
+                                    ->options(function () {
+                                        $companyId = Filament::getTenant()?->id;
+
+                                        return Order::where('company_id', $companyId)
+                                            ->where('status', 'accepted')
+                                            ->get()
+                                            ->pluck('id', 'id'); // خلي العرض هو ID الطلب أو رقم الطلب الحقيقي إذا عندك
+                                    })
+                                    ->helperText('ستظهر أرقام الطلبات التي فقط حالتها مقبولة')
+                                    ->searchable()
+                                    ->required()
+                                    ->reactive()
+                                    ->afterStateUpdated(function ($state, callable $set) {
+                                        $order = \App\Models\Order::with('customer.user')->find($state);
+
+                                        if ($order && $order->customer) {
+                                            $set('customer_id', $order->customer->id);
+                                            $set('customer_name', $order->customer->user?->name ?? 'غير معروف');
+                                        } else {
+                                            $set('customer_id', null);
                                             $set('customer_name', 'غير معروف');
                                         }
                                     }),
 
+// حقل مخفي يخزن ID الزبون
+                                Forms\Components\Hidden::make('customer_id')
+                                    ->required(),
+
+// حقل للعرض فقط (اسم الزبون)
                                 Forms\Components\TextInput::make('customer_name')
                                     ->label('اسم الزبون')
-                                    ->disabled()
-                                    ->dehydrated()
-                                    ->required(),
+                                    ->disabled()   // يعرض فقط
+                                    ->dehydrated(false), // ما ينحفظ بالـ DB لأنه مجرد عرض
 
                                 Forms\Components\Select::make('employee_id')
                                     ->label('الموظف المسؤول')
@@ -220,7 +256,7 @@ class ProjectResource extends Resource
                 Tables\Columns\TextColumn::make('id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('customer_name')
+                Tables\Columns\TextColumn::make('customer.user.name')
                     ->label('اسم الزبون')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('order_id')

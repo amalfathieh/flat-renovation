@@ -24,7 +24,7 @@ class ObjectionController extends Controller
             return Response::Error('stage not found', 404);
         }
 
-        if ($stage->project->order->customer_id != $customerId) {
+        if ($stage->project->customer_id != $customerId) {
             return Response::Error(__('strings.authorization_required'));
         }
 
@@ -39,15 +39,20 @@ class ObjectionController extends Controller
 
     public function getObjections($stageId)
     {
-        $stage = ProjectStage::where('id', $stageId)->first();
-        if (!$stage) {
-            return Response::Error('stage not found', 404);
-        }
+        try {
+            $stage = ProjectStage::where('id', $stageId)->first();
+            if (!$stage) {
+                return Response::Error('stage not found', 404);
+            }
 
-        $customerId = Auth::user()->customerProfile->id;
-        if ($stage->project->order->customer_id != $customerId) {
+            $customerId = Auth::user()->customerProfile->id;
+        if ($stage->project->customer_id != $customerId) {
             return Response::Error(__('strings.authorization_required'));
         }
-        return Response::Success($stage->objections, 'success');
-    }
+            return Response::Success($stage->objections, 'success');
+
+        }catch (\Exception $ex) {
+            return Response::Error($ex->getMessage(), $ex->getCode() ?: 404);
+        }
+         }
 }

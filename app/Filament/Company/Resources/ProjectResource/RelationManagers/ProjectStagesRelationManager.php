@@ -33,7 +33,7 @@ class ProjectStagesRelationManager extends RelationManager
                         Forms\Components\Section::make('Project')
                             ->schema([
 
-                                Forms\Components\TextInput::make('stage_name')
+                                Forms\Components\TextInput::make('name')
                                     ->label('اسم المرحلة')
                                     ->required()
                                     ->maxLength(255),
@@ -65,7 +65,9 @@ class ProjectStagesRelationManager extends RelationManager
                                     ->required(),
 
                                 Forms\Components\MarkdownEditor::make('description')
+                                    ->label('الوصف')
                                     ->columnSpanFull(),
+
                             ])->columns(2),
                     ]),
 
