@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Image_stage;
+use App\Models\ProjectStage;
 use Illuminate\Database\Seeder;
 
 class ProjectStageImageSeeder extends Seeder
@@ -12,9 +13,7 @@ class ProjectStageImageSeeder extends Seeder
 
         $imageIndex = 1;
 
-
-        $stages = array_slice(StageSeeder::$stages, 0, 2 * 4);
-
+        $stages = ProjectStage::orderBy('id')->take(20)->get();
 
         foreach ($stages as $stage) {
 

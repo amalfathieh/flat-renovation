@@ -90,7 +90,8 @@ class OrderResource extends Resource
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\DeleteAction::make(),
 
-                Tables\Actions\Action::make('عرض الموقع ')
+                Tables\Actions\Action::make('عرض الموقع')
+                  ->label('عرض الموقع')
                     ->url(fn ($record) => "https://www.google.com/maps?q={$record->latitude},{$record->longitude}")
                     ->openUrlInNewTab(),
 

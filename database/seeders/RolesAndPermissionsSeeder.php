@@ -142,6 +142,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'view_topuprequest', 'view_any_topuprequest', 'create_topuprequest', 'update_topuprequest', 'delete_topuprequest',
 
             'view_transactionsall', 'view_any_transactionsall', 'delete_transactionsall',
+            'admin_view_externaltransfer',
+            'admin_view_any_externaltransfer',
         ]);
 
         Role::firstOrCreate([

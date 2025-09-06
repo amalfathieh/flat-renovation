@@ -55,6 +55,7 @@ class TopUpRequestResource extends Resource
 
                 Forms\Components\TextInput::make('invoice_number')
                     ->label('Invoice Number')
+                    ->disabled()
                     ->nullable(),
             ]);
     }

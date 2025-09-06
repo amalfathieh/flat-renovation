@@ -43,7 +43,7 @@ class OrderSeeder extends Seeder
                     'customer_id' => $customer->id,
                     'company_id'  => $company->id,
                     'employee_id' => $employee->id,
-                    'status' => 'accepted',
+                    'status' => 'waiting',
                     'cost_of_examination' => rand(50, 200),
                     'budget' => rand(1000, 5000),
                     'latitude' => $latitude,

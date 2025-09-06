@@ -11,7 +11,7 @@ class ProjectImageSeeder extends Seeder
     public function run(): void
     {
 
-        $projects = Project::take(5)->get();
+        $projects = Project::take(25)->get();
 
         $imageIndex = 1;
 

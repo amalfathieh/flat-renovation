@@ -34,8 +34,10 @@ class ProjectSeeder extends Seeder
             $projectType = $projectTypes[array_rand($projectTypes)];
 
             $startDate = now()->subDays(rand(20, 90));
-            $endDate = (rand(0, 1)) ? $startDate->copy()->addDays(rand(5, 20)) : null;
-            $status = $endDate ? 'finished' : 'In progress';
+            $endDate = $startDate->copy()->addDays(rand(5, 20));
+
+            $status = now()->greaterThan($endDate) ? 'finished' : 'in progress';
+
 
             $costRanges = [
                 'دهان داخلي للشقق' => [2000, 4000],
@@ -62,6 +64,10 @@ class ProjectSeeder extends Seeder
                 'description' => "هذا المشروع عبارة عن $projectType تم تنفيذه لصالح الزبون $userName بواسطة موظف الشركة.",
                 'final_cost' => rand($range[0], $range[1]),
                 'is_publish' => (bool) rand(0, 1),
+
+                //'before_image' => "project-images/before_{$imageIndex}.png",
+
+                'file' => "project-files/quantities.pdf",
             ]);
 
 
