@@ -55,6 +55,14 @@ class CompanyResource extends Resource
                 Forms\Components\TextInput::make('logo')
                     ->maxLength(255),
 
+//                Forms\Components\DateTimePicker::make('owner.banned_until')
+//                    ->label('تاريخ انتهاء الحظر')
+//                    ->nullable(),
+                Forms\Components\DateTimePicker::make('banned_until')
+                    ->label('تاريخ انتهاء الحظر')
+                    ->nullable(),
+
+
 
 
             ]);
@@ -94,6 +102,12 @@ class CompanyResource extends Resource
                     ->label('تاريخ الإنشاء')
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->date(),
+                Tables\Columns\TextColumn::make('banned_until')
+                    ->label('محظورة حتى')
+                    ->dateTime()
+                    ->sortable(),
+
+
 
             ])
             ->filters([
@@ -123,6 +137,12 @@ class CompanyResource extends Resource
             ->schema([
                     Section::make('معلومات الشركة')
                         ->schema([
+
+                            TextEntry::make('banned_until')
+                                ->label('محظورة حتى')
+                                ->dateTime(),
+
+
                             TextEntry::make('name')
                                 ->label('اسم الشركة'),
 

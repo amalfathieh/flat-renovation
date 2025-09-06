@@ -8,6 +8,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Pages\Auth\Register as BaseRegister;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 
 class Register extends BaseRegister
 {
@@ -16,7 +17,8 @@ class Register extends BaseRegister
         $user = User::create([
            'name'=> $data['name'],
            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'password' => Hash::make('password'),
+//            'password' => bcrypt($data['password']),
             'phone'=> $data['phone']?? null,
         ]);
         $user->assignRole('company');

@@ -17,6 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append(\App\Http\Middleware\SetLocate::class);
+        $middleware->web(append: [
+            \App\Http\Middleware\CheckBanned::class,
+        ]);
     })
     ->withExceptions(
         function (Exceptions $exceptions) {

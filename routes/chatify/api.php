@@ -1,6 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Monzer\FilamentChatifyIntegration\Pages\Chatify;
+
+Route::group([
+    'middleware' => ['web', 'auth', 'role:supervisor']
+], function () {
+    Chatify::routes();
+});
 
 /**
  * Authentication for pusher private channels

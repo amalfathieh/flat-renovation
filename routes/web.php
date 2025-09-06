@@ -66,7 +66,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/company', function () {
+Route::get('/Taj', function () {
     return view('company-landing');
 });
 Route::get('/dashboard', function () {

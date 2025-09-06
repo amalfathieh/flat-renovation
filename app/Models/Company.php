@@ -14,7 +14,7 @@ class Company extends Model
 
     protected $fillable = [
 
-        'user_id', 'name', 'email', 'slug', 'location', 'phone', 'about', 'logo', 'cost_of_examination',
+        'user_id', 'name', 'email', 'slug', 'location', 'phone', 'about', 'logo', 'cost_of_examination','banned_until'
 
     ];
 
@@ -23,7 +23,7 @@ class Company extends Model
         'updated_at' => 'datetime:Y-m-d\TH:i:s',
 
     ];
-
+    protected $dates = ['banned_until'];
 
     public function user() {
         return $this->belongsTo(User::class);
