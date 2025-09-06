@@ -65,14 +65,14 @@ class MessageController extends Controller
 
             $messageData = Chatify::parseMessage($mess);
 
-            // send to user using pusher
-            if (Auth::user()->id != $request['id']) {
-                Chatify::push("private-chatify.".$conversation->employee->user->id, 'messaging', [
-                    'from_id' => Auth::user()->id,
-                    'to_id' =>$conversation->employee->user->id,
-                    'message' => $messageData
-                ]);
-            }
+//            // send to user using pusher
+//            if (Auth::user()->id != $request['id']) {
+//                Chatify::push("private-chatify.".$conversation->employee->user->id, 'messaging', [
+//                    'from_id' => Auth::user()->id,
+//                    'to_id' =>$conversation->employee->user->id,
+//                    'message' => $messageData
+//                ]);
+//            }
 
 
             event(new \App\Events\MessageSent(

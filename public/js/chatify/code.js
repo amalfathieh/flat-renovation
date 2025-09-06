@@ -542,13 +542,19 @@ function setMessagesLoading(loading = false) {
   messagesLoading = loading;
 }
 function fetchMessages(id, newFetch = false) {
+
   if (newFetch) {
+
     messagesPage = 1;
     noMoreMessages = false;
+
   }
+    console.log({messenger,noMoreMessages,messagesLoading});
   if (messenger != 0 && !noMoreMessages && !messagesLoading) {
+      console.log("ttt");
     const messagesElement = messagesContainer.find(".messages");
     setMessagesLoading(true);
+
     $.ajax({
       url: url + "/fetchMessages",
       method: "POST",
@@ -1711,3 +1717,12 @@ setInterval(() => {
   updateElementsDateToTimeAgo();
 }, 60000);
 
+
+setInterval(() => {
+    const currentId = getMessengerId();
+    console.log("Current Messenger ID:", currentId);
+
+    if (!messagesLoading && currentId) {
+        fetchMessages(currentId, true);
+    }
+}, 3000);

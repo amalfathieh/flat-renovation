@@ -1,312 +1,196 @@
-<?php return array (
-  'anourvalar/eloquent-serialize' => 
-  array (
-    'aliases' => 
-    array (
-      'EloquentSerialize' => 'AnourValar\\EloquentSerialize\\Facades\\EloquentSerializeFacade',
+<?php
+return array(
+    'anourvalar/eloquent-serialize' => array(
+        'aliases' => array(
+            'EloquentSerialize' => 'AnourValar\\EloquentSerialize\\Facades\\EloquentSerializeFacade',
+        ),
     ),
-  ),
-  'barryvdh/laravel-dompdf' => 
-  array (
-    'aliases' => 
-    array (
-      'PDF' => 'Barryvdh\\DomPDF\\Facade\\Pdf',
-      'Pdf' => 'Barryvdh\\DomPDF\\Facade\\Pdf',
+    'bezhansalleh/filament-shield' => array(
+        'aliases' => array(
+            'FilamentShield' => 'BezhanSalleh\\FilamentShield\\Facades\\FilamentShield',
+        ),
+        'providers' => array(
+            'BezhanSalleh\\FilamentShield\\FilamentShieldServiceProvider',
+        ),
     ),
-    'providers' => 
-    array (
-      0 => 'Barryvdh\\DomPDF\\ServiceProvider',
+    'blade-ui-kit/blade-heroicons' => array(
+        'providers' => array(
+            'BladeUI\\Heroicons\\BladeHeroiconsServiceProvider',
+        ),
     ),
-  ),
-  'bezhansalleh/filament-shield' => 
-  array (
-    'aliases' => 
-    array (
-      'FilamentShield' => 'BezhanSalleh\\FilamentShield\\Facades\\FilamentShield',
+    'blade-ui-kit/blade-icons' => array(
+        'providers' => array(
+            'BladeUI\\Icons\\BladeIconsServiceProvider',
+        ),
     ),
-    'providers' => 
-    array (
-      0 => 'BezhanSalleh\\FilamentShield\\FilamentShieldServiceProvider',
+    'filament/actions' => array(
+        'providers' => array(
+            'Filament\\Actions\\ActionsServiceProvider',
+        ),
     ),
-  ),
-  'blade-ui-kit/blade-heroicons' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'BladeUI\\Heroicons\\BladeHeroiconsServiceProvider',
+    'filament/filament' => array(
+        'providers' => array(
+            'Filament\\FilamentServiceProvider',
+        ),
     ),
-  ),
-  'blade-ui-kit/blade-icons' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'BladeUI\\Icons\\BladeIconsServiceProvider',
+    'filament/forms' => array(
+        'providers' => array(
+            'Filament\\Forms\\FormsServiceProvider',
+        ),
     ),
-  ),
-  'filament/actions' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Filament\\Actions\\ActionsServiceProvider',
+    'filament/infolists' => array(
+        'providers' => array(
+            'Filament\\Infolists\\InfolistsServiceProvider',
+        ),
     ),
-  ),
-  'filament/filament' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Filament\\FilamentServiceProvider',
+    'filament/notifications' => array(
+        'providers' => array(
+            'Filament\\Notifications\\NotificationsServiceProvider',
+        ),
     ),
-  ),
-  'filament/forms' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Filament\\Forms\\FormsServiceProvider',
+    'filament/support' => array(
+        'providers' => array(
+            'Filament\\Support\\SupportServiceProvider',
+        ),
     ),
-  ),
-  'filament/infolists' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Filament\\Infolists\\InfolistsServiceProvider',
+    'filament/tables' => array(
+        'providers' => array(
+            'Filament\\Tables\\TablesServiceProvider',
+        ),
     ),
-  ),
-  'filament/notifications' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Filament\\Notifications\\NotificationsServiceProvider',
+    'filament/widgets' => array(
+        'providers' => array(
+            'Filament\\Widgets\\WidgetsServiceProvider',
+        ),
     ),
-  ),
-  'filament/support' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Filament\\Support\\SupportServiceProvider',
+    'jaocero/filachat' => array(
+        'aliases' => array(
+            'FilaChat' => 'JaOcero\\FilaChat\\Facades\\FilaChat',
+        ),
+        'providers' => array(
+            'JaOcero\\FilaChat\\FilaChatServiceProvider',
+        ),
     ),
-  ),
-  'filament/tables' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Filament\\Tables\\TablesServiceProvider',
+    'kirschbaum-development/eloquent-power-joins' => array(
+        'providers' => array(
+            'Kirschbaum\\PowerJoins\\PowerJoinsServiceProvider',
+        ),
     ),
-  ),
-  'filament/widgets' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Filament\\Widgets\\WidgetsServiceProvider',
+    'kreait/laravel-firebase' => array(
+        'aliases' => array(
+            'Firebase' => 'Kreait\\Laravel\\Firebase\\Facades\\Firebase',
+        ),
+        'providers' => array(
+            'Kreait\\Laravel\\Firebase\\ServiceProvider',
+        ),
     ),
-  ),
-  'jaocero/filachat' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'JaOcero\\FilaChat\\FilaChatServiceProvider',
+    'laravel/breeze' => array(
+        'providers' => array(
+            'Laravel\\Breeze\\BreezeServiceProvider',
+        ),
     ),
-    'aliases' => 
-    array (
-      'FilaChat' => 'JaOcero\\FilaChat\\Facades\\FilaChat',
+    'laravel/pail' => array(
+        'providers' => array(
+            'Laravel\\Pail\\PailServiceProvider',
+        ),
     ),
-  ),
-  'kirschbaum-development/eloquent-power-joins' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Kirschbaum\\PowerJoins\\PowerJoinsServiceProvider',
+    'laravel/reverb' => array(
+        'aliases' => array(
+            'Output' => 'Laravel\\Reverb\\Output',
+        ),
+        'providers' => array(
+            'Laravel\\Reverb\\ApplicationManagerServiceProvider',
+            'Laravel\\Reverb\\ReverbServiceProvider',
+        ),
     ),
-  ),
-  'kreait/laravel-firebase' => 
-  array (
-    'aliases' => 
-    array (
-      'Firebase' => 'Kreait\\Laravel\\Firebase\\Facades\\Firebase',
+    'laravel/sail' => array(
+        'providers' => array(
+            'Laravel\\Sail\\SailServiceProvider',
+        ),
     ),
-    'providers' => 
-    array (
-      0 => 'Kreait\\Laravel\\Firebase\\ServiceProvider',
+    'laravel/sanctum' => array(
+        'providers' => array(
+            'Laravel\\Sanctum\\SanctumServiceProvider',
+        ),
     ),
-  ),
-  'laravel/breeze' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Laravel\\Breeze\\BreezeServiceProvider',
+    'laravel/socialite' => array(
+        'aliases' => array(
+            'Socialite' => 'Laravel\\Socialite\\Facades\\Socialite',
+        ),
+        'providers' => array(
+            'Laravel\\Socialite\\SocialiteServiceProvider',
+        ),
     ),
-  ),
-  'laravel/pail' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Laravel\\Pail\\PailServiceProvider',
+    'laravel/tinker' => array(
+        'providers' => array(
+            'Laravel\\Tinker\\TinkerServiceProvider',
+        ),
     ),
-  ),
-  'laravel/reverb' => 
-  array (
-    'aliases' => 
-    array (
-      'Output' => 'Laravel\\Reverb\\Output',
+    'livewire/livewire' => array(
+        'aliases' => array(
+            'Livewire' => 'Livewire\\Livewire',
+        ),
+        'providers' => array(
+            'Livewire\\LivewireServiceProvider',
+        ),
     ),
-    'providers' => 
-    array (
-      0 => 'Laravel\\Reverb\\ApplicationManagerServiceProvider',
-      1 => 'Laravel\\Reverb\\ReverbServiceProvider',
+    'monzer/filament-chatify-integration' => array(
+        'providers' => array(
+            'Monzer\\FilamentChatifyIntegration\\ChatifyServiceProvider',
+        ),
     ),
-  ),
-  'laravel/sail' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Laravel\\Sail\\SailServiceProvider',
+    'munafio/chatify' => array(
+        'aliases' => array(
+            'Chatify' => 'Chatify\\Facades\\ChatifyMessenger',
+        ),
+        'providers' => array(
+            'Chatify\\ChatifyServiceProvider',
+        ),
     ),
-  ),
-  'laravel/sanctum' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Laravel\\Sanctum\\SanctumServiceProvider',
+    'nesbot/carbon' => array(
+        'providers' => array(
+            'Carbon\\Laravel\\ServiceProvider',
+        ),
     ),
-  ),
-  'laravel/socialite' => 
-  array (
-    'aliases' => 
-    array (
-      'Socialite' => 'Laravel\\Socialite\\Facades\\Socialite',
+    'nunomaduro/collision' => array(
+        'providers' => array(
+            'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
+        ),
     ),
-    'providers' => 
-    array (
-      0 => 'Laravel\\Socialite\\SocialiteServiceProvider',
+    'nunomaduro/termwind' => array(
+        'providers' => array(
+            'Termwind\\Laravel\\TermwindServiceProvider',
+        ),
     ),
-  ),
-  'laravel/tinker' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Laravel\\Tinker\\TinkerServiceProvider',
+    'ryangjchandler/blade-capture-directive' => array(
+        'aliases' => array(
+            'BladeCaptureDirective' => 'RyanChandler\\BladeCaptureDirective\\Facades\\BladeCaptureDirective',
+        ),
+        'providers' => array(
+            'RyanChandler\\BladeCaptureDirective\\BladeCaptureDirectiveServiceProvider',
+        ),
     ),
-  ),
-  'livewire/livewire' => 
-  array (
-    'aliases' => 
-    array (
-      'Livewire' => 'Livewire\\Livewire',
+    'spatie/laravel-pdf' => array(
+        'aliases' => array(
+            'LaravelPdf' => 'Spatie\\LaravelPdf\\Facades\\Pdf', // تم تصحيح alias
+        ),
+        'providers' => array(
+            'Spatie\\LaravelPdf\\PdfServiceProvider',
+        ),
     ),
-    'providers' => 
-    array (
-      0 => 'Livewire\\LivewireServiceProvider',
+    'spatie/laravel-permission' => array(
+        'providers' => array(
+            'Spatie\\Permission\\PermissionServiceProvider',
+        ),
     ),
-  ),
-<<<<<<< HEAD
-  'monzer/filament-chatify-integration' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Monzer\\FilamentChatifyIntegration\\ChatifyServiceProvider',
+    'tomatophp/console-helpers' => array(
+        'providers' => array(
+            'TomatoPHP\\ConsoleHelpers\\ConsoleHelpersServiceProvider',
+        ),
     ),
-  ),
-  'munafio/chatify' => 
-  array (
-    'aliases' => 
-    array (
-      'Chatify' => 'Chatify\\Facades\\ChatifyMessenger',
+    'tomatophp/filament-fcm' => array(
+        'providers' => array(
+            'TomatoPHP\\FilamentFcm\\FilamentFcmServiceProvider',
+        ),
     ),
-    'providers' => 
-    array (
-      0 => 'Chatify\\ChatifyServiceProvider',
-=======
-  'maatwebsite/excel' => 
-  array (
-    'aliases' => 
-    array (
-      'Excel' => 'Maatwebsite\\Excel\\Facades\\Excel',
-    ),
-    'providers' => 
-    array (
-      0 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
->>>>>>> 8c95d0e03843433885f02f5fa49fc15da8135ac8
-    ),
-  ),
-  'nesbot/carbon' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Carbon\\Laravel\\ServiceProvider',
-    ),
-  ),
-  'nunomaduro/collision' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
-    ),
-  ),
-  'nunomaduro/termwind' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Termwind\\Laravel\\TermwindServiceProvider',
-    ),
-  ),
-  'pxlrbt/filament-excel' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'pxlrbt\\FilamentExcel\\FilamentExcelServiceProvider',
-    ),
-  ),
-  'ryangjchandler/blade-capture-directive' => 
-  array (
-    'aliases' => 
-    array (
-      'BladeCaptureDirective' => 'RyanChandler\\BladeCaptureDirective\\Facades\\BladeCaptureDirective',
-    ),
-    'providers' => 
-    array (
-      0 => 'RyanChandler\\BladeCaptureDirective\\BladeCaptureDirectiveServiceProvider',
-    ),
-  ),
-  'spatie/laravel-pdf' => 
-  array (
-    'aliases' => 
-    array (
-      'LaravelPdf' => 'Pdf',
-    ),
-    'providers' => 
-    array (
-      0 => 'Spatie\\LaravelPdf\\PdfServiceProvider',
-    ),
-  ),
-  'spatie/laravel-permission' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Spatie\\Permission\\PermissionServiceProvider',
-    ),
-  ),
-  'tomatophp/console-helpers' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'TomatoPHP\\ConsoleHelpers\\ConsoleHelpersServiceProvider',
-    ),
-  ),
-  'tomatophp/filament-fcm' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'TomatoPHP\\FilamentFcm\\FilamentFcmServiceProvider',
-    ),
-  ),
-  'tomatophp/laravel-firebase' => 
-  array (
-    'aliases' => 
-    array (
-      'Firebase' => 'Kreait\\Laravel\\Firebase\\Facades\\Firebase',
-    ),
-    'providers' => 
-    array (
-      0 => 'Kreait\\Laravel\\Firebase\\ServiceProvider',
-    ),
-  ),
 );
