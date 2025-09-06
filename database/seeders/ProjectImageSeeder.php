@@ -22,6 +22,7 @@ class ProjectImageSeeder extends Seeder
                     'project_id' => $project->id,
                     'before_image' => "project-images/before_{$imageIndex}.png",
                     'after_image'  => "project-images/after_{$imageIndex}.png",
+
                     'caption' => "صورة $i قبل وبعد (مشروع رقم " . ($projectIndex + 1) . ")",
                 ]);
 

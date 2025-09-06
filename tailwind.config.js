@@ -9,6 +9,7 @@ module.exports = {
 
         // ⬅️ كمان مفيد أحيانًا
         './vendor/filament/**/*.blade.php',
+        './vendor/jaocero/filachat/resources/views/**/**/*.blade.php',
     ],
     theme: {
         extend: {},

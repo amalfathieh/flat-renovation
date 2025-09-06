@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
             ProjectStageImageSeeder::class,
             payment_methodSeeder::class,
 
-            PlanSeeder::class,
+            PlanSedder::class,
 
 
 

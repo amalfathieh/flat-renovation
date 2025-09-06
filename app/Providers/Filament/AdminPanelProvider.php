@@ -17,6 +17,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use JaOcero\FilaChat\FilaChatPlugin;
 use TomatoPHP\FilamentFcm\FilamentFcmPlugin;
 
 //use Filament\Facades\Filament;
@@ -34,9 +35,16 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+<<<<<<< HEAD
+            ->plugins([
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                  FilaChatPlugin::make()
+            ])
+=======
 //            ->plugins([
 //                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
 //            ])
+>>>>>>> 8c95d0e03843433885f02f5fa49fc15da8135ac8
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

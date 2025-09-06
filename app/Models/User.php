@@ -13,6 +13,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
+use JaOcero\FilaChat\Traits\HasFilaChat;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use TomatoPHP\FilamentFcm\Traits\InteractsWithFCM;
@@ -21,7 +22,7 @@ use TomatoPHP\FilamentFcm\Traits\InteractsWithFCM;
 class User extends Authenticatable implements  HasTenants, FilamentUser, MustVerifyEmail
 {
     use InteractsWithFCM;
-    use HasFactory, Notifiable, HasRoles, HasApiTokens;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens, HasFilaChat;
 
 
     /**

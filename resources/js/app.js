@@ -1,8 +1,9 @@
-import './bootstrap';
-import './firebase-notifications';
+import Echo from 'laravel-echo';
+window.Pusher = require('pusher-js');
 
-import Alpine from 'alpinejs';
-
-window.Alpine = Alpine;
-
-Alpine.start();
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: process.env.MIX_PUSHER_APP_KEY, // أو VITE_PUSHER_APP_KEY
+    cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+    forceTLS: true
+});
