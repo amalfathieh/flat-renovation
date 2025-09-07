@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Company;
+use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\ExternalTransfer;
 use App\Models\Project;
@@ -15,10 +16,18 @@ class StatsAdminOverview extends BaseWidget
 {
     protected function getStats(): array
     {
+        $customerCount = Customer::whereHas('projects')
+            ->distinct('customers.id')
+            ->count('customers.id');
+
+        $ordersCount = Customer::whereHas('orders')
+            ->distinct('customers.id')
+            ->count('customers.id');
+
         return [
 
-            Stat::make('الموظفون', User::query()->count())
-                ->description('عدد المستخدمين')
+            Stat::make('المستخدميين', User::query()->count())
+                ->description('عدد المستخدمين الكلي')
                 ->descriptionIcon('heroicon-o-user-group')
                 ->color('info')
                 ->chart([7, 3, 4, 2, 1, 6, 4]),
@@ -35,8 +44,20 @@ class StatsAdminOverview extends BaseWidget
                 ->color('info')
                 ->chart([7, 3, 4, 2, 1, 6, 4]),
 
-            Stat::make('العملاء', Project::count())
-                ->description('عدد العملاء')
+            Stat::make('الزبائن', Customer::count())
+                ->description('عدد مستخدمي تطبيق الموبيل')
+                ->descriptionIcon('heroicon-o-users')
+                ->color('primary')
+                ->chart([1, 10, 4, 7, 8, 6, 5, 2]),
+
+            Stat::make('العملاء', $customerCount)
+                ->description('عدد العملاء الذين لديهم مشروع على الاقل')
+                ->descriptionIcon('heroicon-o-users')
+                ->color('success')
+                ->chart([1, 10, 4, 7, 8, 6, 5, 2]),
+
+            Stat::make('العملاء', $ordersCount)
+                ->description('عدد العملاء المقدمين طلبات')
                 ->descriptionIcon('heroicon-o-users')
                 ->color('primary')
                 ->chart([1, 10, 4, 7, 8, 6, 5, 2]),

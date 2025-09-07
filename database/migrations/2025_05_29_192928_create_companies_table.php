@@ -26,6 +26,7 @@ return new class extends Migration
             $table->text('cost_of_examination')->nullable();
             $table->text('about')->nullable();
             $table->string('logo')->nullable();
+            $table->timestamp('banned_until')->nullable();
             $table->timestamps();
         });
     }

@@ -256,7 +256,6 @@
             </div>
         </div>
 
-        <script src="https://unpkg.com/alpinejs" defer></script>
         <script>
             function subscriptionModal() {
                 return {

@@ -20,7 +20,6 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('google_id')->nullable()->unique();
-            $table->timestamp('banned_at')->nullable();
             $table->decimal('balance', 10, 2)->default(0);
             $table->string('device_token')->nullable();
             $table->rememberToken();

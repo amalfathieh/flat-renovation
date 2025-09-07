@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\StageResource;
 use App\Http\Responses\Response;
+use App\Models\Project;
 use App\Models\ProjectStage;
 use App\Models\Service;
 use App\Models\ServiceType;
@@ -20,7 +21,15 @@ class ProjectStageController extends Controller
     public function getProjectStages($id)
     {
         try {
-            $projectStages = ProjectStage::with('imagesStage')->where('project_id', $id)->get();
+            $customerId = Auth::user()->customerProfile->id;
+
+            $pr= Project::find($id);
+            if ($pr->customer_id != $customerId){
+                return Response::Error(__('strings.authorization_required'));
+            }
+            $projectStages = ProjectStage::with('imagesStage')
+                ->where('project_id', $id)
+                ->get();
 
             return Response::Success(StageResource::collection($projectStages), 'success');
         } catch (\Exception $ex) {

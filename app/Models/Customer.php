@@ -38,6 +38,10 @@ class Customer extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function projects() {
+        return $this->hasMany(Project::class);
+    }
+
     public function projectRatings()
     {
         return $this->hasMany(ProjectRating::class);

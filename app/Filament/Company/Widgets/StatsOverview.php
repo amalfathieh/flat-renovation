@@ -2,6 +2,7 @@
 
 namespace App\Filament\Company\Widgets;
 
+use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Order;
 use App\Models\Project;
@@ -24,7 +25,15 @@ class StatsOverview extends BaseWidget
 
     protected function getStats(): array
     {
+
         $companyId = Filament::getTenant()?->id;
+
+        $customerCount = Customer::whereHas('projects', function ($query) use ($companyId) {
+            $query->where('company_id', $companyId);
+        })
+            ->distinct('customers.id')
+            ->count('customers.id');
+
         return [
             Stat::make('الموظفون', Employee::where('company_id', $companyId)->count())
                 ->description('عدد الموظفين')
@@ -32,11 +41,12 @@ class StatsOverview extends BaseWidget
                 ->color('info')
                 ->chart([7, 3, 4, 2, 1, 6, 4]),
 
-            Stat::make('العملاء', Project::where('company_id', $companyId)->count())
+            Stat::make('العملاء', $customerCount)
                 ->description('عدد العملاء')
                 ->descriptionIcon('heroicon-o-users')
                 ->color('primary')
                 ->chart([1, 10, 4, 7, 8, 6, 5, 2]),
+
             Stat::make('المشاريع', Project::where('company_id', $companyId)->count())
                 ->description('إجمالي المشاريع')
                 ->descriptionIcon('heroicon-o-briefcase')
