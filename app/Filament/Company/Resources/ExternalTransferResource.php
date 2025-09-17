@@ -40,8 +40,7 @@ class ExternalTransferResource extends Resource
                 TextColumn::make('id')->label('ID')->sortable(),
                 TextColumn::make('admin.name')
                     ->label('الإدمن')
-                    ->sortable()
-                    ->searchable(),
+                    ->sortable(),
 
                 TextColumn::make('amount')
                     ->label('المبلغ')
@@ -95,19 +94,6 @@ class ExternalTransferResource extends Resource
 
 
 
-    public static function canCreate(): bool
-    {
-        return false;
-    }
 
-    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
-    {
-        return false;
-    }
-
-    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
-    {
-        return false;
-    }
 
 }

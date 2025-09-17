@@ -44,6 +44,9 @@ class EditCompanyProfile extends EditTenantProfile
                 TextInput::make('location')
                     ->disabled(Auth::user()->cannot('company_edit')),
 
+                TextInput::make('company.user.balance')
+                    ->disabled(Auth::user()->cannot('company_edit')),
+
                 TextInput::make('about')
                     ->disabled(Auth::user()->cannot('company_edit')),
 

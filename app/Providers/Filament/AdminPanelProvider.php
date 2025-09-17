@@ -38,7 +38,7 @@ class AdminPanelProvider extends PanelProvider
 
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
-                  FilaChatPlugin::make()
+                FilaChatPlugin::make()
             ])
 
 //            ->plugins([
